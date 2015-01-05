@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>个人设置页面</title>
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <script src="js/jquery-1.11.1.min.js" type="text/JavaScript"></script>
+    <script>
+        $(function(){
+			//加载个人设置
+			$.ajax({
+                type:"post",
+                url:"QueryProfileServlet",
+                success:function(data){
+                   var obj = data.split('@');
+                   if(obj[0]&&obj[0]!='null'){
+						$("#urgentName").val(obj[0]);
+                       }
+                   if(obj[1]&&obj[1]!='null'){
+						$("#urgentTelno").val(obj[1]);
+                       }
+                   if(obj[2]&&obj[2]!='null'){
+						if(obj[2]=='15'){
+								$("#btn1").addClass("btn-primary");
+				                $("#btn2").removeClass("btn-primary");
+				                $("#btn3").removeClass("btn-primary");
+							} 
+						if(obj[2]=='30'){
+							$("#btn1").removeClass("btn-primary");
+			                $("#btn2").addClass("btn-primary");
+			                $("#btn3").removeClass("btn-primary");
+						} 
+						if(obj[2]=='45'){
+							$("#btn1").removeClass("btn-primary");
+			                $("#btn2").removeClass("btn-primary");
+			                $("#btn3").addClass("btn-primary");
+						} 
+						
+                       }
+                   
+                }
+            });
+
+            
+            $("#btn2").addClass("btn-primary");
+
+            $("#btn1").click(function(){
+                $(this).addClass("btn-primary");
+                $("#btn2").removeClass("btn-primary");
+                $("#btn3").removeClass("btn-primary");
+                return false;
+            });
+
+            $("#btn2").click(function(){
+                $(this).addClass("btn-primary");
+                $("#btn1").removeClass("btn-primary");
+                $("#btn3").removeClass("btn-primary");
+                return false;
+            });
+
+            $("#btn3").click(function(){
+                $(this).addClass("btn-primary");
+                $("#btn1").removeClass("btn-primary");
+                $("#btn2").removeClass("btn-primary");
+                return false;
+            });
+
+            $("#goMain").click(function(){
+                window.location.href="main.html";
+                return false;
+            });
+        });
+
+    </script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="page-header">
+                <h1>
+                   	在此设置个人详细信息
+                    <button id="logout" class="btn btn-danger" type="button">登出系统</button>
+                </h1>
+            </div>
+            <form class="form-horizontal">
+                <div class="control-group">
+                    <label class="control-label" for="urgentName">紧急联系人姓名</label>
+                    <div class="controls">
+                        <input id="urgentName" name="urgentName" type="text" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="urgentTelno">紧急联系人电话</label>
+                    <div class="controls">
+                        <input id="urgentTelno" name="urgentTelno" type="text" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="txtRandomCode">校验码</label>
+                    <div class="controls">
+                        <input id="txtRandomCode" type="text" />
+                        <input type="button" id="getTxtCodeBtn" class="btn btn-info" value="免费获取验证码" />
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">短信联系频率</label>
+                    <div class="controls">
+                        <div class="btn-group btn-group-vertical">
+                            <button id="btn1" class="btn">15分钟</button>
+                            <button id="btn2" class="btn">30分钟</button>
+                            <button id="btn3" class="btn">45分钟</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <span id="errorMsg"></span>
+                        <br/>
+                        <button type="button" id="checkBtn" class="btn btn-info">提交</button>
+                        <button type="button" id="goMain" class="btn btn-primary">开启服务</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    var wait=60;
+    function time(o) {
+        if (wait == 0) {
+            o.removeAttribute("disabled");
+            o.value="免费获取验证码";
+            wait = 60;
+        } else {
+            o.setAttribute("disabled", true);
+            o.value="重新发送(" + wait + ")";
+            wait--;
+            setTimeout(function() {
+                        time(o)
+                    },
+                    1000)
+        }
+    }
+    document.getElementById("getTxtCodeBtn").onclick=function(){
+        $.ajax({
+            type:"post",
+            url:"TxtCodeSender",
+            data:{
+                codeType:1
+            },
+            success:function(data){
+                if(data=='error4'){
+                    $("#errorMsg").html("<font color='red'>发送失败,请重新获取!</font>");
+                    return false;
+                }
+            }
+        });
+        time(this);
+    }
+</script>
+<script>
+    $(function(){
+
+        //提交表单
+        $("#checkBtn").click(function(){
+            if($("#urgentName").val()==""){
+                $("#errorMsg").html("<font color='red'>紧急联系人姓名不能为空！</font>");
+                return false;
+            }
+            if($("#urgentTelno").val()==""){
+                $("#errorMsg").html("<font color='red'>紧急联系人手机号码不能为空！</font>");
+                return false;
+            }
+            if(!$("#urgentTelno").val().match(/^1[3|4|5|8][0-9]\d{4,8}$/)){
+                $("#errorMsg").html("<font color='red'>手机号码格式不正确！请重新输入！</font>");
+                return false;
+            }
+            if($("#txtRandomCode").val()==""){
+                $("#errorMsg").html("<font color='red'>短信校验码不能为空！</font>");
+                return false;
+            }
+            else{
+                $.ajax({
+                    type:"post",
+                    url:"TxtCodeValidation",
+                    data:{
+                        txtCode:$("#txtRandomCode").val(),
+                        codeType:1
+                    },
+                    success:function(data){
+                        if(data=='error3'){
+                            $("#errorMsg").html("<font color='red'>验证码错误,请确认后重新输入!</font>");
+                            return false;
+                        }else{
+                           //提交
+                                var touchFrequency = '';
+                                if($("#btn1").hasClass("btn-primary")) touchFrequency=15;
+                                if($("#btn2").hasClass("btn-primary")) touchFrequency=30;
+                                if($("#btn3").hasClass("btn-primary")) touchFrequency=45;
+                                $.ajax({
+                                    type:"post",
+                                    url:"ChekInUserProfileServlet",
+                                    data:{
+                                        urgentName:$("#urgentName").val(),
+                                        urgentTelno:$("#urgentTelno").val(),
+                                        touchFrequency:touchFrequency
+
+                                    },
+                                    success:function(data){
+                                        //alert(data);
+                                        if(data=='error5'){
+                                            $("#errorMsg").html("<font color='red'>更新失败，请稍后再试!</font>");
+                                            return false;
+                                        }else{
+                                            window.location.href='main.html';
+                                        }
+                                    }
+                                });
+
+                        }
+
+                    }
+                });
+            }
+        });
+
+      //登出系统
+        $("#logout").click(function(){
+            $.ajax({
+                type:"post",
+                url:"LogoutServlet",
+                success:function(data){
+                    window.location.href="login.html";
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</html>

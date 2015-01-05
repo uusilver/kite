@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>kite</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+	<!-- 未登陆踢出校验 -->
+	<filter>
+		<filter-name>onlineFilter</filter-name>
+		<filter-class>com.tmind.kite.servlet.OnlineFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>onlineFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping>  
+	
+	<!-- 产生随机码的servlet -->
+	<servlet>
+		<servlet-name>RandImage</servlet-name>
+		<servlet-class>com.tmind.kite.servlet.RandImage</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RandImage</servlet-name>
+		<url-pattern>/RandImage</url-pattern>
+	</servlet-mapping>
+
+	<!-- 用户注册的servlet -->
+	<servlet>
+		<servlet-name>Regist</servlet-name>
+		<servlet-class>com.tmind.kite.servlet.RegistServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Regist</servlet-name>
+		<url-pattern>/Regist</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 注册验证的servlet -->
+	<servlet>
+		<servlet-name>ValidationServlet</servlet-name>
+		<servlet-class>com.tmind.kite.servlet.ValidationServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ValidationServlet</servlet-name>
+		<url-pattern>/ValidationServlet</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 手机随机码验证的servlet -->
+	<servlet>
+		<servlet-name>TxtCodeValidation</servlet-name>
+		<servlet-class>com.tmind.kite.servlet.TxtCodeValidation</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TxtCodeValidation</servlet-name>
+		<url-pattern>/TxtCodeValidation</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 发送随机码验证的servlet -->
+	<servlet>
+		<servlet-name>TxtCodeSender</servlet-name>
+		<servlet-class>com.tmind.kite.servlet.TxtCodeSender</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TxtCodeSender</servlet-name>
+		<url-pattern>/TxtCodeSender</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 完成密码的servlet -->
+	<servlet>
+		<servlet-name>GenPwdServlet</servlet-name>
+		<servlet-class>com.tmind.kite.servlet.GenPwdServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GenPwdServlet</servlet-name>
+		<url-pattern>/GenPwdServlet</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 用户更新个人信息的servlet -->
+	<servlet>
+		<servlet-name>ChekInUserProfileServlet</servlet-name>
+		<servlet-class>com.tmind.kite.servlet.ChekInUserProfileServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ChekInUserProfileServlet</servlet-name>
+		<url-pattern>/ChekInUserProfileServlet</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 开启服务的servlet -->
+	<servlet>
+		<servlet-name>StartBodyGuardServlet</servlet-name>
+		<servlet-class>com.tmind.kite.servlet.StartBodyGuardServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StartBodyGuardServlet</servlet-name>
+		<url-pattern>/StartBodyGuardServlet</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 关闭服务的servlet -->
+	<servlet>
+		<servlet-name>StopBodyGuardServlet</servlet-name>
+		<servlet-class>com.tmind.kite.servlet.StopBodyGuardServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StopBodyGuardServlet</servlet-name>
+		<url-pattern>/StopBodyGuardServlet</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 登陆系统的servlet -->
+	<servlet>
+		<servlet-name>LoginServlet</servlet-name>
+		<servlet-class>com.tmind.kite.servlet.LoginServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LoginServlet</servlet-name>
+		<url-pattern>/LoginServlet</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 登出系统的servlet -->
+	<servlet>
+		<servlet-name>LogoutServlet</servlet-name>
+		<servlet-class>com.tmind.kite.servlet.LogoutServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LogoutServlet</servlet-name>
+		<url-pattern>/LogoutServlet</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 查询个人设置的servlet -->
+	<servlet>
+		<servlet-name>QueryProfileServlet</servlet-name>
+		<servlet-class>com.tmind.kite.servlet.QueryProfileServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>QueryProfileServlet</servlet-name>
+		<url-pattern>/QueryProfileServlet</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 查询主页的servlet -->
+	<servlet>
+		<servlet-name>QueryMainServlet</servlet-name>
+		<servlet-class>com.tmind.kite.servlet.QueryMainServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>QueryMainServlet</servlet-name>
+		<url-pattern>/QueryMainServlet</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 用户点击回复的servlet -->
+	<servlet>
+		<servlet-name>resp</servlet-name>
+		<servlet-class>com.tmind.kite.servlet.ResponseHandlerServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>resp</servlet-name>
+		<url-pattern>/resp</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 重置密码检查的servlet -->
+	<servlet>
+		<servlet-name>PreResetPwdServlet</servlet-name>
+		<servlet-class>com.tmind.kite.servlet.PreResetPwdServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PreResetPwdServlet</servlet-name>
+		<url-pattern>/PreResetPwdServlet</url-pattern>
+	</servlet-mapping>
+
+	<!-- LISTENER FOR Txt Poster -->
+	<servlet>
+		<servlet-name>DaemonPosterServlet</servlet-name>
+		<servlet-class>com.tmind.kite.servlet.DaemonPosterServlet</servlet-class>
+		<load-on-startup>9</load-on-startup><!-- 数字越小，启动的优先级越高，必须大于0 -->
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DaemonPosterServlet</servlet-name>
+		<url-pattern>/DaemonPosterServlet</url-pattern>
+	</servlet-mapping>
+	<listener>
+		<listener-class>com.tmind.kite.task.TextSenderListener</listener-class>
+	</listener>
+</web-app>

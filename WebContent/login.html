@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>风筝网</title>
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <script src="js/jquery-1.11.1.min.js" type="text/JavaScript"></script>
+    <script src="js/jquery.cookie.js" type="text/JavaScript"></script>
+    <script>
+    $(function(){
+        //cookie
+    	//判断之前是否有设置cookie，如果有，则设置【记住我】选择框  
+        if($.cookie('kite_telno')!=undefined){  
+            $("#rememberMe").attr("checked", true);  
+        }else{  
+            $("#rememberMe").attr("checked", false);  
+        }  
+          
+        //读取cookie  
+        if($('#rememberMe:checked').length>0){  
+            $('#telno').val($.cookie('kite_telno'));  
+            $('#password').val($.cookie('kite_password'));  
+        }  
+          
+        //监听【记住我】事件  
+        $("#rememberMe").click(function(){  
+            if($('#rememberMe:checked').length>0){//设置cookie  
+                $.cookie('kite_telno', $('#telno').val());  
+                $.cookie('kite_password', $('#password').val());  
+            }else{//清除cookie  
+                $.removeCookie('kite_telno');  
+                $.removeCookie('kite_password');  
+            }  
+        });  
+        
+        
+        
+        
+        
+        $("#resetPwd").click(function(){
+			window.location.href = 'pre-reset-pwd.html';
+            });
+        //
+        var flag = window.location.href.indexOf('?');
+        if(flag!='-1'){
+        	$("#errorMsg").html("<font color='red'>密码错误！</font>");
+            }
+        //去注册
+        $("#goReg").click(function(){window.location.href='regist.html'});
+        $("#checkBtn").click(function(){
+            if($("#telno").val()==""){
+                $("#errorMsg").html("<font color='red'>电话不能为空！</font>");
+                return false;
+            }
+            if(!$("#telno").val().match(/^1[3|4|5|8][0-9]\d{4,8}$/)){
+                $("#errorMsg").html("<font color='red'>手机号码格式不正确！请重新输入！</font>");
+                return false;
+            }
+            if($("#password").val()==""){
+                $("#errorMsg").html("<font color='red'>密码不能为空！</font>");
+                return false;
+            }
+            else{
+                $.ajax({
+                    type:"post",
+                    url:"ValidationServlet",
+                    data:{
+                        telno:$("#telno").val(),
+                        randomCode:"ForLogin"
+                    },
+                    success:function(data){
+                        if(data=='success'){
+                            $("#realBtn").trigger('click');
+                           
+                        }else{
+                        	$("#errorMsg").html("<font color='red'>手机号码不存在，请更换！</font>");
+                            return false;
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+</head>
+ 
+<body>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <h3>
+                风筝网-致力关心您的出行安全
+            </h3>
+            <p>
+                <em>风筝网</em>通过多方位的信息交流，时刻保持与您的沟通，
+            </p>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span6">
+            <div class="page-header">
+                <h1>
+                    登录
+                </h1>
+            </div>
+            <form class="form-horizontal" method="post" action="LoginServlet">
+                <div class="control-group">
+                    <label class="control-label" for="telno">手机号</label>
+                    <div class="controls">
+                        <input id="telno" type="text" name="telno" required oninvalid="setCustomValidity('必须填写！');" oninput="setCustomValidity('');"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="password">密码</label>
+                    <div class="controls">
+                        <input id="password" name="password" type="password" required oninvalid="setCustomValidity('必须填写！');" oninput="setCustomValidity('');"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="checkbox"><input type="checkbox" id="rememberMe"/>记住我</label> 
+                        <button type="button" id="checkBtn" class="btn btn-primary">登陆</button>
+                        <button type="submit" id="realBtn" style="display: none">登陆</button>
+                        
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                    	<span id="errorMsg"></span>
+                    	<br/>
+                    	<button type="button" id="goReg" class="btn btn-info">去注册</button>
+                    	<button type="button" id="resetPwd" class="btn btn-danger">忘记密码</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

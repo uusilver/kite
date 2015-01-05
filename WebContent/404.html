@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="shortcut icon" href="favicon.ico" />
+<link href="css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+<script src="js/jquery-1.11.1.min.js" type="text/JavaScript"></script>
+<script>
+$(function(){
+	var flag = window.location.href.split('?')[1];
+	if(flag=='1'){
+		 $("#msg").append("重置密码失败，请检查您输入的信息");
+	}
+});
+</script>
+
+<title>404</title>
+</head>
+<body>
+出错啦!
+<span id="msg"></span>
+</body>
+</html>
