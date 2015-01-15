@@ -8,6 +8,9 @@ package com.tmind.kite.constants;
  */
 public class CommonConstants
 {
+	/** 用户登录令牌 */
+	public static final String USER_LOGIN_TOKEN = "userLoginToken";
+	
 	/** 每页显示记录数量 */
 	public static final int MAX_PAGE_ITEMS = 10;
 	
@@ -82,5 +85,8 @@ public class CommonConstants
 	
 	/**多用户账号存在*/
 	public static final String MSG_CODE_REST_LOGIN_MULTIPLE_USER = "lgn-error04";
+	
+	/**用户在其他客户端登录*/
+	public static final String MSG_CODE_REST_LOGIN_OTHER_CLIENT = "lgn-error05";
 
 }

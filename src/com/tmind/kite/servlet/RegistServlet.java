@@ -58,7 +58,7 @@ public class RegistServlet extends HttpServlet{
 		ResultSet rs = null;
 		conn = DBUtils.getConnection();
 		//默认15分钟后如果没有回信则联系紧急联系人
-		String sql = "insert into m_user (user_name,reg_date,tel_no,active_flag,service_flag,remarks1,resp_flag,standard_check_time,txt_times,resp_time) values (?,?,?,?,'N',0,'Y',15,20,?)";
+		String sql = "insert into m_user (user_name,reg_date,tel_no,active_flag,service_flag,service_start_minute,resp_flag,standard_check_time,txt_times,resp_time) values (?,?,?,?,'N',0,'Y',15,20,?)";
 		System.out.println("用户注册:"+sql);
 		try {
 			ps = conn.prepareStatement(sql);

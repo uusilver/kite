@@ -64,7 +64,7 @@ public class StartBodyGuardServlet extends HttpServlet{
 				if(times==0){
 					flag = "TXT_OUT";
 				}else{
-					sql = "update m_user set service_flag='Y', service_start_time=?, remarks1=?, touch_freq=? where tel_no=?";
+					sql = "update m_user set service_flag='Y', service_start_time=?, service_start_minute=?, touch_freq=? where tel_no=?";
 					System.out.println("用户开启服务:"+sql);
 					ps = conn.prepareStatement(sql);
 					ps.setTimestamp(1, new Timestamp((new java.util.Date()).getTime()));

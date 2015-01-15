@@ -49,7 +49,7 @@ public class TextSenderTask extends TimerTask {
 			  Calendar calNow=Calendar.getInstance();
 			  calNow.setTime(new Date());
 			  
-			  int minutesInDb = rs.getInt("remarks1");
+			  int minutesInDb = rs.getInt("service_start_minute");
 			  
 			  int minutesDiffer = calNow.get(Calendar.MINUTE) - minutesInDb;
 			  System.out.println("系统相差分钟为:"+minutesDiffer);

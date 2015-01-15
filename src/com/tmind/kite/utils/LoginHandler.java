@@ -6,11 +6,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 
 import com.tmind.kite.constants.CommonConstants;
@@ -20,14 +20,18 @@ public class LoginHandler {
 	
 	protected static final Logger logger = Logger.getLogger(LoginHandler.class);
 
-	private static final String QUERY_SQL = "select id,user_pwd,txt_times,locked_time from m_user where tel_no=? and status='A'";
+	private static final String QUERY_SQL = "select id,user_pwd,login_err_times,locked_time from m_user where tel_no=? and active_flag='Y'";
 	
-	private static final String UPDATE_TIMES_SQL = "update m_user set txt_times=? where id=?";
+	private static final String UPDATE_TIMES_SQL = "update m_user set login_err_times=? where id=?";
 	
-	private static final String UPDATE_TIMES_DATETIME_SQL = "update m_user set txt_times=?,locked_time=? where id=?";
+	private static final String UPDATE_TIMES_DATETIME_SQL = "update m_user set login_err_times=?,locked_time=? where id=?";
+	
+	private static final String UPDATE_LOGIN_SUCCESS_SQL = "update m_user set login_err_times=?,locked_time=?,login_flag=?,access_client=? where id=?";
+	
+	private static final String UPDATE_LOGIN_FLAG_SQL = "update m_user set login_flag=? where id=?";
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static HashMap login(String teleNo,String password) {
+	public static HashMap login(String teleNo,String password,String clientType) {
 		HashMap map = new HashMap();
 		String resultCode = "";
 		
@@ -50,7 +54,7 @@ public class LoginHandler {
 		String pwd = null;
 		try {
 			//Base64解密
-			pwd = new String(Base64.getDecoder().decode(password.getBytes()),CommonConstants.CHARSETNAME_UTF_8);
+			pwd = new String(Base64.decodeBase64(password.getBytes()),CommonConstants.CHARSETNAME_UTF_8);
 		} catch (UnsupportedEncodingException e1) {
 			// TODO Auto-generated catch block
 			logger.info("用户密码解密失败，异常信息如下：");
@@ -76,12 +80,12 @@ public class LoginHandler {
 			List userList = new ArrayList();
 			String id = null;
 			String user_pwd = null;
-			String txt_times = null;
+			String login_err_times = null;
 			Date lockTime = null;
 			while(rs.next()){
 				id = (new Integer(rs.getInt("Id"))).toString();
 				user_pwd = rs.getString("user_pwd");
-				txt_times = (new Integer(rs.getInt("txt_times"))).toString();
+				login_err_times = (new Integer(rs.getInt("login_err_times"))).toString();
 				lockTime = rs.getDate("locked_time");
 
 				logger.debug("获取用户信息,[User ID:"+id+",TelNo:"+teleNo+"]");
@@ -89,7 +93,7 @@ public class LoginHandler {
 				User user = new User();
 				user.setId(id);
 				user.setUserPwd(user_pwd);
-				user.setTxtTimes(txt_times);
+				user.setTxtTimes(login_err_times);
 				
 				userList.add(user);
 			}
@@ -124,11 +128,21 @@ public class LoginHandler {
 				//如果密码匹配，则登陆成功，登陆失败次数更新为0
 				else if(DigestHandler.makeMD5(pwd).equals(userPwd)){
 					resultCode = CommonConstants.MSG_CODE_REST_LOGIN_SUCCESS;
-					updPs = conn.prepareStatement(UPDATE_TIMES_DATETIME_SQL);
+					updPs = conn.prepareStatement(UPDATE_LOGIN_SUCCESS_SQL);
 					errTimes = 0;
+					
+					//用户登录失败次数更新为0
 					updPs.setInt(1, errTimes);
+					
+					//用户账号锁定时间点更新为空
 					updPs.setDate(2, null);
-					updPs.setInt(3, userId);
+					
+					//用户登录状态更新为1，即已登录
+					updPs.setInt(3, 1);
+					
+					//用户访问入口
+					updPs.setInt(4, new Integer(clientType));
+					updPs.setInt(5, userId);
 					updPs.executeUpdate();
 					updPs.close();
 				}
@@ -186,5 +200,33 @@ public class LoginHandler {
 			value = true;
 		}
 		return value;
+	}
+	
+	public static boolean logoutInDBLevel(int flag,int id){
+		
+		int exeResult = 0;
+		boolean returnValue = false;
+		Connection conn  = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		conn = DBUtils.getConnection();
+		
+		logger.debug("更新用户登录状态位,[SQL:"+UPDATE_LOGIN_FLAG_SQL+",flag="+flag+",id="+id+"]");
+		try {
+			ps = conn.prepareStatement(UPDATE_LOGIN_FLAG_SQL);
+			ps.setInt(1, flag);
+			ps.setInt(2, id);
+			exeResult = ps.executeUpdate();
+			if(exeResult>0){
+				returnValue = true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			logger.info("[UserID:"+id+"]-更新用户登陆状态失败，异常信息如下：");
+			logger.info(e.getMessage());
+		}finally{
+			DBUtils.freeConnection(conn, ps, rs);
+		}
+		return returnValue;
 	}
 }

@@ -26,6 +26,11 @@
 		<filter-name>onlineFilter</filter-name>
 		<url-pattern>*.html</url-pattern>
 	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>onlineFilter</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
 	
 	<!-- 产生随机码的servlet -->
 	<servlet>
@@ -204,4 +209,10 @@
 	<listener>
 		<listener-class>com.tmind.kite.task.TextSenderListener</listener-class>
 	</listener>
+	<listener>
+		<listener-class>com.tmind.kite.web.SessionListener</listener-class>
+	</listener>
+	<session-config>  
+       <session-timeout>60</session-timeout>  
+    </session-config>  
 </web-app>
