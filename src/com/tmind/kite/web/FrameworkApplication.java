@@ -32,7 +32,7 @@ public class FrameworkApplication {
 	 * 获取session缓存对象
 	 * @return HashMap
 	 */
-	public static HashMap<String,Object> getSessionManager(){
+	public HashMap<String,Object> getSessionManager(){
 		return sessionManager;
 	}
 }

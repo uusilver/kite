@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 import com.tmind.kite.constants.CommonConstants;
 import com.tmind.kite.model.User;
 import com.tmind.kite.utils.LoginHandler;
-import com.tmind.kite.utils.SessionUtils;
 
 public class SessionListener implements HttpSessionListener {
 	
