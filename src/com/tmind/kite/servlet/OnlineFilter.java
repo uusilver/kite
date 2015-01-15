@@ -37,6 +37,7 @@ public class OnlineFilter extends HttpServlet implements Filter {
 
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
 		
@@ -60,8 +61,10 @@ public class OnlineFilter extends HttpServlet implements Filter {
 			// 判断如果没有取到用户信息,则说明用户没有登录，就跳转到登陆页面
 			if (user != null) {
 				if("3".equals(user.getClientType())||"4".equals(user.getClientType())){
+					
 					// 用户已经在微信或者Web App登录,IOS或者Android App有优先权将其从Web端退出，并登录IOS或者Android APP
 					logger.info("用户已经在微信或者Web App登录，IOS或者Android App有优先权将其从Web端退出，并登录IOS或者Android APP");
+					
 					//获取session管理器，并将session从中清除
 					HashMap<String,Object> sessionManager = FrameworkApplication.getInstance().getSessionManager();
 					if(sessionManager!=null){
