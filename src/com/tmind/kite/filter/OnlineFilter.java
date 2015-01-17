@@ -1,4 +1,4 @@
-package com.tmind.kite.servlet;
+package com.tmind.kite.filter;
 
 import java.io.IOException;
 import java.util.HashMap;
