@@ -2,6 +2,8 @@ package com.tmind.kite.filter;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -44,10 +46,26 @@ public class OnlineFilter extends HttpServlet implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		
-		String telNo = req.getParameter("telNo");
 		
 		//用户访问的入口，1：ISO APP；2：Android；3：微信；4：WebAPP
 		String clientType = req.getParameter("clientType");
+		
+		if(clientType==null||"".equals(clientType)){
+			clientType = String.valueOf(SessionUtils.getObjectAttribute(req, CommonConstants.CLIENT_TYPE));
+			if(clientType==null||"".equals(clientType)){
+				Gson gson = new Gson();
+				Map errCode = new LinkedHashMap();
+				errCode.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_ACCESS_DENIED);
+				errCode.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED);
+				String returnValue= gson.toJson(errCode);
+				res.getOutputStream().write(returnValue.getBytes());
+				return;
+			}
+		}else{
+			SessionUtils.setObjectAttribute(req, CommonConstants.CLIENT_TYPE, clientType);
+		}
+
+		String telNo = req.getParameter("telNo");
 		
 		//获取session中的用户信息
 		User user = getUserFromSession(req);
@@ -55,14 +73,15 @@ public class OnlineFilter extends HttpServlet implements Filter {
 		String path = req.getServletPath();
 		
 		//用户从IOS或者Android APP进入
-		if(clientType!=null&&("1".equals(clientType)||"2".equals(clientType))){
-			logger.info("请求来自："+(clientType.equals("1")?"IOS APP":"Android APP")+",用户请求的路径："+path);	
+		if(CommonConstants.ACCESS_FROM_IOS.equals(clientType)||CommonConstants.ACCESS_FROM_ANDROID.equals(clientType)){
+			logger.info("请求来自："+(clientType.equals(CommonConstants.ACCESS_FROM_IOS)?"IOS APP":"Android APP")+",用户请求的路径："+path);	
 			
-			// 判断如果没有取到用户信息,则说明用户没有登录，就跳转到登陆页面
+			// 如果没有取到用户信息,则说明用户没有登录，就跳转到登陆页面
 			if (user != null) {
-				if("3".equals(user.getClientType())||"4".equals(user.getClientType())){
+				
+				// 用户已经在微信或者Web App登录,IOS或者Android App有优先权将其从Web端退出，并登录IOS或者Android APP
+				if(CommonConstants.ACCESS_FROM_WEIXIN.equals(user.getClientType())||CommonConstants.ACCESS_FROM_WEBAPP.equals(user.getClientType())){
 					
-					// 用户已经在微信或者Web App登录,IOS或者Android App有优先权将其从Web端退出，并登录IOS或者Android APP
 					logger.info("用户已经在微信或者Web App登录，IOS或者Android App有优先权将其从Web端退出，并登录IOS或者Android APP");
 					
 					//获取session管理器，并将session从中清除
@@ -73,11 +92,12 @@ public class OnlineFilter extends HttpServlet implements Filter {
 					//主动销毁当前session
 					getSession(req).invalidate();
 					logger.info("用户 [TelNo:"+telNo+"，Id="+user.getId()+"] 已经退出Web App!");
+					chain.doFilter(request, response);
 					return;
 				}
 				
 				//用户已经在IOS App登录，此时需要在Android上登录
-				if("1".equals(user.getClientType()) && "2".equals(clientType)){
+				if(CommonConstants.ACCESS_FROM_IOS.equals(user.getClientType()) && CommonConstants.ACCESS_FROM_ANDROID.equals(clientType)){
 					logger.info("用户已经在IOS App登录，此时需要在Android上登录");
 					
 					//获取session管理器，并将session从中清除
@@ -99,12 +119,12 @@ public class OnlineFilter extends HttpServlet implements Filter {
 					Gson gson = new Gson();
 					String returnValue= gson.toJson(resultMap);
 					res.getOutputStream().write(returnValue.getBytes());
-					
+					chain.doFilter(request, response);
 					return;
 				}
 
 				//用户已经在Android App登录，此时需要在IOS上登录
-				if("2".equals(user.getClientType()) && "1".equals(clientType)){
+				if(CommonConstants.ACCESS_FROM_ANDROID.equals(user.getClientType()) && CommonConstants.ACCESS_FROM_IOS.equals(clientType)){
 					logger.info("用户已经在Android App登录，此时需要在IOS上登录");
 
 					
@@ -134,14 +154,16 @@ public class OnlineFilter extends HttpServlet implements Filter {
 		}
 		
 		//用户从WebAPP或者微信进入
-		if(clientType!=null&&("3".equals(clientType)||"4".equals(clientType))){
+		if(CommonConstants.ACCESS_FROM_WEIXIN.equals(clientType)||CommonConstants.ACCESS_FROM_WEBAPP.equals(clientType)){
 
-			logger.info("请求来自："+(clientType.equals("3")?"微信":"Web APP")+",用户请求的路径："+path);
+			logger.info("请求来自："+(clientType.equals(CommonConstants.ACCESS_FROM_WEIXIN)?"微信":"Web APP")+",用户请求的路径："+path);
 
 			// 这里设置如果没有登陆将要转发到的页面
 			RequestDispatcher dispatcher = request.getRequestDispatcher("login.html");
 			
-			if(path.equalsIgnoreCase("/login.html")||path.equalsIgnoreCase("/regist.html")||path.equalsIgnoreCase("/pre-reset-pwd.html")||path.equalsIgnoreCase("/404.html")){
+			if(path.equalsIgnoreCase("/login.html")||path.equalsIgnoreCase("/regist.html")
+					||path.equalsIgnoreCase("/pre-reset-pwd.html")||path.equalsIgnoreCase("/404.html")
+					||path.equalsIgnoreCase("/gen-pwd.html")){
 				// 已经登陆,继续此次请求
 				chain.doFilter(request, response);
 				logger.info("不需要登陆，可操作");
@@ -159,10 +181,10 @@ public class OnlineFilter extends HttpServlet implements Filter {
 				res.setDateHeader("Expires", 0);
 				res.setHeader("Pragma", "no-cache");
 				return;
-			} else if("1".equals(user.getClientType())||"2".equals(user.getClientType())){
+			} else if(CommonConstants.ACCESS_FROM_IOS.equals(user.getClientType())||CommonConstants.ACCESS_FROM_ANDROID.equals(user.getClientType())){
 				
 				// 已经在IOS或者Android登录,需跳转到强制关闭服务页面将用户退出IOS或者Android APP
-				dispatcher = request.getRequestDispatcher("stopApp.html");
+				dispatcher = request.getRequestDispatcher("shutdownApp.html");
 				logger.info("用户已经在IOS或者Android登录，则跳转到服务关闭页面，允许用户强制退出App。");
 				return;
 			}else{

@@ -28,7 +28,8 @@ public class LoginServlet extends HttpServlet {
 
 		String telno = request.getParameter("telno");
 		String password = request.getParameter("password");
-		String clientType = request.getParameter("clientType");
+//		String clientType = request.getParameter("clientType");
+		String clientType = String.valueOf(SessionUtils.getObjectAttribute(request, CommonConstants.CLIENT_TYPE));
 
 		logger.info("用户手机号码：" + telno + ",密码：" + password + ",登录入口："+ clientType);
 		

@@ -51,13 +51,18 @@ public class OnlineFilter extends HttpServlet implements Filter {
 		String clientType = req.getParameter("clientType");
 		
 		if(clientType==null||"".equals(clientType)){
-			Gson gson = new Gson();
-			Map errCode = new LinkedHashMap();
-			errCode.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_ACCESS_DENIED);
-			errCode.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED);
-			String returnValue= gson.toJson(errCode);
-			res.getOutputStream().write(returnValue.getBytes());
-			return;
+			clientType = String.valueOf(SessionUtils.getObjectAttribute(req, CommonConstants.CLIENT_TYPE));
+			if(clientType==null||"".equals(clientType)){
+				Gson gson = new Gson();
+				Map errCode = new LinkedHashMap();
+				errCode.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_ACCESS_DENIED);
+				errCode.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED);
+				String returnValue= gson.toJson(errCode);
+				res.getOutputStream().write(returnValue.getBytes());
+				return;
+			}
+		}else{
+			SessionUtils.setObjectAttribute(req, CommonConstants.CLIENT_TYPE, clientType);
 		}
 
 		String telNo = req.getParameter("telNo");

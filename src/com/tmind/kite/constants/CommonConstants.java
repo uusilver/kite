@@ -42,6 +42,9 @@ public class CommonConstants
 	/** 用户登录令牌 */
 	public static final String USER_LOGIN_TOKEN = "loginToken";
 	
+	/** 登录成功的用户 */
+	public static final String LOGIN_USER_OBJECT = "user";
+	
 	/** 每页显示记录数量 */
 	public static final int MAX_PAGE_ITEMS = 10;
 	
@@ -50,6 +53,9 @@ public class CommonConstants
 	
 	/** 尝试登陆失败x次后账号被锁定多分钟数 */
 	public static final int LOGIN_LOCK_TIME = 20;
+
+	/** 用户请求来源标识,即客户端类型 */
+	public static final String CLIENT_TYPE = "clientType";
 	
 	/** 用户请求来自IOS APP */
 	public static final String ACCESS_FROM_IOS = "1";

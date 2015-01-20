@@ -122,7 +122,7 @@ public class LoginHandler {
 				int userId = new Integer(user.getId());
 				
 				//用户账号已经被锁定,并且还没有超过20分钟的锁定时长
-				if(!isReleased(lockTime,CommonConstants.LOGIN_LOCK_TIME)){
+				if(lockTime!=null&&!isReleased(lockTime,CommonConstants.LOGIN_LOCK_TIME)){
 					resultCode = CommonConstants.MSG_CODE_REST_LOGIN_LOCKED_USER;
 				}
 				//如果密码匹配，则登陆成功，登陆失败次数更新为0
@@ -145,6 +145,7 @@ public class LoginHandler {
 					updPs.setInt(5, userId);
 					updPs.executeUpdate();
 					updPs.close();
+					map.put(CommonConstants.LOGIN_USER_OBJECT, user);
 				}
 				//用户密码不正确，失败计数累计
 				else{
