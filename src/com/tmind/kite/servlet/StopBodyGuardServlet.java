@@ -13,18 +13,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.tmind.kite.utils.DBUtils;
 
 public class StopBodyGuardServlet extends HttpServlet{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7213742721844414990L;
 
+	private static final long serialVersionUID = -7213742721844414990L;
+	
+	protected static final Logger logger = Logger.getLogger(StopBodyGuardServlet.class);
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-	    System.out.println("关闭服务..........");
+	    logger.debug("关闭服务..........");
 	    PrintWriter out = response.getWriter();
 	    String telno = (String) request.getSession().getAttribute("telno");
 	    if(stopService(telno)){
@@ -43,8 +44,11 @@ public class StopBodyGuardServlet extends HttpServlet{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		conn = DBUtils.getConnection();
-		String sql = "update m_user set service_flag='N', service_stop_time=?  where tel_no=?";
-		System.out.println("用户关闭服务:"+sql);
+		String sql = " update m_user m,web_service_record r"
+				   + " set r.service_flag='N', r.service_stop_time=?  "
+				   + " where m.id = r.user_id "
+				   + " and tel_no=?";
+		logger.debug("用户关闭服务:"+sql);
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setTimestamp(1, new Timestamp((new java.util.Date()).getTime()));

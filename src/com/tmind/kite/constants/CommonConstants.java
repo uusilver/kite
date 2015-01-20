@@ -8,17 +8,6 @@ package com.tmind.kite.constants;
  */
 public class CommonConstants
 {
-	/** 用户登录令牌 */
-	public static final String USER_LOGIN_TOKEN = "userLoginToken";
-	
-	/** 每页显示记录数量 */
-	public static final int MAX_PAGE_ITEMS = 10;
-	
-	/** 登陆尝试次数 */
-	public static final String MAX_LOGIN_ATTEMPT_TIMES = "3";
-	
-	/** 尝试登陆失败x次后账号被锁定多分钟数 */
-	public static final int LOGIN_LOCK_TIME = 20;
 
 	/**超级管理员帐号*/
 	public static final String SUPER_ADMIN_NAME = "admin";
@@ -50,6 +39,30 @@ public class CommonConstants
 	/**文字编码字符集：UTF－8*/
 	public static final String CHARSETNAME_UTF_8 = "UTF-8";
 	
+	/** 用户登录令牌 */
+	public static final String USER_LOGIN_TOKEN = "loginToken";
+	
+	/** 每页显示记录数量 */
+	public static final int MAX_PAGE_ITEMS = 10;
+	
+	/** 登陆尝试次数 */
+	public static final String MAX_LOGIN_ATTEMPT_TIMES = "3";
+	
+	/** 尝试登陆失败x次后账号被锁定多分钟数 */
+	public static final int LOGIN_LOCK_TIME = 20;
+	
+	/** 用户请求来自IOS APP */
+	public static final String ACCESS_FROM_IOS = "1";
+	
+	/** 用户请求来自Android APP */
+	public static final String ACCESS_FROM_ANDROID = "2";
+	
+	/** 用户请求来自Weixin */
+	public static final String ACCESS_FROM_WEIXIN = "3";
+	
+	/** 用户请求来自Web APP */
+	public static final String ACCESS_FROM_WEBAPP = "4";
+	
 	/**REST消息格式：status*/
 	public static final String REST_MSG_FORMAT_STATUS = "status";
 	
@@ -64,6 +77,9 @@ public class CommonConstants
 	
 	/**用户登陆成功*/
 	public static final String MSG_CODE_REST_LOGIN_SUCCESS = "success";
+	
+	/**拒绝用户访问*/
+	public static final String MSG_CODE_ACCESS_DENIED = "acc-denied-01";
 	
 	/**空用户ID*/
 	public static final String MSG_CODE_REST_LOGIN_NULL_USERID = "lgn-error00-1";

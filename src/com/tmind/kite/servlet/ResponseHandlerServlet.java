@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.tmind.kite.utils.DBUtils;
 import com.tmind.kite.utils.DigestHandler;
 
@@ -21,6 +23,8 @@ public class ResponseHandlerServlet extends HttpServlet{
 	 * 
 	 */
 	private static final long serialVersionUID = -4285028177905885896L;
+	
+	protected static final Logger logger = Logger.getLogger(ResponseHandlerServlet.class);
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
@@ -51,8 +55,11 @@ public class ResponseHandlerServlet extends HttpServlet{
 			PreparedStatement ps = null;
 			ResultSet rs = null;
 			conn = DBUtils.getConnection();
-			String sql = "update m_user set resp_flag='Y', resp_time=? where tel_no=?";
-			System.out.println("用户更新安全信息服务:"+sql);
+			String sql = "update m_user m,web_service_record r"
+					+ " set r.resp_flag='Y', r.resp_time=? "
+					+ " where m.id = r.user_id "
+					+ " and tel_no=?";
+			logger.debug("用户更新安全信息服务:"+sql);
 			try {
 				ps = conn.prepareStatement(sql);
 				ps.setTimestamp(1, new Timestamp((new java.util.Date()).getTime()));
@@ -76,7 +83,7 @@ public class ResponseHandlerServlet extends HttpServlet{
 			ResultSet rs = null;
 			conn = DBUtils.getConnection();
 			String sql = "select active_flag from m_task_key where key_val=?";
-			System.out.println("用户任务代码表:"+sql);
+			logger.debug("用户任务代码表:"+sql);
 			try {
 				ps = conn.prepareStatement(sql);
 				ps.setString(1, key);
@@ -85,7 +92,7 @@ public class ResponseHandlerServlet extends HttpServlet{
 					flag = true;
 				//更新key状态
 				sql = "update m_task_key set active_flag='Y' where key_val=?";
-				System.out.println("用户更新代码表:"+sql);
+				logger.debug("用户更新代码表:"+sql);
 				ps = conn.prepareStatement(sql);
 				ps.setString(1, key);
 				ps.execute();

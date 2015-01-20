@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import com.tmind.kite.utils.DBUtils;
 
 public class TxtCodeValidation extends HttpServlet{
@@ -20,6 +22,8 @@ public class TxtCodeValidation extends HttpServlet{
 	 * 
 	 */
 	private static final long serialVersionUID = -2534001044148977994L;
+	
+	protected static final Logger logger = Logger.getLogger(TxtCodeValidation.class);
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
@@ -32,7 +36,7 @@ public class TxtCodeValidation extends HttpServlet{
 			String txtCode = request.getParameter("txtCode");
 			String codeType = request.getParameter("codeType");
 			//验证类型0是用户，1是紧急联系人
-			System.out.println("短信验证类型为:"+codeType);
+			logger.debug("短信验证类型为:"+codeType);
 			if(validateTxtCode(telno,txtCode,codeType)){
 				out.write("success");
 			}else{
@@ -51,7 +55,7 @@ public class TxtCodeValidation extends HttpServlet{
 	
 	//Todo 校验短信随机码
 	private boolean validateTxtCode(String telno, String txtCode, String codeType){
-		System.out.println("随机码校验:"+txtCode+"电话为:"+telno);
+		logger.debug("随机码校验:"+txtCode+"电话为:"+telno);
 		
 		boolean flag = false;
 		Connection conn = null;
@@ -59,7 +63,7 @@ public class TxtCodeValidation extends HttpServlet{
 		ResultSet rs = null;
 		conn = DBUtils.getConnection();
 		String sql = "select id,random_num from m_random_num where tel_no=? and type_t=? and random_num=? and active_flag='N'";
-		System.out.println("校验随机码:"+sql);
+		logger.debug("校验随机码:"+sql);
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, telno);

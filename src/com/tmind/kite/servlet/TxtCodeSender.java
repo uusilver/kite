@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.tmind.kite.utils.DBUtils;
 import com.tmind.kite.utils.TxtHandler;
 
@@ -19,6 +21,8 @@ public class TxtCodeSender extends HttpServlet{
 	 * 
 	 */
 	private static final long serialVersionUID = -3426443876978110228L;
+	
+	protected static final Logger logger = Logger.getLogger(TxtCodeSender.class);
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
@@ -32,7 +36,7 @@ public class TxtCodeSender extends HttpServlet{
 		try {
 			String codeType = request.getParameter("codeType");
 			//验证类型0是用户，1是紧急联系人
-			System.out.println("短信验证类型为:"+codeType);
+			logger.debug("短信验证类型为:"+codeType);
 			if(insertRandomCode(telno,codeType,txtCode))
 				if(TxtHandler.sendTxt(telno, txtCode)){
 					out.write("success");   

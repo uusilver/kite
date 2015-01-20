@@ -4,11 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 import java.util.TimerTask;
+
+import org.apache.log4j.Logger;
 
 import com.tmind.kite.model.TxtMsgModel;
 import com.tmind.kite.servlet.DaemonPosterServlet;
@@ -16,6 +17,8 @@ import com.tmind.kite.utils.DBUtils;
 import com.tmind.kite.utils.DigestHandler;
 
 public class TextSenderTask extends TimerTask {
+	
+	protected static final Logger logger = Logger.getLogger(TextSenderTask.class);
 
   public void run() {
     // System.out.println("call at " + (new Date()));
@@ -36,7 +39,14 @@ public class TextSenderTask extends TimerTask {
 	  Connection conn = null;
 	  PreparedStatement ps = null;
 	  ResultSet rs = null;
-	  String sql = "select * from m_user where active_flag='Y' and service_flag='Y' and resp_flag='Y' and txt_times>0";
+//	  String sql = "select * from m_user where active_flag='Y' and service_flag='Y' and resp_flag='Y' and txt_times>0";
+	  String sql = "select u.tel_no,u.touch_freq,r.service_start_minute "
+	  			  +" from m_user u,web_service_record r "
+				  +" where u.id = r.user_id "
+				  +" and u.active_flag = 'Y' "
+				  +" and u.txt_times>0"
+				  +" and r.service_flag = 'Y' "
+				  +" and r.resp_flag = 'Y' ";
 	  conn = DBUtils.getConnection();
 	  try {
 		rs = conn.prepareStatement(sql).executeQuery();
@@ -44,7 +54,7 @@ public class TextSenderTask extends TimerTask {
 			  TxtMsgModel txtModel = new TxtMsgModel();
 			  //String str = "新加短信-->"+System.currentTimeMillis();
 			  int touchFrequency = rs.getInt("touch_freq");
-			  System.out.println("设置的时间间隔分钟:"+touchFrequency);
+			  logger.debug("设置的时间间隔分钟:"+touchFrequency);
 			  
 			  Calendar calNow=Calendar.getInstance();
 			  calNow.setTime(new Date());
@@ -52,7 +62,7 @@ public class TextSenderTask extends TimerTask {
 			  int minutesInDb = rs.getInt("service_start_minute");
 			  
 			  int minutesDiffer = calNow.get(Calendar.MINUTE) - minutesInDb;
-			  System.out.println("系统相差分钟为:"+minutesDiffer);
+			  logger.debug("系统相差分钟为:"+minutesDiffer);
 			  if(minutesDiffer%touchFrequency==0){
 				  String telno = rs.getString("tel_no");
 				  //更新用户的应答状态为N,成功则继续
@@ -63,7 +73,7 @@ public class TextSenderTask extends TimerTask {
 					  String encrypContent = telno+"@"+generateRandomKey();
 					  content += DigestHandler.encryptBASE64(encrypContent.getBytes());
 					  txtModel.setContent(content);
-					  System.out.println("校验短信发送:"+txtModel);
+					  logger.debug("校验短信发送:"+txtModel);
 					  DaemonPosterServlet.addIntoQueue(txtModel);
 				  }
 			  }
@@ -83,8 +93,15 @@ public class TextSenderTask extends TimerTask {
 	  Connection conn = null;
 	  PreparedStatement ps = null;
 	  ResultSet rs = null;
-	  String sql = "select * from m_user where (timestampdiff(minute,resp_time,now())>standard_check_time)>0 and active_flag='Y' and service_flag='Y' and resp_flag='N' and txt_times>0;";
-	  System.out.println("紧急联系人查询:"+sql);
+	  String sql = "select m.tel_no,m.urgent_telno "
+	  		+ " from m_user m,web_service_record r "
+	  		+ " where m.id = r.user_id "
+	  		+ " and (timestampdiff(minute,r.resp_time,now())>m.standard_check_time)>0 "
+	  		+ " and m.active_flag='Y' "
+	  		+ " and m.txt_times>0"
+	  		+ " and r.service_flag='Y' "
+	  		+ " and r.resp_flag='N' ";
+	  logger.debug("紧急联系人查询:"+sql);
 	  conn = DBUtils.getConnection();
 	  try {
 		rs = conn.prepareStatement(sql).executeQuery();
@@ -98,7 +115,7 @@ public class TextSenderTask extends TimerTask {
 				String encrypContent = telno+"@"+generateRandomKey();
 				content += DigestHandler.encryptBASE64(encrypContent.getBytes());
 				txtModel.setContent(content);
-				System.out.println("发送至紧急联系人:"+txtModel);
+				logger.debug("发送至紧急联系人:"+txtModel);
 				DaemonPosterServlet.addIntoQueue(txtModel);
 			}
 		}
@@ -118,8 +135,11 @@ public class TextSenderTask extends TimerTask {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		conn = DBUtils.getConnection();
-		String sql = "update m_user set resp_flag='N', txt_times=txt_times-1 where tel_no=?";
-		System.out.println("用户开启服务:"+sql);
+		String sql = "update m_user m,web_service_record r "
+				+ " set r.resp_flag='N', m.txt_times=txt_times-1 "
+				+ " where m.id = r.user_id "
+				+ " m.tel_no=? ";
+		logger.debug("用户开启服务:"+sql);
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, telno);
@@ -150,7 +170,7 @@ public class TextSenderTask extends TimerTask {
 		ResultSet rs = null;
 		conn = DBUtils.getConnection();
 		String sql = "insert into m_task_key (key_val, active_flag) values(?,'N')";
-		System.out.println("用户开启服务:"+sql);
+		logger.debug("用户开启服务:"+sql);
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, sb.toString());
