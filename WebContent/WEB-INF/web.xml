@@ -19,7 +19,7 @@
 	<!-- 未登陆踢出校验 -->
 	<filter>
 		<filter-name>onlineFilter</filter-name>
-		<filter-class>com.tmind.kite.servlet.OnlineFilter</filter-class>
+		<filter-class>com.tmind.kite.filter.OnlineFilter</filter-class>
 	</filter>
 
 	<filter-mapping>
