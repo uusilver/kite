@@ -88,20 +88,20 @@
                 <div class="control-group">
                     <label class="control-label" for="urgentName">紧急联系人姓名</label>
                     <div class="controls">
-                        <input id="urgentName" name="urgentName" type="text" />
+                        <input id="urgentName" name="urgentName" maxlength="10" type="text" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="urgentTelno">紧急联系人电话</label>
                     <div class="controls">
-                        <input id="urgentTelno" name="urgentTelno" type="text" />
+                        <input id="urgentTelno" name="urgentTelno" maxlength="11" type="text" />
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="txtRandomCode">校验码</label>
                     <div class="controls">
                         <input id="txtRandomCode" type="text" />
-                        <input type="button" id="getTxtCodeBtn" class="btn btn-info" value="免费获取验证码" />
+                        <input type="button" id="getTxtCodeBtn" class="btn btn-info"  maxlength="6" value="免费获取验证码" />
                     </div>
                 </div>
                 <div class="control-group">
@@ -118,8 +118,8 @@
                     <div class="controls">
                         <span id="errorMsg"></span>
                         <br/>
-                        <button type="button" id="checkBtn" class="btn btn-info">提交</button>
-                        <button type="button" id="goMain" class="btn btn-primary">开启服务</button>
+                        <button type="button" id="checkBtn" class="btn btn-info">保 存</button>
+                        <button type="button" id="goMain" class="btn btn-primary">返 回</button>
                     </div>
                 </div>
             </form>
@@ -168,6 +168,10 @@
         $("#checkBtn").click(function(){
             if($("#urgentName").val()==""){
                 $("#errorMsg").html("<font color='red'>紧急联系人姓名不能为空！</font>");
+                return false;
+            }
+            if($("#urgentName").val().indexOf("@")!=-1){
+                $("#errorMsg").html("<font color='red'>紧急联系人姓名中不能包含字符@，请修改！</font>");
                 return false;
             }
             if($("#urgentTelno").val()==""){

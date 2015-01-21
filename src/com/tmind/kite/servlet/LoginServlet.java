@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 
 import com.tmind.kite.constants.CommonConstants;
@@ -35,6 +36,7 @@ public class LoginServlet extends HttpServlet {
 		logger.info("用户手机号码：" + telno + ",密码：" + password + ",登录入口："+ clientType);
 		
 		try {
+			password = new String(Base64.encodeBase64(password.getBytes()),CommonConstants.CHARSETNAME_UTF_8);
 			HashMap resultMap = LoginHandler.login(telno, password, clientType);
 			String status = (String) resultMap.get(CommonConstants.REST_MSG_FORMAT_STATUS);
 			if ("success".equals(status)) {

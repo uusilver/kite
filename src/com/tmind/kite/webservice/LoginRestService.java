@@ -7,6 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
@@ -23,11 +24,15 @@ public class LoginRestService {
 	
 	protected static final Logger logger = Logger.getLogger(LoginRestService.class);
 	
+	@Context 
+	private HttpServletRequest request;
+	
 	@GET
-	@Path("login/{userName}/{password}/{accessType}")
+	@Path("login/{userName}/{password}/{clientType}")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String login(@PathParam(value="userName") String telno,@PathParam(value="password") String pwd,
-						@PathParam(value="clientType") String clientType,HttpServletRequest request){
+						@PathParam(value="clientType") String clientType){
+		
 		String returnValue = "";
 
 		logger.debug("[Login Web Service Request] : <User ID:"+telno+", Password:"+pwd+">");
@@ -35,8 +40,8 @@ public class LoginRestService {
 		HashMap resultMap = LoginHandler.login(telno, pwd,clientType);
 		
 		if(!resultMap.isEmpty()){
-			if(resultMap.get("user")!=null){
-				User user = (User) resultMap.get("user");
+			if(resultMap.get(CommonConstants.LOGIN_USER_OBJECT)!=null){
+				User user = (User) resultMap.get(CommonConstants.LOGIN_USER_OBJECT);
 				
 				user.setClientType(clientType);
 				user.setLoginFlag("1");
@@ -49,7 +54,7 @@ public class LoginRestService {
 					sessionManager.put(user.getTelNo(), request.getSession());
 				}
 				
-				resultMap.remove("user");
+				resultMap.remove(CommonConstants.LOGIN_USER_OBJECT);
 			}
 			Gson gson = new Gson();
 			returnValue= gson.toJson(resultMap);

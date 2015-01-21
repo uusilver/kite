@@ -14,7 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import com.tmind.kite.constants.CommonConstants;
+import com.tmind.kite.model.User;
 import com.tmind.kite.utils.DBUtils;
+import com.tmind.kite.utils.SessionUtils;
 
 @SuppressWarnings("serial")
 public class ChekInUserProfileServlet extends HttpServlet{
@@ -24,7 +27,10 @@ public class ChekInUserProfileServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		PrintWriter out = response.getWriter();
-		String telno = (String) request.getSession().getAttribute("telno");
+		//1.从session中获取用户信息
+		User user = (User)SessionUtils.getObjectAttribute(request, CommonConstants.USER_LOGIN_TOKEN);
+		String telno = user.getTelNo();
+		
 	    String urgentName = request.getParameter("urgentName");
 	    String urgentTelno = request.getParameter("urgentTelno");
 	    String touchFrequency = request.getParameter("touchFrequency");

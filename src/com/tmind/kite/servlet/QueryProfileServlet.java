@@ -14,7 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import com.tmind.kite.constants.CommonConstants;
+import com.tmind.kite.model.User;
 import com.tmind.kite.utils.DBUtils;
+import com.tmind.kite.utils.SessionUtils;
 
 @SuppressWarnings("serial")
 public class QueryProfileServlet extends HttpServlet{
@@ -23,8 +26,12 @@ public class QueryProfileServlet extends HttpServlet{
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		response.setCharacterEncoding("UTF-8");
-	    String telno = (String) request.getSession().getAttribute("telno");
+		
+		response.setCharacterEncoding(CommonConstants.CHARSETNAME_UTF_8);
+		//1.从session中获取用户信息
+		User user = (User)SessionUtils.getObjectAttribute(request, CommonConstants.USER_LOGIN_TOKEN);
+		String telno = user.getTelNo();
+		
 	    Connection conn  = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -47,10 +54,5 @@ public class QueryProfileServlet extends HttpServlet{
 		}finally{
 			DBUtils.freeConnection(conn, ps, rs);
 		}
-		
-		
-	    
-		
-	    
 	}
 }

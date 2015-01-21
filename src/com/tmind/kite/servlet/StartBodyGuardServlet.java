@@ -17,13 +17,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import com.tmind.kite.constants.CommonConstants;
+import com.tmind.kite.model.User;
 import com.tmind.kite.utils.DBUtils;
+import com.tmind.kite.utils.SessionUtils;
 
 public class StartBodyGuardServlet extends HttpServlet{
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -2369276585257232858L;
 	
 	protected static final Logger logger = Logger.getLogger(StartBodyGuardServlet.class);
@@ -31,14 +31,22 @@ public class StartBodyGuardServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 	    logger.debug("开启服务..........");
+	    
 	    PrintWriter out = response.getWriter();
-	    String telno = (String) request.getSession().getAttribute("telno");
-	    String clientType = request.getParameter("clientType");
-	    String status = "ERROR";
-	    if(telno!=null&&!"".equals(telno)&&clientType!=null&&!"".equals(clientType)){
+	    
+		//1.从session中获取用户信息
+		User user = (User)SessionUtils.getObjectAttribute(request, CommonConstants.USER_LOGIN_TOKEN);
+		String telno = user.getTelNo();
+
+		String clientType = String.valueOf(SessionUtils.getObjectAttribute(request, CommonConstants.CLIENT_TYPE));
+	    
+		String status = "ERROR";
+	    
+		if(telno!=null&&!"".equals(telno)&&clientType!=null&&!"".equals(clientType)){
 		    status = startService(telno,clientType);
 	    }
-	    if(status.equalsIgnoreCase("OK")){
+	    
+		if(status.equalsIgnoreCase("OK")){
 	    	out.write("success");   
 		}else if(status.equalsIgnoreCase("TXT_OUT")){
 			//短信次数为0:error11

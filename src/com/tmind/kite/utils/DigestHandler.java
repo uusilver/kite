@@ -40,4 +40,8 @@ public class DigestHandler {
     	   }   
     	   return password;   
     	}
+    
+    public static void main(String[] args){
+    	makeMD5("123654");
+    }
 }

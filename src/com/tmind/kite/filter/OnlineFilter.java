@@ -45,11 +45,34 @@ public class OnlineFilter extends HttpServlet implements Filter {
 		
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
+
 		
+		String path = req.getServletPath();
 		
-		//用户访问的入口，1：ISO APP；2：Android；3：微信；4：WebAPP
-		String clientType = req.getParameter(CommonConstants.CLIENT_TYPE);
-		String telNo = req.getParameter(CommonConstants.TEL_NUMBER);
+		String requestURI = req.getRequestURI();
+		
+		String clientType = null;
+		
+		String telNo = null;
+		
+		//如果访问URI中包含/rest/字样，则说明请求webservice服务
+		if(requestURI!=null&&requestURI.indexOf("/rest/")!=-1){
+			//如果访问URI中包含/loginRest/login/字样，则说明请求login webservice服务
+			int indexNo = requestURI.indexOf("/loginRest/login/");
+			if(indexNo!=-1){
+				String[] params = requestURI.substring(indexNo+"/loginRest/login/".length()).split("/");
+				if(params!=null&&params.length==3){
+					telNo = params[0];
+					clientType = params[2];
+				}
+			}
+		}else{
+			// 否则是请求servlet
+			// 用户访问的入口，1：ISO APP；2：Android；3：微信；4：WebAPP
+			clientType = req.getParameter(CommonConstants.CLIENT_TYPE);
+			telNo = req.getParameter(CommonConstants.TEL_NUMBER);
+		}
+		
 		
 		if(clientType==null||"".equals(clientType)){
 			clientType = String.valueOf(SessionUtils.getObjectAttribute(req, CommonConstants.CLIENT_TYPE));
@@ -75,11 +98,18 @@ public class OnlineFilter extends HttpServlet implements Filter {
 
 		logger.info("**********************"+telNo+"****************");
 		
-		String path = req.getServletPath();
-		
 		//用户从IOS或者Android APP进入
 		if(CommonConstants.ACCESS_FROM_IOS.equals(clientType)||CommonConstants.ACCESS_FROM_ANDROID.equals(clientType)){
 			logger.info("请求来自："+(clientType.equals(CommonConstants.ACCESS_FROM_IOS)?"IOS APP":"Android APP")+",用户["+telNo+"]请求的路径："+path);	
+			
+			if(requestURI.indexOf("/loginRest/login/")!=-1||requestURI.indexOf("/registRest/regist/")!=-1
+					||path.indexOf("/resetPwd/reset/")!=-1){
+				// 已经登陆,继续此次请求
+				chain.doFilter(request, response);
+				logger.info("不需要登陆，可操作");
+				return;
+			}
+			
 			
 			// 如果没有取到用户信息,则说明用户没有登录，就跳转到登陆页面
 			if (user != null) {
