@@ -90,7 +90,7 @@ public class OnlineFilter extends HttpServlet implements Filter {
 		}
 		
 		//获取session中的用户信息
-		User user = getUserFromSession(req);
+		User user = getUserFromSession(req,telNo);
 		
 		if((telNo==null||"".equals(telNo)) && user!=null){
 			telNo = user.getTelNo();
@@ -101,15 +101,6 @@ public class OnlineFilter extends HttpServlet implements Filter {
 		//用户从IOS或者Android APP进入
 		if(CommonConstants.ACCESS_FROM_IOS.equals(clientType)||CommonConstants.ACCESS_FROM_ANDROID.equals(clientType)){
 			logger.info("请求来自："+(clientType.equals(CommonConstants.ACCESS_FROM_IOS)?"IOS APP":"Android APP")+",用户["+telNo+"]请求的路径："+path);	
-			
-			if(requestURI.indexOf("/loginRest/login/")!=-1||requestURI.indexOf("/registRest/regist/")!=-1
-					||path.indexOf("/resetPwd/reset/")!=-1){
-				// 已经登陆,继续此次请求
-				chain.doFilter(request, response);
-				logger.info("不需要登陆，可操作");
-				return;
-			}
-			
 			
 			// 如果没有取到用户信息,则说明用户没有登录，就跳转到登陆页面
 			if (user != null) {
@@ -125,7 +116,7 @@ public class OnlineFilter extends HttpServlet implements Filter {
 						sessionManager.remove(user.getTelNo());
 					}
 					//主动销毁当前session
-					getSession(req).invalidate();
+					getSession(req,user.getTelNo()).invalidate();
 					logger.info("用户 [TelNo:"+telNo+"，Id="+user.getId()+"] 已经退出Web App!");
 					chain.doFilter(request, response);
 					return;
@@ -141,7 +132,7 @@ public class OnlineFilter extends HttpServlet implements Filter {
 						sessionManager.remove(user.getTelNo());
 					}
 					//主动销毁当前session
-					getSession(req).invalidate();
+					getSession(req,user.getTelNo()).invalidate();
 					logger.info("用户 [TelNo:"+telNo+"，Id="+user.getId()+"] 已经退出Web App!");
 					
 					HashMap resultMap = new HashMap();
@@ -169,7 +160,7 @@ public class OnlineFilter extends HttpServlet implements Filter {
 						sessionManager.remove(user.getTelNo());
 					}
 					//主动销毁当前session
-					getSession(req).invalidate();
+					getSession(req,user.getTelNo()).invalidate();
 					logger.info("用户 [TelNo:"+telNo+"，Id="+user.getId()+"] 已经退出Web App!");
 					
 					HashMap resultMap = new HashMap();
@@ -185,6 +176,14 @@ public class OnlineFilter extends HttpServlet implements Filter {
 					return;
 				}
 				
+			}else{
+				if(requestURI.indexOf("/loginRest/login/")!=-1||requestURI.indexOf("/registRest/regist/")!=-1
+						||path.indexOf("/resetPwd/reset/")!=-1){
+					// 已经登陆,继续此次请求
+					chain.doFilter(request, response);
+					logger.info("不需要登陆，可操作");
+					return;
+				}
 			}
 		}
 		
@@ -241,7 +240,7 @@ public class OnlineFilter extends HttpServlet implements Filter {
 	 * @param request
 	 * @return
 	 */
-	private User getUserFromSession(HttpServletRequest request){
+	private User getUserFromSession(HttpServletRequest request,String telNo){
 		
 		HttpSession session = null;
 		
@@ -251,7 +250,6 @@ public class OnlineFilter extends HttpServlet implements Filter {
 		//2.如果用户信息不存在，则尝试从session管理器中获取用户信息
 		if(user==null){
 
-			String telNo = request.getParameter(CommonConstants.TEL_NUMBER);
 			if(telNo==null || "".equals(telNo)){
 				return null;
 			}
@@ -275,14 +273,13 @@ public class OnlineFilter extends HttpServlet implements Filter {
 	 * @param request
 	 * @return
 	 */
-	private HttpSession getSession(HttpServletRequest request){
+	private HttpSession getSession(HttpServletRequest request,String telNo){
 		
 		HttpSession session = request.getSession();
 		
 		//如果session不存在，则尝试从session管理器中获取
 		if(session==null){
 			
-			String telNo = request.getParameter(CommonConstants.TEL_NUMBER);
 			if(telNo==null || "".equals(telNo)){
 				return null;
 			}

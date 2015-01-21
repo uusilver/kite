@@ -55,7 +55,7 @@ public class LoginServlet extends HttpServlet {
 				}
 				response.sendRedirect("main.html");
 			} else {
-				response.sendRedirect("login.html?1");
+				response.sendRedirect("login.html?clientType="+clientType);
 			}
 
 		} catch (IOException e) {

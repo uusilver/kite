@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -155,7 +156,7 @@ public class LoginHandler {
 					if(errTimes==new Integer(CommonConstants.MAX_LOGIN_ATTEMPT_TIMES)){
 						updPs = conn.prepareStatement(UPDATE_TIMES_DATETIME_SQL);
 						updPs.setInt(1, errTimes);
-						updPs.setDate(2, (java.sql.Date)DateUtils.convertString2Date(DateUtils.getChar14()));
+						updPs.setTimestamp(2, new Timestamp((new java.util.Date()).getTime()));
 						updPs.setInt(3, userId);
 					}else{
 						updPs = conn.prepareStatement(UPDATE_TIMES_SQL);
