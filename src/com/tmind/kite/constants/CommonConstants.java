@@ -54,6 +54,27 @@ public class CommonConstants
 	/** 尝试登陆失败x次后账号被锁定多分钟数 */
 	public static final int LOGIN_LOCK_TIME = 20;
 
+	/** 用户姓名 */
+	public static final String 	USER_NAME = "userName";
+
+	/** 用户手机号码标识 */
+	public static final String TEL_NUMBER = "telno";
+
+	/** 用户密码标识 */
+	public static final String USER_PASSWORD = "password";
+
+	/** 短信验证类型代码标识 */
+	public static final String SMS_CODE_TYPE = "codeType";
+
+	/** 随机码 */
+	public static final String TXT_CODE = "txtCode";
+	
+	/** 校验码标识 */
+	public static final String VALIDATE_CODE = "validateCode";
+
+	/** 随机码标识 */
+	public static final String RANDOM_CODE = "randomCode";
+	
 	/** 用户请求来源标识,即客户端类型 */
 	public static final String CLIENT_TYPE = "clientType";
 	

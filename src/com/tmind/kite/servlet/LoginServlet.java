@@ -26,18 +26,19 @@ public class LoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
-		String telno = request.getParameter("telno");
-		String password = request.getParameter("password");
-//		String clientType = request.getParameter("clientType");
+		String telno = request.getParameter(CommonConstants.TEL_NUMBER);
+		String password = request.getParameter(CommonConstants.USER_PASSWORD);
+		
+		//从session中获取用户访问入口代码
 		String clientType = String.valueOf(SessionUtils.getObjectAttribute(request, CommonConstants.CLIENT_TYPE));
 
 		logger.info("用户手机号码：" + telno + ",密码：" + password + ",登录入口："+ clientType);
 		
 		try {
 			HashMap resultMap = LoginHandler.login(telno, password, clientType);
-			String status = (String) resultMap.get("status");
+			String status = (String) resultMap.get(CommonConstants.REST_MSG_FORMAT_STATUS);
 			if ("success".equals(status)) {
-				User user = (User) resultMap.get("user");
+				User user = (User) resultMap.get(CommonConstants.LOGIN_USER_OBJECT);
 				
 				user.setClientType(clientType);
 				user.setLoginFlag("1");

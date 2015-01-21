@@ -48,7 +48,8 @@ public class OnlineFilter extends HttpServlet implements Filter {
 		
 		
 		//用户访问的入口，1：ISO APP；2：Android；3：微信；4：WebAPP
-		String clientType = req.getParameter("clientType");
+		String clientType = req.getParameter(CommonConstants.CLIENT_TYPE);
+		String telNo = req.getParameter(CommonConstants.TEL_NUMBER);
 		
 		if(clientType==null||"".equals(clientType)){
 			clientType = String.valueOf(SessionUtils.getObjectAttribute(req, CommonConstants.CLIENT_TYPE));
@@ -64,17 +65,21 @@ public class OnlineFilter extends HttpServlet implements Filter {
 		}else{
 			SessionUtils.setObjectAttribute(req, CommonConstants.CLIENT_TYPE, clientType);
 		}
-
-		String telNo = req.getParameter("telNo");
 		
 		//获取session中的用户信息
 		User user = getUserFromSession(req);
+		
+		if((telNo==null||"".equals(telNo)) && user!=null){
+			telNo = user.getTelNo();
+		}
+
+		logger.info("**********************"+telNo+"****************");
 		
 		String path = req.getServletPath();
 		
 		//用户从IOS或者Android APP进入
 		if(CommonConstants.ACCESS_FROM_IOS.equals(clientType)||CommonConstants.ACCESS_FROM_ANDROID.equals(clientType)){
-			logger.info("请求来自："+(clientType.equals(CommonConstants.ACCESS_FROM_IOS)?"IOS APP":"Android APP")+",用户请求的路径："+path);	
+			logger.info("请求来自："+(clientType.equals(CommonConstants.ACCESS_FROM_IOS)?"IOS APP":"Android APP")+",用户["+telNo+"]请求的路径："+path);	
 			
 			// 如果没有取到用户信息,则说明用户没有登录，就跳转到登陆页面
 			if (user != null) {
@@ -156,10 +161,10 @@ public class OnlineFilter extends HttpServlet implements Filter {
 		//用户从WebAPP或者微信进入
 		if(CommonConstants.ACCESS_FROM_WEIXIN.equals(clientType)||CommonConstants.ACCESS_FROM_WEBAPP.equals(clientType)){
 
-			logger.info("请求来自："+(clientType.equals(CommonConstants.ACCESS_FROM_WEIXIN)?"微信":"Web APP")+",用户请求的路径："+path);
+			logger.info("请求来自："+(clientType.equals(CommonConstants.ACCESS_FROM_WEIXIN)?"微信":"Web APP")+",用户["+telNo+"]请求的路径："+path);
 
 			// 这里设置如果没有登陆将要转发到的页面
-			RequestDispatcher dispatcher = request.getRequestDispatcher("login.html");
+			RequestDispatcher dispatcher = null;
 			
 			if(path.equalsIgnoreCase("/login.html")||path.equalsIgnoreCase("/regist.html")
 					||path.equalsIgnoreCase("/pre-reset-pwd.html")||path.equalsIgnoreCase("/404.html")
@@ -170,10 +175,10 @@ public class OnlineFilter extends HttpServlet implements Filter {
 				return;
 			}
 			
-			logger.info("**********************"+telNo+"****************");
 			// 判断如果没有取到用户信息,则说明用户没有登录，就跳转到登陆页面
 			if (user == null) {
 				// 跳转到登陆页面
+				dispatcher = request.getRequestDispatcher("login.html");
 				dispatcher.forward(request, response);
 				logger.info("用户没有登陆，不允许操作");
 
@@ -185,6 +190,7 @@ public class OnlineFilter extends HttpServlet implements Filter {
 				
 				// 已经在IOS或者Android登录,需跳转到强制关闭服务页面将用户退出IOS或者Android APP
 				dispatcher = request.getRequestDispatcher("shutdownApp.html");
+				dispatcher.forward(request, response);
 				logger.info("用户已经在IOS或者Android登录，则跳转到服务关闭页面，允许用户强制退出App。");
 				return;
 			}else{
@@ -207,17 +213,19 @@ public class OnlineFilter extends HttpServlet implements Filter {
 	 */
 	private User getUserFromSession(HttpServletRequest request){
 		
-		String telNo = request.getParameter("telNo");
-		if(telNo==null || "".equals(telNo)){
-			return null;
-		}
 		HttpSession session = null;
 		
-		//获取session中的用户信息
+		//1.从session中获取用户信息
 		User user = (User)SessionUtils.getObjectAttribute(request, CommonConstants.USER_LOGIN_TOKEN);
 		
-		//如果用户信息不存在，则尝试从session管理器中获取用户信息
+		//2.如果用户信息不存在，则尝试从session管理器中获取用户信息
 		if(user==null){
+
+			String telNo = request.getParameter(CommonConstants.TEL_NUMBER);
+			if(telNo==null || "".equals(telNo)){
+				return null;
+			}
+			
 			//获取session管理器，并从中根据用户手机号获取对应的session对象
 			HashMap<String,Object> sessionManager = FrameworkApplication.getInstance().getSessionManager();
 			if(sessionManager!=null && sessionManager.containsKey(telNo)){
@@ -239,14 +247,15 @@ public class OnlineFilter extends HttpServlet implements Filter {
 	 */
 	private HttpSession getSession(HttpServletRequest request){
 		
-		String telNo = request.getParameter("telNo");
-		if(telNo==null || "".equals(telNo)){
-			return null;
-		}
 		HttpSession session = request.getSession();
 		
 		//如果session不存在，则尝试从session管理器中获取
 		if(session==null){
+			
+			String telNo = request.getParameter(CommonConstants.TEL_NUMBER);
+			if(telNo==null || "".equals(telNo)){
+				return null;
+			}
 			//获取session管理器，并从中根据用户手机号获取对应的session对象
 			HashMap<String,Object> sessionManager = FrameworkApplication.getInstance().getSessionManager();
 			if(sessionManager!=null && sessionManager.containsKey(telNo)){

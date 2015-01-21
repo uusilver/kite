@@ -12,10 +12,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.tmind.kite.utils.DBUtils;
 
 @SuppressWarnings("serial")
 public class QueryProfileServlet extends HttpServlet{
+
+	protected static final Logger logger = Logger.getLogger(QueryProfileServlet.class);
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
@@ -26,14 +30,14 @@ public class QueryProfileServlet extends HttpServlet{
 		ResultSet rs = null;
 		conn = DBUtils.getConnection();
 		String sql = "select urgent_name, urgent_telno, touch_freq from m_user where tel_no=?";
-		System.out.println("查询用户个人设置:"+sql);
+		logger.debug("查询用户个人设置:"+sql);
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, telno);
 			rs = ps.executeQuery();
 			if(rs.next()){
 				PrintWriter out = response.getWriter();
-				//System.out.println(rs.getString("urgent_name"));
+				//logger.debug(rs.getString("urgent_name"));
 			    out.write(rs.getString("urgent_name")+"@"+rs.getString("urgent_telno")+"@"+rs.getString("touch_freq")); 
 			}
 			

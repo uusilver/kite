@@ -92,6 +92,7 @@ public class LoginHandler {
 				
 				User user = new User();
 				user.setId(id);
+				user.setTelNo(teleNo);
 				user.setUserPwd(user_pwd);
 				user.setTxtTimes(login_err_times);
 				

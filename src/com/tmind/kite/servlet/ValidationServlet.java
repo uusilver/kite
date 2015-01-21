@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
+import com.tmind.kite.constants.CommonConstants;
 import com.tmind.kite.utils.DBUtils;
 
 
@@ -23,15 +26,18 @@ public class ValidationServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 2662511918019956239L;
 
+	protected static final Logger logger = Logger.getLogger(ValidationServlet.class);
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		PrintWriter out = response.getWriter();
 		try {
 			HttpSession session = request.getSession(true);  
 			// 将内容输出到响应客户端对象的输出流中，生成的图片中包含4个字符
-			String randomCodeOnServer = (String) session.getAttribute("validateCode");
-			String randomCode = request.getParameter("randomCode");
-			String telNo = request.getParameter("telno");
+			String randomCodeOnServer = (String) session.getAttribute(CommonConstants.VALIDATE_CODE);
+			String randomCode = request.getParameter(CommonConstants.RANDOM_CODE);
+			String telNo = request.getParameter(CommonConstants.TEL_NUMBER);
+			
 			//Login用的标示为ForLogin,配置在login.html的JS中
 			if(randomCode.equalsIgnoreCase("ForLogin")){
 				if(notExistTelno(telNo)){
@@ -67,7 +73,7 @@ public class ValidationServlet extends HttpServlet {
 		ResultSet rs = null;
 		conn = DBUtils.getConnection();
 		String sql = "select id from m_user where tel_no=? and active_flag='Y'";
-		System.out.println("查询手机号是否存在"+sql);
+		logger.debug("查询手机号是否存在"+sql);
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, telNo);

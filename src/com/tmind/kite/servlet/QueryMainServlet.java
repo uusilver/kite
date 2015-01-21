@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.tmind.kite.utils.DBUtils;
 
 public class QueryMainServlet extends HttpServlet{
@@ -19,6 +21,8 @@ public class QueryMainServlet extends HttpServlet{
 	 * 
 	 */
 	private static final long serialVersionUID = -4188434648874653761L;
+
+	protected static final Logger logger = Logger.getLogger(QueryMainServlet.class);
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
@@ -28,7 +32,7 @@ public class QueryMainServlet extends HttpServlet{
 		ResultSet rs = null;
 		conn = DBUtils.getConnection();
 		String sql = "select service_flag, urgent_name, urgent_telno from m_user where tel_no=?";
-		System.out.println("查询用户个人设置:"+sql);
+		logger.debug("查询用户个人设置:"+sql);
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, telno);

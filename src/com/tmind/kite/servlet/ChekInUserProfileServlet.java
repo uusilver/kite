@@ -12,10 +12,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.tmind.kite.utils.DBUtils;
 
 @SuppressWarnings("serial")
 public class ChekInUserProfileServlet extends HttpServlet{
+	
+	protected static final Logger logger = Logger.getLogger(ChekInUserProfileServlet.class);
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
@@ -24,7 +28,7 @@ public class ChekInUserProfileServlet extends HttpServlet{
 	    String urgentName = request.getParameter("urgentName");
 	    String urgentTelno = request.getParameter("urgentTelno");
 	    String touchFrequency = request.getParameter("touchFrequency");
-	    System.out.println(urgentName+":"+urgentTelno+":"+touchFrequency);
+	    logger.debug(urgentName+":"+urgentTelno+":"+touchFrequency);
 	    if(checkInUserProfile(telno, urgentName,urgentTelno,touchFrequency)){
 			//更新用户个人信息失败:error5
 	    	out.write("success"); 
@@ -35,17 +39,17 @@ public class ChekInUserProfileServlet extends HttpServlet{
 	}
 	
 	public boolean checkInUserProfile(String telno, String urgentName, String urgentTelno, String touchFrequency){
-		System.out.println("用户:"+telno);
-		System.out.println("紧急联系人姓名:"+urgentName);
-		System.out.println("紧急联系人电话:"+urgentTelno);
-		System.out.println("信息发送频率:"+touchFrequency);
+		logger.debug("用户:"+telno);
+		logger.debug("紧急联系人姓名:"+urgentName);
+		logger.debug("紧急联系人电话:"+urgentTelno);
+		logger.debug("信息发送频率:"+touchFrequency);
 		boolean flag = false;
 		Connection conn  = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		conn = DBUtils.getConnection();
 		String sql = "update m_user set urgent_name=?, urgent_telno=?, touch_freq=? where tel_no=?";
-		System.out.println("用户设置更新:"+sql);
+		logger.debug("用户设置更新:"+sql);
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, urgentName);

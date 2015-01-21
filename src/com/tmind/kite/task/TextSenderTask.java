@@ -21,7 +21,7 @@ public class TextSenderTask extends TimerTask {
 	protected static final Logger logger = Logger.getLogger(TextSenderTask.class);
 
   public void run() {
-    // System.out.println("call at " + (new Date()));
+    // logger.debug("call at " + (new Date()));
     // TODO 此处添加具体任务代码
 	try {
 		checkUserStatus();

@@ -6,15 +6,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Date;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
+import com.tmind.kite.constants.CommonConstants;
 import com.tmind.kite.utils.DBUtils;
 
 
@@ -25,20 +25,22 @@ public class RegistServlet extends HttpServlet{
 	 */
 	private static final long serialVersionUID = 8845479346221043741L;
 
+	protected static final Logger logger = Logger.getLogger(RegistServlet.class);
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response){
 
 			try {
-				request.setCharacterEncoding("UTF-8");
+				request.setCharacterEncoding(CommonConstants.CHARSETNAME_UTF_8);
 			} catch (UnsupportedEncodingException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			String username = request.getParameter("username");
-			System.out.println("用户名:"+username);
-			String telno = request.getParameter("telno");
+			String username = request.getParameter(CommonConstants.USER_NAME);
+			logger.debug("用户名:"+username);
+			String telno = request.getParameter(CommonConstants.TEL_NUMBER);
 			//电话写入session
 			HttpSession session = request.getSession();
-			session.setAttribute("telno", telno);
+			session.setAttribute(CommonConstants.TEL_NUMBER, telno);
 			if(insertUserIntoDb(username,telno)){
 				try {
 					response.sendRedirect("gen-pwd.html");
@@ -60,7 +62,7 @@ public class RegistServlet extends HttpServlet{
 		//默认15分钟后如果没有回信则联系紧急联系人
 		String sql = "insert into m_user (user_name,reg_date,tel_no,active_flag,standard_check_time,txt_times) "
 				+ " values (?,?,?,?,?,?)";
-		System.out.println("用户注册:"+sql);
+		logger.debug("用户注册:"+sql);
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, username);

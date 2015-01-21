@@ -13,7 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import com.tmind.kite.constants.CommonConstants;
+import com.tmind.kite.model.User;
 import com.tmind.kite.utils.DBUtils;
+import com.tmind.kite.utils.SessionUtils;
 import com.tmind.kite.utils.TxtHandler;
 
 public class TxtCodeSender extends HttpServlet{
@@ -26,15 +29,19 @@ public class TxtCodeSender extends HttpServlet{
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		//获得session里的电话号码
-		String telno = (String) request.getSession().getAttribute("telno");
+		
+		//1.从session中获取用户信息
+		User user = (User)SessionUtils.getObjectAttribute(request, CommonConstants.USER_LOGIN_TOKEN);
+		
+		//2.获得session里的电话号码
+		String telno = user.getTelNo();
 		PrintWriter out = response.getWriter();
 		//生成6位随机数字
 		String txtCode = "";
 		 while(txtCode.length()<6)
 			 txtCode+=(int)(Math.random()*10);
 		try {
-			String codeType = request.getParameter("codeType");
+			String codeType = request.getParameter(CommonConstants.SMS_CODE_TYPE);
 			//验证类型0是用户，1是紧急联系人
 			logger.debug("短信验证类型为:"+codeType);
 			if(insertRandomCode(telno,codeType,txtCode))

@@ -1,8 +1,12 @@
 package com.tmind.kite.utils;
 
+import org.apache.log4j.Logger;
+
 import com.tmind.kite.constants.MessageContent;
 
 public class ComposeMessage {
+
+	protected static final Logger logger = Logger.getLogger(ComposeMessage.class);
 
 	public static String composeMessage(String msgFormat,String[] values){
 		
@@ -19,6 +23,6 @@ public class ComposeMessage {
 	public static void main(String[] args){
 		String[] values = {"23:56","Andorid"};
 		String msg = composeMessage(MessageContent.MSG_LOGIN_OTHER_CLIENT,values);
-		System.out.println(msg);
+		logger.debug(msg);
 	}
 }

@@ -15,7 +15,10 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import com.tmind.kite.constants.CommonConstants;
+import com.tmind.kite.model.User;
 import com.tmind.kite.utils.DBUtils;
+import com.tmind.kite.utils.SessionUtils;
 
 public class TxtCodeValidation extends HttpServlet{
 	/**
@@ -30,11 +33,15 @@ public class TxtCodeValidation extends HttpServlet{
 		PrintWriter out = response.getWriter();
 		// 设置输出内容为图像，格式为jpeg
 		try {
-			HttpSession session = request.getSession(true);  
-			String telno = (String) session.getAttribute("telno");
+			//1.从session中获取用户信息
+			User user = (User)SessionUtils.getObjectAttribute(request, CommonConstants.USER_LOGIN_TOKEN);
+			
+			String telno = user.getTelNo();
+			
 			// 将内容输出到响应客户端对象的输出流中，生成的图片中包含4个字符
-			String txtCode = request.getParameter("txtCode");
-			String codeType = request.getParameter("codeType");
+			String txtCode = request.getParameter(CommonConstants.TXT_CODE);
+			String codeType = request.getParameter(CommonConstants.SMS_CODE_TYPE);
+			
 			//验证类型0是用户，1是紧急联系人
 			logger.debug("短信验证类型为:"+codeType);
 			if(validateTxtCode(telno,txtCode,codeType)){
