@@ -82,6 +82,7 @@ public class OnlineFilter extends HttpServlet implements Filter {
 				errCode.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_ACCESS_DENIED);
 				errCode.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED);
 				String returnValue= gson.toJson(errCode);
+				res.setContentType("text/html;charset=UTF-8");
 				res.getOutputStream().write(returnValue.getBytes());
 				return;
 			}
@@ -89,8 +90,9 @@ public class OnlineFilter extends HttpServlet implements Filter {
 			SessionUtils.setObjectAttribute(req, CommonConstants.CLIENT_TYPE, clientType);
 		}
 		
-		//获取session中的用户信息
-		User user = getUserFromSession(req,telNo);
+		
+		//从session中获取用户信息
+		User user = (User)SessionUtils.getObjectAttribute(req, CommonConstants.USER_LOGIN_TOKEN);;
 		
 		if((telNo==null||"".equals(telNo)) && user!=null){
 			telNo = user.getTelNo();
@@ -98,88 +100,20 @@ public class OnlineFilter extends HttpServlet implements Filter {
 
 		logger.info("**********************"+telNo+"****************");
 		
+		
+		
 		//用户从IOS或者Android APP进入
 		if(CommonConstants.ACCESS_FROM_IOS.equals(clientType)||CommonConstants.ACCESS_FROM_ANDROID.equals(clientType)){
 			logger.info("请求来自："+(clientType.equals(CommonConstants.ACCESS_FROM_IOS)?"IOS APP":"Android APP")+",用户["+telNo+"]请求的路径："+path);	
 			
 			// 如果没有取到用户信息,则说明用户没有登录，就跳转到登陆页面
 			if (user != null) {
-				
-				// 用户已经在微信或者Web App登录,IOS或者Android App有优先权将其从Web端退出，并登录IOS或者Android APP
-				if(CommonConstants.ACCESS_FROM_WEIXIN.equals(user.getClientType())||CommonConstants.ACCESS_FROM_WEBAPP.equals(user.getClientType())){
-					
-					logger.info("用户已经在微信或者Web App登录，IOS或者Android App有优先权将其从Web端退出，并登录IOS或者Android APP");
-					
-					//获取session管理器，并将session从中清除
-					HashMap<String,Object> sessionManager = FrameworkApplication.getInstance().getSessionManager();
-					if(sessionManager!=null){
-						sessionManager.remove(user.getTelNo());
-					}
-					//销毁已经存在的session
-					getSession(user.getTelNo()).invalidate();
-					logger.info("用户 [TelNo:"+telNo+"，Id="+user.getId()+"] 已经退出Web App!");
-					chain.doFilter(request, response);
-					return;
-				}
-				
-				//用户已经在IOS App登录，此时需要在Android上登录
-				if(CommonConstants.ACCESS_FROM_IOS.equals(user.getClientType()) && CommonConstants.ACCESS_FROM_ANDROID.equals(clientType)){
-					logger.info("用户已经在IOS App登录，此时需要在Android上登录");
-					
-					//获取session管理器，并将session从中清除
-					HashMap<String,Object> sessionManager = FrameworkApplication.getInstance().getSessionManager();
-					if(sessionManager!=null){
-						sessionManager.remove(user.getTelNo());
-					}
-					//销毁已经存在的session
-					getSession(user.getTelNo()).invalidate();
-					logger.info("用户 [TelNo:"+telNo+"，Id="+user.getId()+"] 已经退出Web App!");
-					
-					HashMap resultMap = new HashMap();
-
-					String currentDateTime = DateUtils.formatChar12(DateUtils.getChar12());
-					String[] values = {currentDateTime,"Andorid"};
-					String msg = ComposeMessage.composeMessage(MessageContent.MSG_LOGIN_OTHER_CLIENT,values);
-					resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_OTHER_CLIENT);
-					resultMap.put(CommonConstants.REST_MSG_FORMAT_CONTENT, msg);
-					Gson gson = new Gson();
-					String returnValue= gson.toJson(resultMap);
-					res.getOutputStream().write(returnValue.getBytes());
-					chain.doFilter(request, response);
-					return;
-				}
-
-				//用户已经在Android App登录，此时需要在IOS上登录
-				if(CommonConstants.ACCESS_FROM_ANDROID.equals(user.getClientType()) && CommonConstants.ACCESS_FROM_IOS.equals(clientType)){
-					logger.info("用户已经在Android App登录，此时需要在IOS上登录");
-
-					
-					//获取session管理器，并将session从中清除
-					HashMap<String,Object> sessionManager = FrameworkApplication.getInstance().getSessionManager();
-					if(sessionManager!=null){
-						sessionManager.remove(user.getTelNo());
-					}
-					//销毁已经存在的session
-					getSession(user.getTelNo()).invalidate();
-					logger.info("用户 [TelNo:"+telNo+"，Id="+user.getId()+"] 已经退出Web App!");
-					
-					HashMap resultMap = new HashMap();
-
-					String currentDateTime = DateUtils.formatChar12(DateUtils.getChar12());
-					String[] values = {currentDateTime,"Apple"};
-					String msg = ComposeMessage.composeMessage(MessageContent.MSG_LOGIN_OTHER_CLIENT,values);
-					resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_OTHER_CLIENT);
-					resultMap.put(CommonConstants.REST_MSG_FORMAT_CONTENT, msg);
-					Gson gson = new Gson();
-					String returnValue= gson.toJson(resultMap);
-					res.getOutputStream().write(returnValue.getBytes());
-					return;
-				}
-				
-			}else{
-				if(requestURI.indexOf("/loginRest/login/")!=-1||requestURI.indexOf("/registRest/regist/")!=-1
-						||path.indexOf("/resetPwd/reset/")!=-1){
-					// 已经登陆,继续此次请求
+				logger.info("用户 [TelNo:"+telNo+"，Id="+user.getId()+"] 已经退出Web App!");
+				chain.doFilter(request, response);
+				return;
+			}else {
+				if(requestURI.indexOf("/loginRest/login/")!=-1||requestURI.indexOf("/registRest/regist/")!=-1||path.indexOf("/resetPwd/reset/")!=-1){
+					// 访问这些数据不需要登录,继续此次请求
 					chain.doFilter(request, response);
 					logger.info("不需要登陆，可操作");
 					return;
@@ -207,7 +141,7 @@ public class OnlineFilter extends HttpServlet implements Filter {
 			// 判断如果没有取到用户信息,则说明用户没有登录，就跳转到登陆页面
 			if (user == null) {
 				// 跳转到登陆页面
-				dispatcher = request.getRequestDispatcher("login.html");
+				dispatcher = request.getRequestDispatcher("login.html?clientType="+clientType);
 				dispatcher.forward(request, response);
 				logger.info("用户没有登陆，不允许操作");
 
@@ -215,14 +149,7 @@ public class OnlineFilter extends HttpServlet implements Filter {
 				res.setDateHeader("Expires", 0);
 				res.setHeader("Pragma", "no-cache");
 				return;
-			} else if(CommonConstants.ACCESS_FROM_IOS.equals(user.getClientType())||CommonConstants.ACCESS_FROM_ANDROID.equals(user.getClientType())){
-				
-				// 已经在IOS或者Android登录,需跳转到强制关闭服务页面将用户退出IOS或者Android APP
-				dispatcher = request.getRequestDispatcher("shutdownApp.html");
-				dispatcher.forward(request, response);
-				logger.info("用户已经在IOS或者Android登录，则跳转到服务关闭页面，允许用户强制退出App。");
-				return;
-			}else{
+			} else{
 				// 已经登陆,继续此次请求
 				chain.doFilter(request, response);
 				logger.info("用户已经登陆，允许操作");
@@ -233,59 +160,5 @@ public class OnlineFilter extends HttpServlet implements Filter {
 
 	public void destroy() {
 
-	}
-	
-	/**
-	 * 根据用户手机号码获取session，并从中取出用户信息
-	 * @param request
-	 * @return
-	 */
-	private User getUserFromSession(HttpServletRequest request,String telNo){
-		
-		HttpSession session = null;
-		
-		//1.从session中获取用户信息
-		User user = (User)SessionUtils.getObjectAttribute(request, CommonConstants.USER_LOGIN_TOKEN);
-		
-		//2.如果用户信息不存在，则尝试从session管理器中获取用户信息
-		if(user==null){
-
-			if(telNo==null || "".equals(telNo)){
-				return null;
-			}
-			
-			//获取session管理器，并从中根据用户手机号获取对应的session对象
-			HashMap<String,Object> sessionManager = FrameworkApplication.getInstance().getSessionManager();
-			if(sessionManager!=null && sessionManager.containsKey(telNo)){
-				session = (HttpSession)sessionManager.get(telNo);
-				if(session!=null){
-					user = (User)session.getAttribute(CommonConstants.USER_LOGIN_TOKEN);
-				}
-			}else{
-				logger.info("用户["+telNo+"]没有登录，请先登录");
-			}
-		}
-		return user;
-	}
-	
-	/**
-	 * 根据用户手机号码从session管理器中获取session
-	 * @param request
-	 * @return
-	 */
-	private HttpSession getSession(String telNo){
-		
-		HttpSession session = null;
-		
-		if(telNo==null || "".equals(telNo)){
-			return null;
-		}
-		//获取session管理器，并从中根据用户手机号获取对应的session对象
-		HashMap<String,Object> sessionManager = FrameworkApplication.getInstance().getSessionManager();
-		if(sessionManager!=null && sessionManager.containsKey(telNo)){
-			session = (HttpSession)sessionManager.get(telNo);
-		}
-		
-		return session;
 	}
 }

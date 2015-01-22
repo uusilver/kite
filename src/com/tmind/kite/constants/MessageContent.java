@@ -2,8 +2,14 @@ package com.tmind.kite.constants;
 
 public class MessageContent {
 	
-	//不同设备或者异地登录提示信息
-	public static final String MSG_LOGIN_OTHER_CLIENT = "您的账号于{0}在{1}设备上登录。如果这不是您的操作，您的登录密码可能已经泄漏。请及时改密。";
+	//不同设备或者异地登录提示信息：用户已经在IOS或者Andorid端登录，此时需要在不同平台的App端登录
+	public static final String MSG_LOGIN_OTHER_CLIENT_FOR_APP = "您的账号于{0}在{1}设备上登录。如果这不是您的操作，您的登录密码可能已经泄漏。请及时改密。";
+	
+	//不同设备或者异地登录提示信息：用户已经在Web端登录，此时需要在App端登录
+	public static final String MSG_LOGIN_OTHER_CLIENT_FOR_WEB = "您的账号已经在{0}上登录，IOS或者Android App有优先权将其从{1}端退出，并在IOS或者Android APP端登录。如果这不是您的操作，您的登录密码可能已经泄漏。请及时改密。";
+	
+	//不同设备或者异地登录提示信息：用户已经在APP登录，此时需要在Web端登录
+	public static final String MSG_LOGIN_APP_CLIENT_FOR_WEB = "用户已经在{0}登录，则跳转到服务关闭页面，允许用户强制退出App";
 	
 	//缺少访问入口标识，拒绝被访问
 	public static final String MSG_ACCESS_DENIED = "非法访问渠道";

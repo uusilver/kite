@@ -22,7 +22,7 @@ public class ComposeMessage {
 	
 	public static void main(String[] args){
 		String[] values = {"23:56","Andorid"};
-		String msg = composeMessage(MessageContent.MSG_LOGIN_OTHER_CLIENT,values);
+		String msg = composeMessage(MessageContent.MSG_LOGIN_OTHER_CLIENT_FOR_APP,values);
 		logger.debug(msg);
 	}
 }

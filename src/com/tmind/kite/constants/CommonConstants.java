@@ -131,5 +131,8 @@ public class CommonConstants
 	
 	/**用户在其他客户端登录*/
 	public static final String MSG_CODE_REST_LOGIN_OTHER_CLIENT = "lgn-error05";
+	
+	/**用户在web端登录，但是APP端已经登录*/
+	public static final String MSG_CODE_REST_LOGIN_WEB_TO_APP = "lgn-error05－01";
 
 }

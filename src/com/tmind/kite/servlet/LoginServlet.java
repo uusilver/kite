@@ -14,6 +14,7 @@ import com.tmind.kite.constants.CommonConstants;
 import com.tmind.kite.model.User;
 import com.tmind.kite.utils.LoginHandler;
 import com.tmind.kite.utils.SessionUtils;
+import com.tmind.kite.utils.SynchLoginStatus;
 import com.tmind.kite.web.FrameworkApplication;
 
 public class LoginServlet extends HttpServlet {
@@ -26,17 +27,31 @@ public class LoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
-		String telno = request.getParameter(CommonConstants.TEL_NUMBER);
+		String telNo = request.getParameter(CommonConstants.TEL_NUMBER);
 		String password = request.getParameter(CommonConstants.USER_PASSWORD);
 		
 		//从session中获取用户访问入口代码
 		String clientType = String.valueOf(SessionUtils.getObjectAttribute(request, CommonConstants.CLIENT_TYPE));
 
-		logger.info("用户手机号码：" + telno + ",密码：" + password + ",登录入口："+ clientType);
+		logger.info("用户手机号码：" + telNo + ",密码：" + password + ",登录入口："+ clientType);
+		
+		//如果手机号码或者客户端类型为空，则跳转入异常提示页面
+		if(telNo==null||"".equals(telNo)||clientType==null||"".equals(clientType)){
+			try {
+				response.sendRedirect("access_denied.html");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		//根据手机号码和客户端类型检查用户是否已经在其他客户端登录,如果登录则根据情况同步登录状态
+		HashMap loginStatus = SynchLoginStatus.synchLogin(telNo, clientType);
 		
 		try {
 			password = new String(Base64.encodeBase64(password.getBytes()),CommonConstants.CHARSETNAME_UTF_8);
-			HashMap resultMap = LoginHandler.login(telno, password, clientType);
+			
+			HashMap resultMap = LoginHandler.login(telNo, password, clientType);
 			String status = (String) resultMap.get(CommonConstants.REST_MSG_FORMAT_STATUS);
 			if ("success".equals(status)) {
 				User user = (User) resultMap.get(CommonConstants.LOGIN_USER_OBJECT);
@@ -63,5 +78,4 @@ public class LoginServlet extends HttpServlet {
 		}
 
 	}
-
 }

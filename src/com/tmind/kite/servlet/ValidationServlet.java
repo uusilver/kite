@@ -84,7 +84,7 @@ public class ValidationServlet extends HttpServlet {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		conn = DBUtils.getConnection();
-		String sql = "select id,login_err_times from m_user where tel_no=? and active_flag='Y'";
+		String sql = "select id,login_err_times,timestampdiff(minute,locked_time,now()) as val from m_user where tel_no=? and active_flag='Y'";
 		logger.debug("查询手机号是否存在"+sql);
 		try {
 			ps = conn.prepareStatement(sql);
@@ -92,8 +92,11 @@ public class ValidationServlet extends HttpServlet {
 			rs = ps.executeQuery();
 			if(rs.next()){
 				int loginErrTimes = rs.getInt("login_err_times");
-				if(CommonConstants.MAX_LOGIN_ATTEMPT_TIMES.equals(loginErrTimes+"")){
+				int interval = rs.getInt("val");
+				if(CommonConstants.MAX_LOGIN_ATTEMPT_TIMES.equals(loginErrTimes+"") && CommonConstants.LOGIN_LOCK_TIME>interval){
 					flag = "locked";
+				}else{
+					flag="released";
 				}
 			}else{
 				flag = "notExist";
