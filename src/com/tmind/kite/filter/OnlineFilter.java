@@ -115,8 +115,8 @@ public class OnlineFilter extends HttpServlet implements Filter {
 					if(sessionManager!=null){
 						sessionManager.remove(user.getTelNo());
 					}
-					//主动销毁当前session
-					getSession(req,user.getTelNo()).invalidate();
+					//销毁已经存在的session
+					getSession(user.getTelNo()).invalidate();
 					logger.info("用户 [TelNo:"+telNo+"，Id="+user.getId()+"] 已经退出Web App!");
 					chain.doFilter(request, response);
 					return;
@@ -131,8 +131,8 @@ public class OnlineFilter extends HttpServlet implements Filter {
 					if(sessionManager!=null){
 						sessionManager.remove(user.getTelNo());
 					}
-					//主动销毁当前session
-					getSession(req,user.getTelNo()).invalidate();
+					//销毁已经存在的session
+					getSession(user.getTelNo()).invalidate();
 					logger.info("用户 [TelNo:"+telNo+"，Id="+user.getId()+"] 已经退出Web App!");
 					
 					HashMap resultMap = new HashMap();
@@ -159,8 +159,8 @@ public class OnlineFilter extends HttpServlet implements Filter {
 					if(sessionManager!=null){
 						sessionManager.remove(user.getTelNo());
 					}
-					//主动销毁当前session
-					getSession(req,user.getTelNo()).invalidate();
+					//销毁已经存在的session
+					getSession(user.getTelNo()).invalidate();
 					logger.info("用户 [TelNo:"+telNo+"，Id="+user.getId()+"] 已经退出Web App!");
 					
 					HashMap resultMap = new HashMap();
@@ -269,26 +269,23 @@ public class OnlineFilter extends HttpServlet implements Filter {
 	}
 	
 	/**
-	 * 根据用户手机号码获取session
+	 * 根据用户手机号码从session管理器中获取session
 	 * @param request
 	 * @return
 	 */
-	private HttpSession getSession(HttpServletRequest request,String telNo){
+	private HttpSession getSession(String telNo){
 		
-		HttpSession session = request.getSession();
+		HttpSession session = null;
 		
-		//如果session不存在，则尝试从session管理器中获取
-		if(session==null){
-			
-			if(telNo==null || "".equals(telNo)){
-				return null;
-			}
-			//获取session管理器，并从中根据用户手机号获取对应的session对象
-			HashMap<String,Object> sessionManager = FrameworkApplication.getInstance().getSessionManager();
-			if(sessionManager!=null && sessionManager.containsKey(telNo)){
-				session = (HttpSession)sessionManager.get(telNo);
-			}
+		if(telNo==null || "".equals(telNo)){
+			return null;
 		}
+		//获取session管理器，并从中根据用户手机号获取对应的session对象
+		HashMap<String,Object> sessionManager = FrameworkApplication.getInstance().getSessionManager();
+		if(sessionManager!=null && sessionManager.containsKey(telNo)){
+			session = (HttpSession)sessionManager.get(telNo);
+		}
+		
 		return session;
 	}
 }

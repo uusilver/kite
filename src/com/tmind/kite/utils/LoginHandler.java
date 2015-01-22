@@ -87,7 +87,7 @@ public class LoginHandler {
 				id = (new Integer(rs.getInt("Id"))).toString();
 				user_pwd = rs.getString("user_pwd");
 				login_err_times = (new Integer(rs.getInt("login_err_times"))).toString();
-				lockTime = rs.getDate("locked_time");
+				lockTime = rs.getTimestamp("locked_time");
 
 				logger.debug("获取用户信息,[User ID:"+id+",TelNo:"+teleNo+"]");
 				

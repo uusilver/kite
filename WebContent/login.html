@@ -45,7 +45,7 @@
         var flag = window.location.href.indexOf('?');
         if(flag!='-1'){
         	$("#errorMsg").html("<font color='red'>密码错误！</font>");
-            }
+        }
         //去注册
         $("#goReg").click(function(){window.location.href='regist.html'});
         $("#checkBtn").click(function(){
@@ -70,11 +70,15 @@
                         randomCode:"ForLogin"
                     },
                     success:function(data){
+                    	alert(data);
                         if(data=='success'){
                             $("#realBtn").trigger('click');
                            
-                        }else{
+                        }else if(data=='error2'){
                         	$("#errorMsg").html("<font color='red'>手机号码不存在，请更换！</font>");
+                            return false;
+                        }else if(data=='error5'){
+                        	$("#errorMsg").html("<font color='red'>由于连续3次登录失败，该账号已经被锁定，请20分钟后再尝试！</font>");
                             return false;
                         }
                     }

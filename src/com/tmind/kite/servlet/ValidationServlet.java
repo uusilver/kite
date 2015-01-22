@@ -37,11 +37,16 @@ public class ValidationServlet extends HttpServlet {
 			String randomCodeOnServer = (String) session.getAttribute(CommonConstants.VALIDATE_CODE);
 			String randomCode = request.getParameter(CommonConstants.RANDOM_CODE);
 			String telNo = request.getParameter(CommonConstants.TEL_NUMBER);
-			
+			String errorCode = "";
 			//Login用的标示为ForLogin,配置在login.html的JS中
 			if(randomCode.equalsIgnoreCase("ForLogin")){
-				if(notExistTelno(telNo)){
+				errorCode = notExistOrLocked(telNo);
+				if("notExist".equals(errorCode)){
+					//error2:用户不存在
 					out.write("error2");
+				}else if("locked".equals(errorCode)){
+					//error5：用户账号被锁住
+					out.write("error5");
 				}else{
 					out.write("success");
 				}
@@ -49,10 +54,17 @@ public class ValidationServlet extends HttpServlet {
 				if(!randomCode.equalsIgnoreCase(randomCodeOnServer))
 				{
 					out.write("error1");
-				}else if(notExistTelno(telNo)){
-					out.write("success"); 
 				}else{
-					out.write("error2");
+					errorCode = notExistOrLocked(telNo);
+					if("notExist".equals(errorCode)){
+						//error2:用户不存在
+						out.write("error2");
+					}else if("locked".equals(errorCode)){
+						//error5：用户账号被锁住
+						out.write("error5");
+					}else{
+						out.write("success");
+					}
 				}
 			}  
 			   
@@ -65,31 +77,33 @@ public class ValidationServlet extends HttpServlet {
 
 	}
 	
-	//Todo 从数据库查询手机号码是否存在
-	private boolean notExistTelno(String telNo){
-		boolean flag = false;
+	//Todo 从数据库查询手机号码是否存在或者被锁定
+	private String notExistOrLocked(String telNo){
+		String flag = "notExist";
 		Connection conn  = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		conn = DBUtils.getConnection();
-		String sql = "select id from m_user where tel_no=? and active_flag='Y'";
+		String sql = "select id,login_err_times from m_user where tel_no=? and active_flag='Y'";
 		logger.debug("查询手机号是否存在"+sql);
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, telNo);
 			rs = ps.executeQuery();
-			if(rs.next())
-				flag = false;
-			else
-				flag = true;
+			if(rs.next()){
+				int loginErrTimes = rs.getInt("login_err_times");
+				if(CommonConstants.MAX_LOGIN_ATTEMPT_TIMES.equals(loginErrTimes+"")){
+					flag = "locked";
+				}
+			}else{
+				flag = "notExist";
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
 			DBUtils.freeConnection(conn, ps, rs);
 		}
-		
-		
 		return flag;
 	}
 }
