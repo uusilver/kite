@@ -14,7 +14,7 @@
             <h3>
                 请输入短信校验码，并设置密码
             </h3>
-            <form class="form-horizontal" action="GenPwdServlet" method="post">
+            <form class="form-horizontal" action="GenPwdServlet.k" method="post">
                 <div class="control-group">
                     <label class="control-label" for="txtRandomCode">校验码</label>
                     <div class="controls">
@@ -70,7 +70,7 @@
             data:{
                 codeType:0
             },
-            url:"TxtCodeSender",
+            url:"TxtCodeSender.k",
             success:function(data){
                 if(data=='error4'){
                     $("#errorMsg").html("<font color='red'>发送失败,请重新获取!</font>");
@@ -105,7 +105,7 @@
                 else{
                     $.ajax({
                         type:"post",
-                        url:"TxtCodeValidation",
+                        url:"TxtCodeValidation.k",
                         data:{
                             txtCode:$("#txtRandomCode").val(),
                             codeType:0

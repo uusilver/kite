@@ -6,15 +6,23 @@
     <param-value>kiteApp</param-value>
   </context-param>
   <filter>
-    <filter-name>onlineFilter</filter-name>
-    <filter-class>com.tmind.kite.filter.OnlineFilter</filter-class>
+    <filter-name>onlineServletFilter</filter-name>
+    <filter-class>com.tmind.kite.filter.OnlineServletFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>onlineRestFilter</filter-name>
+    <filter-class>com.tmind.kite.filter.OnlineRestFilter</filter-class>
   </filter>
   <filter-mapping>
-    <filter-name>onlineFilter</filter-name>
+    <filter-name>onlineServletFilter</filter-name>
     <url-pattern>*.html</url-pattern>
   </filter-mapping>
   <filter-mapping>
-    <filter-name>onlineFilter</filter-name>
+    <filter-name>onlineServletFilter</filter-name>
+    <url-pattern>*.k</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>onlineRestFilter</filter-name>
     <url-pattern>/rest/*</url-pattern>
   </filter-mapping>
   
@@ -35,7 +43,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>RandImage</servlet-name>
-    <url-pattern>/RandImage</url-pattern>
+    <url-pattern>/RandImage.k</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>Regist</servlet-name>
@@ -43,7 +51,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Regist</servlet-name>
-    <url-pattern>/Regist</url-pattern>
+    <url-pattern>/Regist.k</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>ValidationServlet</servlet-name>
@@ -51,7 +59,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>ValidationServlet</servlet-name>
-    <url-pattern>/ValidationServlet</url-pattern>
+    <url-pattern>/ValidationServlet.k</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>TxtCodeValidation</servlet-name>
@@ -59,7 +67,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>TxtCodeValidation</servlet-name>
-    <url-pattern>/TxtCodeValidation</url-pattern>
+    <url-pattern>/TxtCodeValidation.k</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>TxtCodeSender</servlet-name>
@@ -67,7 +75,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>TxtCodeSender</servlet-name>
-    <url-pattern>/TxtCodeSender</url-pattern>
+    <url-pattern>/TxtCodeSender.k</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>GenPwdServlet</servlet-name>
@@ -75,7 +83,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>GenPwdServlet</servlet-name>
-    <url-pattern>/GenPwdServlet</url-pattern>
+    <url-pattern>/GenPwdServlet.k</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>ChekInUserProfileServlet</servlet-name>
@@ -83,7 +91,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>ChekInUserProfileServlet</servlet-name>
-    <url-pattern>/ChekInUserProfileServlet</url-pattern>
+    <url-pattern>/ChekInUserProfileServlet.k</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>StartBodyGuardServlet</servlet-name>
@@ -91,7 +99,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>StartBodyGuardServlet</servlet-name>
-    <url-pattern>/StartBodyGuardServlet</url-pattern>
+    <url-pattern>/StartBodyGuardServlet.k</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>StopBodyGuardServlet</servlet-name>
@@ -99,7 +107,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>StopBodyGuardServlet</servlet-name>
-    <url-pattern>/StopBodyGuardServlet</url-pattern>
+    <url-pattern>/StopBodyGuardServlet.k</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>LoginServlet</servlet-name>
@@ -107,7 +115,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>LoginServlet</servlet-name>
-    <url-pattern>/LoginServlet</url-pattern>
+    <url-pattern>/LoginServlet.k</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>LogoutServlet</servlet-name>
@@ -115,7 +123,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>LogoutServlet</servlet-name>
-    <url-pattern>/LogoutServlet</url-pattern>
+    <url-pattern>/LogoutServlet.k</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>QueryProfileServlet</servlet-name>
@@ -123,7 +131,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>QueryProfileServlet</servlet-name>
-    <url-pattern>/QueryProfileServlet</url-pattern>
+    <url-pattern>/QueryProfileServlet.k</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>QueryMainServlet</servlet-name>
@@ -131,7 +139,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>QueryMainServlet</servlet-name>
-    <url-pattern>/QueryMainServlet</url-pattern>
+    <url-pattern>/QueryMainServlet.k</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>resp</servlet-name>
@@ -139,7 +147,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>resp</servlet-name>
-    <url-pattern>/resp</url-pattern>
+    <url-pattern>/resp.k</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>PreResetPwdServlet</servlet-name>
@@ -147,7 +155,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>PreResetPwdServlet</servlet-name>
-    <url-pattern>/PreResetPwdServlet</url-pattern>
+    <url-pattern>/PreResetPwdServlet.k</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>DaemonPosterServlet</servlet-name>
@@ -156,7 +164,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>DaemonPosterServlet</servlet-name>
-    <url-pattern>/DaemonPosterServlet</url-pattern>
+    <url-pattern>/DaemonPosterServlet.k</url-pattern>
   </servlet-mapping>
   <servlet>
     <servlet-name>WebRest</servlet-name>

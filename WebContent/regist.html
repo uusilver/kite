@@ -10,7 +10,7 @@
 <script type="text/javascript">  
         function reImg(){  
             var img = document.getElementById("Img");  
-            img.src = "RandImage?rnd=" + Math.random();  
+            img.src = "RandImage.k?rnd=" + Math.random();  
         }  
 </script>  
 <body>
@@ -32,7 +32,7 @@
                     注册
                 </h1>
             </div>
-            <form class="form-horizontal" action="Regist" method="post">
+            <form class="form-horizontal" action="Regist.k" method="post">
                 <div class="control-group">
                     <label class="control-label" for="username">姓名</label>
                     <div class="controls">
@@ -49,7 +49,7 @@
                     <label class="control-label" for="randomCode">验证码</label>
                     <div class="controls">
                         <input id="randomCode" name="randomCode" type="text"/>
-                        <img id="Img" src="RandImage" alt="验证码" />  
+                        <img id="Img" src="RandImage.k" alt="验证码" />  
     					<a href="#" id="refreshRandomCode" onclick="reImg();">看不清，换一张</a>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
             }else{
                 $.ajax({
                     type:"post",
-                    url:"ValidationServlet",
+                    url:"ValidationServlet.k",
                     data:{
                         telno:$("#telno").val(),
                         randomCode:$("#randomCode").val()

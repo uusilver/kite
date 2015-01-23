@@ -69,7 +69,7 @@ public class TextSenderTask extends TimerTask {
 				  if(updateUserRespFlag(telno)){
 					  txtModel.setTelno(telno);
 					  String content = "您好,风筝网现与您确认您的安全,请点击安全连接  ";
-					  content += "http://127.0.0.1:8080/kite/resp?c=";
+					  content += "http://127.0.0.1:8080/kite/resp.k?c=";
 					  String encrypContent = telno+"@"+generateRandomKey();
 					  content += DigestHandler.encryptBASE64(encrypContent.getBytes());
 					  txtModel.setContent(content);
@@ -111,7 +111,7 @@ public class TextSenderTask extends TimerTask {
 				TxtMsgModel txtModel = new TxtMsgModel();
 				txtModel.setTelno(rs.getString("urgent_telno"));
 				String content = "您好:"+rs.getString("user_name")+"的用户在安全时间内未与系统联系，请您注意!点击安全连接关闭消息 ";
-				content += "http://127.0.0.1:9090/kite/resp?c=";
+				content += "http://127.0.0.1:9090/kite/resp.k?c=";
 				String encrypContent = telno+"@"+generateRandomKey();
 				content += DigestHandler.encryptBASE64(encrypContent.getBytes());
 				txtModel.setContent(content);

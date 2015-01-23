@@ -29,11 +29,11 @@ import com.tmind.kite.utils.SessionUtils;
 import com.tmind.kite.web.FrameworkApplication;
 
 
-public class OnlineFilter extends HttpServlet implements Filter {
+public class OnlineServletFilter extends HttpServlet implements Filter {
 	
 	private static final long serialVersionUID = 1L;
 	
-	protected static final Logger logger = Logger.getLogger(OnlineFilter.class);
+	protected static final Logger logger = Logger.getLogger(OnlineServletFilter.class);
 
 	public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -49,41 +49,20 @@ public class OnlineFilter extends HttpServlet implements Filter {
 		
 		String path = req.getServletPath();
 		
-		String requestURI = req.getRequestURI();
-		
-		String clientType = null;
-		
-		String telNo = null;
-		
-		//如果访问URI中包含/rest/字样，则说明请求webservice服务
-		if(requestURI!=null&&requestURI.indexOf("/rest/")!=-1){
-			//如果访问URI中包含/loginRest/login/字样，则说明请求login webservice服务
-			int indexNo = requestURI.indexOf("/loginRest/login/");
-			if(indexNo!=-1){
-				String[] params = requestURI.substring(indexNo+"/loginRest/login/".length()).split("/");
-				if(params!=null&&params.length==3){
-					telNo = params[0];
-					clientType = params[2];
-				}
-			}
-		}else{
-			// 否则是请求servlet
-			// 用户访问的入口，1：ISO APP；2：Android；3：微信；4：WebAPP
-			clientType = req.getParameter(CommonConstants.CLIENT_TYPE);
-			telNo = req.getParameter(CommonConstants.TEL_NUMBER);
-		}
+		// 用户访问的入口，1：ISO APP；2：Android；3：微信；4：WebAPP
+		String clientType = req.getParameter(CommonConstants.CLIENT_TYPE);
+		String telNo = req.getParameter(CommonConstants.TEL_NUMBER);
 		
 		
 		if(clientType==null||"".equals(clientType)){
 			clientType = String.valueOf(SessionUtils.getObjectAttribute(req, CommonConstants.CLIENT_TYPE));
-			if(clientType==null||"".equals(clientType)){
-				Gson gson = new Gson();
-				Map errCode = new LinkedHashMap();
-				errCode.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_ACCESS_DENIED);
-				errCode.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED);
-				String returnValue= gson.toJson(errCode);
-				res.setContentType("text/html;charset=UTF-8");
-				res.getOutputStream().write(returnValue.getBytes());
+			if(clientType==null||"".equals(clientType)||"null".equalsIgnoreCase(clientType)){
+				RequestDispatcher dispatcher = request.getRequestDispatcher("accessDenied.html");
+				dispatcher.forward(request, response);
+				logger.info("未知请求来源，不允许操作");
+				res.setHeader("Cache-Control", "no-store");
+				res.setDateHeader("Expires", 0);
+				res.setHeader("Pragma", "no-cache");
 				return;
 			}
 		}else{
@@ -101,43 +80,25 @@ public class OnlineFilter extends HttpServlet implements Filter {
 		logger.info("**********************"+telNo+"****************");
 		
 		
-		
-		//用户从IOS或者Android APP进入
-		if(CommonConstants.ACCESS_FROM_IOS.equals(clientType)||CommonConstants.ACCESS_FROM_ANDROID.equals(clientType)){
-			logger.info("请求来自："+(clientType.equals(CommonConstants.ACCESS_FROM_IOS)?"IOS APP":"Android APP")+",用户["+telNo+"]请求的路径："+path);	
-			
-			// 如果没有取到用户信息,则说明用户没有登录，就跳转到登陆页面
-			if (user != null) {
-				logger.info("用户 [TelNo:"+telNo+"，Id="+user.getId()+"] 已经退出Web App!");
-				chain.doFilter(request, response);
-				return;
-			}else {
-				if(requestURI.indexOf("/loginRest/login/")!=-1||requestURI.indexOf("/registRest/regist/")!=-1||path.indexOf("/resetPwd/reset/")!=-1){
-					// 访问这些数据不需要登录,继续此次请求
-					chain.doFilter(request, response);
-					logger.info("不需要登陆，可操作");
-					return;
-				}
-			}
-		}
-		
 		//用户从WebAPP或者微信进入
 		if(CommonConstants.ACCESS_FROM_WEIXIN.equals(clientType)||CommonConstants.ACCESS_FROM_WEBAPP.equals(clientType)){
 
-			logger.info("请求来自："+(clientType.equals(CommonConstants.ACCESS_FROM_WEIXIN)?"微信":"Web APP")+",用户["+telNo+"]请求的路径："+path);
+			String loginedFrom = clientType.equals(CommonConstants.ACCESS_FROM_WEIXIN)?"微信":"Web APP";
+			
+			logger.info("请求来自："+loginedFrom+",用户["+telNo+"]请求的路径："+path);
 
 			// 这里设置如果没有登陆将要转发到的页面
 			RequestDispatcher dispatcher = null;
 			
 			if(path.equalsIgnoreCase("/login.html")||path.equalsIgnoreCase("/regist.html")
 					||path.equalsIgnoreCase("/pre-reset-pwd.html")||path.equalsIgnoreCase("/404.html")
-					||path.equalsIgnoreCase("/gen-pwd.html")){
+					||path.equalsIgnoreCase("/gen-pwd.html")||path.equalsIgnoreCase("/ValidationServlet.k")
+					||path.equalsIgnoreCase("/LoginServlet.k")||path.equalsIgnoreCase("/Regist.k")){
 				// 已经登陆,继续此次请求
 				chain.doFilter(request, response);
 				logger.info("不需要登陆，可操作");
 				return;
 			}
-			
 			// 判断如果没有取到用户信息,则说明用户没有登录，就跳转到登陆页面
 			if (user == null) {
 				// 跳转到登陆页面
@@ -150,6 +111,7 @@ public class OnlineFilter extends HttpServlet implements Filter {
 				res.setHeader("Pragma", "no-cache");
 				return;
 			} else{
+				logger.info("用户 [TelNo:"+telNo+"，Id="+user.getId()+"] 已经登录"+loginedFrom+"!");
 				// 已经登陆,继续此次请求
 				chain.doFilter(request, response);
 				logger.info("用户已经登陆，允许操作");

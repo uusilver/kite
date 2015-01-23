@@ -12,5 +12,8 @@ public class MessageContent {
 	public static final String MSG_LOGIN_APP_CLIENT_FOR_WEB = "用户已经在{0}登录，则跳转到服务关闭页面，允许用户强制退出App";
 	
 	//缺少访问入口标识，拒绝被访问
-	public static final String MSG_ACCESS_DENIED = "非法访问渠道";
+	public static final String MSG_ACCESS_DENIED_FOR_UNKNOWN_CLIENT = "非法访问渠道";
+	
+	//未登录，拒绝被访问
+	public static final String MSG_ACCESS_DENIED_FOR_NO_LOGIN = "未登录,非法访问";
 }

@@ -105,8 +105,11 @@ public class CommonConstants
 	/**用户登陆成功*/
 	public static final String MSG_CODE_REST_LOGIN_SUCCESS = "success";
 	
-	/**拒绝用户访问*/
-	public static final String MSG_CODE_ACCESS_DENIED = "acc-denied-01";
+	/**拒绝用户访问:不明客户端类型*/
+	public static final String MSG_CODE_UNKNOWN_CLIENT_ACCESS_DENIED = "acc-denied-01";
+	
+	/**拒绝用户访问:未登录*/
+	public static final String MSG_CODE_NO_LOGIN_ACCESS_DENIED = "acc-denied-02";
 	
 	/**空用户ID*/
 	public static final String MSG_CODE_REST_LOGIN_NULL_USERID = "lgn-error00-1";
@@ -116,6 +119,9 @@ public class CommonConstants
 	
 	/**解密用户密码异常*/
 	public static final String MSG_CODE_REST_LOGIN_DECODE_PWD_ERR = "lgn-error00-3";
+	
+	/**客户端类型为空*/
+	public static final String MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE = "lgn-error00-4";
 	
 	/**用户不存在*/
 	public static final String MSG_CODE_REST_LOGIN_NO_USER = "lgn-error01";
