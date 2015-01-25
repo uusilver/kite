@@ -51,6 +51,20 @@ public class OnlineRestFilter extends HttpServlet implements Filter  {
 		
 		//如果访问URI中包含/rest/字样，则说明请求webservice服务
 		if(requestURI!=null&&!"".equals(requestURI)){
+			
+			//校验请求URI中是否包含clientType，请求URI中clientType应该在最后一位，由‘／’分隔，格式为/clientType
+			clientType = requestURI.substring(requestURI.length()-2);
+			if(!clientType.startsWith("/")){
+				Gson gson = new Gson();
+				Map errCode = new LinkedHashMap();
+				errCode.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_WRONG_ACCESS_FORMAT);
+				errCode.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_WRONG_CLIENT_FORMAT);
+				String returnValue= gson.toJson(errCode);
+				res.setContentType("text/html;charset=UTF-8");
+				res.getOutputStream().write(returnValue.getBytes());
+				return;
+			}
+			
 			//如果访问URI中包含/loginRest/login/字样，则说明请求login webservice服务
 			int indexNo = requestURI.indexOf("/loginRest/login/");
 			if(indexNo!=-1){
@@ -74,7 +88,7 @@ public class OnlineRestFilter extends HttpServlet implements Filter  {
 			errCode.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_UNKNOWN_CLIENT_ACCESS_DENIED);
 			errCode.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_UNKNOWN_CLIENT);
 			String returnValue= gson.toJson(errCode);
-//			res.setContentType("text/html;charset=UTF-8");
+			res.setContentType("text/html;charset=UTF-8");
 			res.getOutputStream().write(returnValue.getBytes());
 			return;
 		}
@@ -112,7 +126,7 @@ public class OnlineRestFilter extends HttpServlet implements Filter  {
 					errCode.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_NO_LOGIN_ACCESS_DENIED);
 					errCode.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NO_LOGIN);
 					String returnValue= gson.toJson(errCode);
-//					res.setContentType("text/html;charset=UTF-8");
+					res.setContentType("text/html;charset=UTF-8");
 					res.getOutputStream().write(returnValue.getBytes());
 					return;
 				}

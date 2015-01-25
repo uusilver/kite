@@ -46,8 +46,35 @@ public class OnlineServletFilter extends HttpServlet implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 
-		
 		String path = req.getServletPath();
+		
+		//从session中获取用户信息
+		User user = (User)SessionUtils.getObjectAttribute(req, CommonConstants.USER_LOGIN_TOKEN);
+		// 判断如果没有取到用户信息,则说明用户没有登录，就跳转到登陆页面
+		//????问题是获得不到clientType，不知道该往何处跳转？？？？？
+		if (user == null) {
+
+			if(path.equalsIgnoreCase("/login.html")||path.equalsIgnoreCase("/regist.html")
+					||path.equalsIgnoreCase("/pre-reset-pwd.html")||path.equalsIgnoreCase("/404.html")
+					||path.equalsIgnoreCase("/gen-pwd.html")||path.equalsIgnoreCase("/ValidationServlet.k")
+					||path.equalsIgnoreCase("/LoginServlet.k")||path.equalsIgnoreCase("/Regist.k")){
+				// 已经登陆,继续此次请求
+				chain.doFilter(request, response);
+				logger.info("不需要登陆，可操作");
+				return;
+			}
+			
+			// 跳转到登陆页面
+			RequestDispatcher dispatcher = request.getRequestDispatcher("index.htm");
+			dispatcher.forward(request, response);
+			logger.info("用户没有登陆，不允许操作");
+
+			res.setHeader("Cache-Control", "no-store");
+			res.setDateHeader("Expires", 0);
+			res.setHeader("Pragma", "no-cache");
+			return;
+		}
+		
 		
 		// 用户访问的入口，1：ISO APP；2：Android；3：微信；4：WebAPP
 		String clientType = req.getParameter(CommonConstants.CLIENT_TYPE);
@@ -57,9 +84,9 @@ public class OnlineServletFilter extends HttpServlet implements Filter {
 		if(clientType==null||"".equals(clientType)){
 			clientType = String.valueOf(SessionUtils.getObjectAttribute(req, CommonConstants.CLIENT_TYPE));
 			if(clientType==null||"".equals(clientType)||"null".equalsIgnoreCase(clientType)){
-				RequestDispatcher dispatcher = request.getRequestDispatcher("accessDenied.html");
+				RequestDispatcher dispatcher = request.getRequestDispatcher("error.htm");
 				dispatcher.forward(request, response);
-				logger.info("未知请求来源，不允许操作");
+				logger.info("请求URI格式不正确，无法获取客户端类型，不允许继续操作");
 				res.setHeader("Cache-Control", "no-store");
 				res.setDateHeader("Expires", 0);
 				res.setHeader("Pragma", "no-cache");
@@ -69,9 +96,7 @@ public class OnlineServletFilter extends HttpServlet implements Filter {
 			SessionUtils.setObjectAttribute(req, CommonConstants.CLIENT_TYPE, clientType);
 		}
 		
-		
-		//从session中获取用户信息
-		User user = (User)SessionUtils.getObjectAttribute(req, CommonConstants.USER_LOGIN_TOKEN);;
+
 		
 		if((telNo==null||"".equals(telNo)) && user!=null){
 			telNo = user.getTelNo();

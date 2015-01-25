@@ -42,10 +42,10 @@
 			window.location.href = 'pre-reset-pwd.html';
             });
         //
-        var flag = window.location.href.indexOf('?');
-        if(flag!='-1'){
-        	$("#errorMsg").html("<font color='red'>密码错误！</font>");
-        }
+        //var flag = window.location.href.indexOf('?');
+        //if(flag!='-1'){
+        //	$("#errorMsg").html("<font color='red'>密码错误！</font>");
+        //}
         //去注册
         $("#goReg").click(function(){window.location.href='regist.html'});
         $("#checkBtn").click(function(){
@@ -67,14 +67,18 @@
                     url:"ValidationServlet.k",
                     data:{
                         telno:$("#telno").val(),
+                        password:$("#password").val(),
                         randomCode:"ForLogin"
                     },
                     success:function(data){
                         if(data=='success'){
                             $("#realBtn").trigger('click');
-                           
                         }else if(data=='error2'){
                         	$("#errorMsg").html("<font color='red'>手机号码不存在，请更换！</font>");
+                            return false;
+                        }else if(data.indexOf('error6')!=-1){
+                        	var leftAttampts = data.substr(-1);
+                        	$("#errorMsg").html("<font color='red'>密码不对哦！还有"+leftAttampts+"次机会</font>");
                             return false;
                         }else if(data=='error5'){
                         	$("#errorMsg").html("<font color='red'>由于连续3次登录失败，该账号已经被锁定，请20分钟后再尝试！</font>");

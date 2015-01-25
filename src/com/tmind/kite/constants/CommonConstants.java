@@ -111,6 +111,9 @@ public class CommonConstants
 	/**拒绝用户访问:未登录*/
 	public static final String MSG_CODE_NO_LOGIN_ACCESS_DENIED = "acc-denied-02";
 	
+	/**拒绝用户访问:请求URI中客户端类型格式错误*/
+	public static final String MSG_CODE_REST_WRONG_ACCESS_FORMAT = "acc-denied-03";
+	
 	/**空用户ID*/
 	public static final String MSG_CODE_REST_LOGIN_NULL_USERID = "lgn-error00-1";
 	

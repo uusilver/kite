@@ -14,6 +14,9 @@ public class MessageContent {
 	//缺少访问入口标识，拒绝被访问
 	public static final String MSG_ACCESS_DENIED_FOR_UNKNOWN_CLIENT = "非法访问渠道";
 	
+	//缺少访问入口标识，拒绝被访问
+	public static final String MSG_ACCESS_DENIED_FOR_WRONG_CLIENT_FORMAT = "拒绝用户访问:请求URI中客户端类型格式错误";
+	
 	//未登录，拒绝被访问
 	public static final String MSG_ACCESS_DENIED_FOR_NO_LOGIN = "未登录,非法访问";
 }
