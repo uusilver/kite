@@ -13,6 +13,12 @@
                 type:"post",
                 url:"QueryProfileServlet.k",
                 success:function(data){
+                	alert(data);
+                    if(data=='unknownClient'){
+                 	   window.location.href="index.htm";
+                 	   return false;
+                    }
+                    
                    var obj = data.split('@');
                    if(obj[0]&&obj[0]!='null'){
 						$("#urgentName").val(obj[0]);
@@ -20,26 +26,7 @@
                    if(obj[1]&&obj[1]!='null'){
 						$("#urgentTelno").val(obj[1]);
                        }
-                   if(obj[2]&&obj[2]!='null'){
-						if(obj[2]=='15'){
-								$("#btn1").addClass("btn-primary");
-				                $("#btn2").removeClass("btn-primary");
-				                $("#btn3").removeClass("btn-primary");
-							} 
-						if(obj[2]=='30'){
-							$("#btn1").removeClass("btn-primary");
-			                $("#btn2").addClass("btn-primary");
-			                $("#btn3").removeClass("btn-primary");
-						} 
-						if(obj[2]=='45'){
-							$("#btn1").removeClass("btn-primary");
-			                $("#btn2").removeClass("btn-primary");
-			                $("#btn3").addClass("btn-primary");
-						} 
-						
-                       }
-                   
-                }
+               	 }
             });
 
             
@@ -80,7 +67,7 @@
         <div class="span12">
             <div class="page-header">
                 <h1>
-                   	在此设置个人详细信息
+                   	在此设置紧急联系人详细信息
                     <button id="logout" class="btn btn-danger" type="button">登出系统</button>
                 </h1>
             </div>
@@ -102,16 +89,6 @@
                     <div class="controls">
                         <input id="txtRandomCode" type="text" />
                         <input type="button" id="getTxtCodeBtn" class="btn btn-info"  maxlength="6" value="免费获取验证码" />
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">短信联系频率</label>
-                    <div class="controls">
-                        <div class="btn-group btn-group-vertical">
-                            <button id="btn1" class="btn">15分钟</button>
-                            <button id="btn2" class="btn">30分钟</button>
-                            <button id="btn3" class="btn">45分钟</button>
-                        </div>
                     </div>
                 </div>
                 <div class="control-group">
@@ -200,17 +177,12 @@
                             return false;
                         }else{
                            //提交
-                                var touchFrequency = '';
-                                if($("#btn1").hasClass("btn-primary")) touchFrequency=15;
-                                if($("#btn2").hasClass("btn-primary")) touchFrequency=30;
-                                if($("#btn3").hasClass("btn-primary")) touchFrequency=45;
                                 $.ajax({
                                     type:"post",
                                     url:"ChekInUserProfileServlet.k",
                                     data:{
                                         urgentName:$("#urgentName").val(),
-                                        urgentTelno:$("#urgentTelno").val(),
-                                        touchFrequency:touchFrequency
+                                        urgentTelno:$("#urgentTelno").val()
 
                                     },
                                     success:function(data){
@@ -237,7 +209,7 @@
                 type:"post",
                 url:"LogoutServlet.k",
                 success:function(data){
-                    window.location.href="login.html";
+                    window.location.href="index.htm";
                 }
             });
             return false;

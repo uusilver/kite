@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 
+import com.google.gson.Gson;
 import com.tmind.kite.constants.CommonConstants;
 import com.tmind.kite.model.User;
 import com.tmind.kite.utils.LoginHandler;
@@ -45,8 +46,25 @@ public class LoginServlet extends HttpServlet {
 			}
 		}
 		
-		//根据手机号码和客户端类型检查用户是否已经在其他客户端登录,如果登录则根据情况同步登录状态
+		//根据手机号码和客户端类型检查用户是否已经在IOS或者Android客户端登录,如果登录则终止此次登录，并跳转到登录页面
 		HashMap loginStatus = SynchLoginStatus.synchLogin(telNo, clientType);
+		if(loginStatus!=null && !loginStatus.isEmpty()){
+			String resultCode = (String)loginStatus.get(CommonConstants.REST_MSG_FORMAT_STATUS);
+			if(resultCode!=null && !"".equals(resultCode) 
+					&& CommonConstants.MSG_CODE_REST_LOGIN_WEB_TO_APP.equals(resultCode)){
+				try {
+					Gson gson = new Gson();
+					String returnValue= gson.toJson(loginStatus);
+//					response.setContentType("text/html;charset=UTF-8");
+					response.getOutputStream().write(returnValue.getBytes());
+//					response.sendRedirect("login.html?clientType="+clientType);
+					return;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 		
 		try {
 			password = new String(Base64.encodeBase64(password.getBytes()),CommonConstants.CHARSETNAME_UTF_8);

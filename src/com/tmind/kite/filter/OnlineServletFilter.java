@@ -1,6 +1,7 @@
 package com.tmind.kite.filter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -50,60 +51,85 @@ public class OnlineServletFilter extends HttpServlet implements Filter {
 		
 		//从session中获取用户信息
 		User user = (User)SessionUtils.getObjectAttribute(req, CommonConstants.USER_LOGIN_TOKEN);
-		// 判断如果没有取到用户信息,则说明用户没有登录，就跳转到登陆页面
-		//????问题是获得不到clientType，不知道该往何处跳转？？？？？
-		if (user == null) {
-
-			if(path.equalsIgnoreCase("/login.html")||path.equalsIgnoreCase("/regist.html")
-					||path.equalsIgnoreCase("/pre-reset-pwd.html")||path.equalsIgnoreCase("/404.html")
-					||path.equalsIgnoreCase("/gen-pwd.html")||path.equalsIgnoreCase("/ValidationServlet.k")
-					||path.equalsIgnoreCase("/LoginServlet.k")||path.equalsIgnoreCase("/Regist.k")){
-				// 已经登陆,继续此次请求
-				chain.doFilter(request, response);
-				logger.info("不需要登陆，可操作");
-				return;
-			}
-			
-			// 跳转到登陆页面
-			RequestDispatcher dispatcher = request.getRequestDispatcher("index.htm");
-			dispatcher.forward(request, response);
-			logger.info("用户没有登陆，不允许操作");
-
-			res.setHeader("Cache-Control", "no-store");
-			res.setDateHeader("Expires", 0);
-			res.setHeader("Pragma", "no-cache");
-			return;
-		}
 		
 		
 		// 用户访问的入口，1：ISO APP；2：Android；3：微信；4：WebAPP
 		String clientType = req.getParameter(CommonConstants.CLIENT_TYPE);
-		String telNo = req.getParameter(CommonConstants.TEL_NUMBER);
-		
 		
 		if(clientType==null||"".equals(clientType)){
+			
+			//可以从session中获取clientType，如果获取不到也说明session不存在
 			clientType = String.valueOf(SessionUtils.getObjectAttribute(req, CommonConstants.CLIENT_TYPE));
+			
+			//如果session中没有clientType，则跳转到错误提示页面，提供正确的微信访问方式和Web访问连接
 			if(clientType==null||"".equals(clientType)||"null".equalsIgnoreCase(clientType)){
-				RequestDispatcher dispatcher = request.getRequestDispatcher("error.htm");
-				dispatcher.forward(request, response);
-				logger.info("请求URI格式不正确，无法获取客户端类型，不允许继续操作");
+				logger.info("无法获取客户端类型，不允许继续操作");
 				res.setHeader("Cache-Control", "no-store");
 				res.setDateHeader("Expires", 0);
 				res.setHeader("Pragma", "no-cache");
+
+			    if(path.indexOf(".html")!=-1){
+			    	RequestDispatcher dispatcher = req.getRequestDispatcher("index.htm");
+					dispatcher.forward(req, res);
+			    }
+			    if(path.indexOf(".k")!=-1){
+				    PrintWriter out = response.getWriter();
+				    out.write("unknownClient");
+			    }
+				
+//				if(user==null){
+//					dispatcher = req.getRequestDispatcher("index.htm");
+//					dispatcher.forward(req, res);
+//				}else{
+//					dispatcher = req.getRequestDispatcher("error.htm");
+//					dispatcher.forward(req, res);
+//				}
+				
 				return;
+				
+			}else{
+
+				logger.info("**********首次访问中可以获取客户端类型："+clientType+"****************");
+				
+				// 判断如果没有取到用户信息,则说明用户没有登录，就跳转到登陆页面
+				if (user == null) {
+
+					if(path.equalsIgnoreCase("/login.html")||path.equalsIgnoreCase("/regist.html")
+							||path.equalsIgnoreCase("/pre-reset-pwd.html")||path.equalsIgnoreCase("/404.html")
+							||path.equalsIgnoreCase("/gen-pwd.html")||path.equalsIgnoreCase("/ValidationServlet.k")
+							||path.equalsIgnoreCase("/LoginServlet.k")||path.equalsIgnoreCase("/Regist.k")){
+						// 已经登陆,继续此次请求
+						chain.doFilter(request, response);
+						logger.info("不需要登陆，可操作");
+						return;
+					}
+
+					logger.info("用户没有登陆，不允许操作");
+
+					res.setHeader("Cache-Control", "no-store");
+					res.setDateHeader("Expires", 0);
+					res.setHeader("Pragma", "no-cache");
+					
+					// 跳转到登陆页面
+					RequestDispatcher dispatcher = request.getRequestDispatcher("index.htm");
+					dispatcher.forward(request, response);
+					return;
+				}
 			}
 		}else{
+			logger.info("**********客户端类型："+clientType+"****************");
 			SessionUtils.setObjectAttribute(req, CommonConstants.CLIENT_TYPE, clientType);
 		}
 		
 
+		//用户手机号码
+		String telNo = req.getParameter(CommonConstants.TEL_NUMBER);
 		
 		if((telNo==null||"".equals(telNo)) && user!=null){
 			telNo = user.getTelNo();
 		}
 
-		logger.info("**********************"+telNo+"****************");
-		
+		logger.info("**********用户手机号码："+telNo+"****************");
 		
 		//用户从WebAPP或者微信进入
 		if(CommonConstants.ACCESS_FROM_WEIXIN.equals(clientType)||CommonConstants.ACCESS_FROM_WEBAPP.equals(clientType)){
@@ -112,9 +138,6 @@ public class OnlineServletFilter extends HttpServlet implements Filter {
 			
 			logger.info("请求来自："+loginedFrom+",用户["+telNo+"]请求的路径："+path);
 
-			// 这里设置如果没有登陆将要转发到的页面
-			RequestDispatcher dispatcher = null;
-			
 			if(path.equalsIgnoreCase("/login.html")||path.equalsIgnoreCase("/regist.html")
 					||path.equalsIgnoreCase("/pre-reset-pwd.html")||path.equalsIgnoreCase("/404.html")
 					||path.equalsIgnoreCase("/gen-pwd.html")||path.equalsIgnoreCase("/ValidationServlet.k")
@@ -124,10 +147,11 @@ public class OnlineServletFilter extends HttpServlet implements Filter {
 				logger.info("不需要登陆，可操作");
 				return;
 			}
+			
 			// 判断如果没有取到用户信息,则说明用户没有登录，就跳转到登陆页面
 			if (user == null) {
 				// 跳转到登陆页面
-				dispatcher = request.getRequestDispatcher("login.html?clientType="+clientType);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("login.html?clientType="+clientType);
 				dispatcher.forward(request, response);
 				logger.info("用户没有登陆，不允许操作");
 

@@ -47,5 +47,5 @@ public class LogoutServlet extends HttpServlet{
 		}else{
 			logger.info("用户未登录，无需退出");
 		}
-}
+	}
 }
