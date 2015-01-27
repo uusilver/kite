@@ -1,6 +1,7 @@
 package com.tmind.kite.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServlet;
@@ -47,24 +48,24 @@ public class LoginServlet extends HttpServlet {
 		}
 		
 		//根据手机号码和客户端类型检查用户是否已经在IOS或者Android客户端登录,如果登录则终止此次登录，并跳转到登录页面
-		HashMap loginStatus = SynchLoginStatus.synchLogin(telNo, clientType);
-		if(loginStatus!=null && !loginStatus.isEmpty()){
-			String resultCode = (String)loginStatus.get(CommonConstants.REST_MSG_FORMAT_STATUS);
-			if(resultCode!=null && !"".equals(resultCode) 
-					&& CommonConstants.MSG_CODE_REST_LOGIN_WEB_TO_APP.equals(resultCode)){
-				try {
-					Gson gson = new Gson();
-					String returnValue= gson.toJson(loginStatus);
+//		HashMap loginStatus = SynchLoginStatus.synchLogin(telNo, clientType);
+//		if(loginStatus!=null && !loginStatus.isEmpty()){
+//			String resultCode = (String)loginStatus.get(CommonConstants.REST_MSG_FORMAT_STATUS);
+//			if(resultCode!=null && !"".equals(resultCode) 
+//					&& CommonConstants.MSG_CODE_REST_LOGIN_WEB_TO_APP.equals(resultCode)){
+//				try {
+//					Gson gson = new Gson();
+//					String returnValue= gson.toJson(loginStatus);
 //					response.setContentType("text/html;charset=UTF-8");
-					response.getOutputStream().write(returnValue.getBytes());
-//					response.sendRedirect("login.html?clientType="+clientType);
-					return;
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
+//					PrintWriter out = response.getWriter();
+//					out.write(returnValue);
+//					return;
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
+//		}
 		
 		try {
 			password = new String(Base64.encodeBase64(password.getBytes()),CommonConstants.CHARSETNAME_UTF_8);
@@ -85,6 +86,12 @@ public class LoginServlet extends HttpServlet {
 				if(sessionManager!=null){
 					sessionManager.put(user.getTelNo(), request.getSession());
 				}
+//				Gson gson = new Gson();
+//				String returnValue= gson.toJson(resultMap);
+//				response.setContentType("text/html;charset=UTF-8");
+//				PrintWriter out = response.getWriter();
+//				out.write(returnValue);
+				//return;
 				response.sendRedirect("main.html");
 			} else {
 				response.sendRedirect("login.html?clientType="+clientType);

@@ -103,6 +103,21 @@ public class CommonConstants
 	public static final String REST_MSG_FORMAT_MSG_CONTENT = "msg";
 	
 	/**用户登陆成功*/
+	public static final String MSG_CODE_LOGIN_SUCCESS = "success";
+	
+	/**验证码不正确*/
+	public static final String MSG_CODE_LOGIN_WRONG_RANDOM_CODE = "error01";
+	
+	/**用户不存在*/
+	public static final String MSG_CODE_LOGIN_NO_USER = "error02";
+	
+	/**用户账号被锁住*/
+	public static final String MSG_CODE_LOGIN_USER_LOCKED = "error05";
+	
+	/**用户密码错误*/
+	public static final String MSG_CODE_LOGIN_WRONG_PWD = "error06";
+	
+	/**用户登陆成功*/
 	public static final String MSG_CODE_REST_LOGIN_SUCCESS = "success";
 	
 	/**拒绝用户访问:不明客户端类型*/

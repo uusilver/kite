@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,9 +17,12 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import com.google.gson.Gson;
 import com.tmind.kite.constants.CommonConstants;
 import com.tmind.kite.utils.DBUtils;
 import com.tmind.kite.utils.DigestHandler;
+import com.tmind.kite.utils.SessionUtils;
+import com.tmind.kite.utils.SynchLoginStatus;
 
 
 public class ValidationServlet extends HttpServlet {
@@ -32,52 +36,105 @@ public class ValidationServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
+		
+		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
+
+		HttpSession session = request.getSession(true);  
+		// 将内容输出到响应客户端对象的输出流中，生成的图片中包含4个字符
+		String randomCodeOnServer = (String) session.getAttribute(CommonConstants.VALIDATE_CODE);
+		String randomCode = request.getParameter(CommonConstants.RANDOM_CODE);
+		String telNo = request.getParameter(CommonConstants.TEL_NUMBER);
+		String pwd = request.getParameter(CommonConstants.USER_PASSWORD);
+		String errorCode = "";
+
+		//从session中获取用户访问入口代码
+		String clientType = String.valueOf(SessionUtils.getObjectAttribute(request, CommonConstants.CLIENT_TYPE));
+		
+		//根据手机号码和客户端类型检查用户是否已经在IOS或者Android客户端登录,如果登录则终止此次登录，并跳转到登录页面
+		HashMap loginStatus = SynchLoginStatus.synchLogin(telNo, clientType);
+		if (loginStatus != null && !loginStatus.isEmpty()) {
+			String resultCode = (String) loginStatus.get(CommonConstants.REST_MSG_FORMAT_STATUS);
+			if (resultCode != null&& !"".equals(resultCode)
+					&& CommonConstants.MSG_CODE_REST_LOGIN_WEB_TO_APP.equals(resultCode)) {
+				Gson gson = new Gson();
+				String returnValue = gson.toJson(loginStatus);
+				out.write(returnValue);
+				out.flush();
+				out.close();
+				return;
+			}
+		}
+		
+		
 		try {
-			HttpSession session = request.getSession(true);  
-			// 将内容输出到响应客户端对象的输出流中，生成的图片中包含4个字符
-			String randomCodeOnServer = (String) session.getAttribute(CommonConstants.VALIDATE_CODE);
-			String randomCode = request.getParameter(CommonConstants.RANDOM_CODE);
-			String telNo = request.getParameter(CommonConstants.TEL_NUMBER);
-			String pwd = request.getParameter(CommonConstants.USER_PASSWORD);
-			String errorCode = "";
+			HashMap resultMap = new HashMap();
 			//Login用的标示为ForLogin,配置在login.html的JS中
 			if(randomCode.equalsIgnoreCase("ForLogin")){
 				errorCode = notExistOrLocked(telNo,pwd);
 				if("notExist".equals(errorCode)){
 					//error2:用户不存在
-					out.write("error2");
+					resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS,CommonConstants.MSG_CODE_LOGIN_NO_USER);
+					Gson gson = new Gson();
+					String returnValue = gson.toJson(resultMap);
+					out.write(returnValue);
 				}else if("locked".equals(errorCode)){
 					//error5：用户账号被锁住
-					out.write("error5");
+					resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS,CommonConstants.MSG_CODE_LOGIN_USER_LOCKED);
+					Gson gson = new Gson();
+					String returnValue = gson.toJson(resultMap);
+					out.write(returnValue);
 				}else if(errorCode.startsWith("incorrectPwd")){
 					//用户密码错误
 					String leftAttampts = errorCode.substring(errorCode.indexOf(":"));
-					out.write("error6:"+leftAttampts);
+					resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS,CommonConstants.MSG_CODE_LOGIN_WRONG_PWD);
+					resultMap.put(CommonConstants.REST_MSG_FORMAT_CONTENT,leftAttampts);
+					Gson gson = new Gson();
+					String returnValue = gson.toJson(resultMap);
+					out.write(returnValue);
 				}else{
-					out.write("success");
+					resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS,CommonConstants.MSG_CODE_LOGIN_SUCCESS);
+					Gson gson = new Gson();
+					String returnValue = gson.toJson(resultMap);
+					out.write(returnValue);
 				}
 			}else{
 				if(!randomCode.equalsIgnoreCase(randomCodeOnServer))
 				{
-					out.write("error1");
+					resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS,CommonConstants.MSG_CODE_LOGIN_WRONG_RANDOM_CODE);
+					Gson gson = new Gson();
+					String returnValue = gson.toJson(resultMap);
+					out.write(returnValue);
 				}else{
 					errorCode = notExistOrLocked(telNo,pwd);
 					if("notExist".equals(errorCode)){
 						//error2:用户不存在
-						out.write("error2");
+						resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS,CommonConstants.MSG_CODE_LOGIN_NO_USER);
+						Gson gson = new Gson();
+						String returnValue = gson.toJson(resultMap);
+						out.write(returnValue);
 					}else if("locked".equals(errorCode)){
 						//error5：用户账号被锁住
-						out.write("error5");
+						resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS,CommonConstants.MSG_CODE_LOGIN_USER_LOCKED);
+						Gson gson = new Gson();
+						String returnValue = gson.toJson(resultMap);
+						out.write(returnValue);
 					}else if(errorCode.startsWith("incorrectPwd")){
 						//用户密码错误
 						String leftAttampts = errorCode.substring(errorCode.indexOf(":"));
-						out.write("error6:"+leftAttampts);
+						resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS,CommonConstants.MSG_CODE_LOGIN_WRONG_PWD);
+						resultMap.put(CommonConstants.REST_MSG_FORMAT_CONTENT,leftAttampts);
+						Gson gson = new Gson();
+						String returnValue = gson.toJson(resultMap);
+						out.write(returnValue);
 					}else{
-						out.write("success");
+						resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS,CommonConstants.MSG_CODE_LOGIN_SUCCESS);
+						Gson gson = new Gson();
+						String returnValue = gson.toJson(resultMap);
+						out.write(returnValue);
 					}
 				}
-			}  
+			}
 			   
 		} catch (Exception e) {
 

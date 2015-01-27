@@ -68,40 +68,31 @@
                         randomCode:"ForLogin"
                     },
                     success:function(data){
-                        if(data=='success'){
+
+                    	var dataObj = eval('('+data+')');
+                    	
+                        if(dataObj.status=='lgn-error05-01'){
+                        	alert(dataObj.content);
+                        	window.location.href='stopApp.html';
+                            return false;
+                        }
+                    	
+                        if(dataObj.status=='success'){
                             $("#realBtn").trigger('click');
-                        }else if(data=='error2'){
+                        }else if(dataObj.status=='error2'){
                         	$("#errorMsg").html("<font color='red'>手机号码不存在，请更换！</font>");
                             return false;
-                        }else if(data.indexOf('error6')!=-1){
-                        	var leftAttampts = data.substr(-1);
+                        }else if(dataObj.status('error6')){
+                        	var leftAttampts = data.content;
                         	$("#errorMsg").html("<font color='red'>密码不对哦！还有"+leftAttampts+"次机会</font>");
                             return false;
-                        }else if(data=='error5'){
+                        }else if(dataObj.status=='error5'){
                         	$("#errorMsg").html("<font color='red'>由于连续3次登录失败，该账号已经被锁定，请20分钟后再尝试！</font>");
                             return false;
                         }
                     }
                 });
             }
-        });
-        
-        $("#loginForm").submit(function(){
-            $.ajax({
-                type:"post",
-                url:"LoginServlet.k",
-                data:{
-                    telno:$("#telno").val(),
-                    password:$("#password").val()
-                },
-                dataType:"json",
-                success:function(data){
-                    if(data[1].status=='lgn-error05-01'){
-                    	$("#errorMsg").html("<font color='red'>"+data[0].content+"</font>");
-                        return false;
-                    }
-                }
-            });
         });
     });
 </script>
@@ -126,7 +117,7 @@
                     登录
                 </h1>
             </div>
-            <form class="form-horizontal" method="post" id="loginForm">
+            <form class="form-horizontal" method="post" action="LoginServlet.k">
                 <div class="control-group">
                     <label class="control-label" for="telno">手机号</label>
                     <div class="controls">

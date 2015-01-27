@@ -94,7 +94,7 @@ public class OnlineServletFilter extends HttpServlet implements Filter {
 				// 判断如果没有取到用户信息,则说明用户没有登录，就跳转到登陆页面
 				if (user == null) {
 
-					if(path.equalsIgnoreCase("/login.html")||path.equalsIgnoreCase("/regist.html")
+					if(path.equalsIgnoreCase("/login.html")||path.equalsIgnoreCase("/regist.html")||path.equalsIgnoreCase("/StopApp.html")
 							||path.equalsIgnoreCase("/pre-reset-pwd.html")||path.equalsIgnoreCase("/404.html")
 							||path.equalsIgnoreCase("/gen-pwd.html")||path.equalsIgnoreCase("/ValidationServlet.k")
 							||path.equalsIgnoreCase("/LoginServlet.k")||path.equalsIgnoreCase("/Regist.k")){
@@ -138,7 +138,7 @@ public class OnlineServletFilter extends HttpServlet implements Filter {
 			
 			logger.info("请求来自："+loginedFrom+",用户["+telNo+"]请求的路径："+path);
 
-			if(path.equalsIgnoreCase("/login.html")||path.equalsIgnoreCase("/regist.html")
+			if(path.equalsIgnoreCase("/login.html")||path.equalsIgnoreCase("/regist.html")||path.equalsIgnoreCase("/StopApp.html")
 					||path.equalsIgnoreCase("/pre-reset-pwd.html")||path.equalsIgnoreCase("/404.html")
 					||path.equalsIgnoreCase("/gen-pwd.html")||path.equalsIgnoreCase("/ValidationServlet.k")
 					||path.equalsIgnoreCase("/LoginServlet.k")||path.equalsIgnoreCase("/Regist.k")){
@@ -150,14 +150,15 @@ public class OnlineServletFilter extends HttpServlet implements Filter {
 			
 			// 判断如果没有取到用户信息,则说明用户没有登录，就跳转到登陆页面
 			if (user == null) {
-				// 跳转到登陆页面
-				RequestDispatcher dispatcher = request.getRequestDispatcher("login.html?clientType="+clientType);
-				dispatcher.forward(request, response);
 				logger.info("用户没有登陆，不允许操作");
 
 				res.setHeader("Cache-Control", "no-store");
 				res.setDateHeader("Expires", 0);
 				res.setHeader("Pragma", "no-cache");
+				
+				// 跳转到登陆页面
+				RequestDispatcher dispatcher = request.getRequestDispatcher("index.htm");
+				dispatcher.forward(request, response);
 				return;
 			} else{
 				logger.info("用户 [TelNo:"+telNo+"，Id="+user.getId()+"] 已经登录"+loginedFrom+"!");
