@@ -1,6 +1,5 @@
 package com.tmind.kite.webservice;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +28,7 @@ public class LoginRestService {
 	@Context 
 	private HttpServletRequest request;
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GET
 	@Path("login/{userName}/{password}/{clientType}")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -53,7 +52,22 @@ public class LoginRestService {
 		
 		//根据手机号码和客户端类型检查用户是否已经在其他客户端登录,如果登录则根据情况同步登录状态
 		HashMap loginStatus = SynchLoginStatus.synchLogin(telno, clientType);
-		
+		if(loginStatus!=null && !loginStatus.isEmpty()){
+			String status = (String)loginStatus.get(CommonConstants.REST_MSG_FORMAT_STATUS);
+			String msg = (String)loginStatus.get(CommonConstants.REST_MSG_FORMAT_CONTENT);
+			//向相应的客户端推送提示消息
+			if(status.equals(CommonConstants.MSG_CODE_REST_LOGIN_OTHER_CLIENT)){
+				if(clientType.equals(CommonConstants.ACCESS_FROM_IOS)){
+					//给Android客户端推送通知消息
+					
+				}else if(clientType.equals(CommonConstants.ACCESS_FROM_ANDROID)){
+					//给IOS客户端推送通知消息
+					
+				}else{
+					//给用户发通知短信
+				}
+			}
+		}
 		//用户登录
 		HashMap resultMap = LoginHandler.login(telno, pwd,clientType);
 		

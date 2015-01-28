@@ -1,7 +1,6 @@
 package com.tmind.kite.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServlet;
@@ -11,12 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 
-import com.google.gson.Gson;
 import com.tmind.kite.constants.CommonConstants;
 import com.tmind.kite.model.User;
 import com.tmind.kite.utils.LoginHandler;
 import com.tmind.kite.utils.SessionUtils;
-import com.tmind.kite.utils.SynchLoginStatus;
 import com.tmind.kite.web.FrameworkApplication;
 
 public class LoginServlet extends HttpServlet {
@@ -27,6 +24,7 @@ public class LoginServlet extends HttpServlet {
 
 	protected static final Logger logger = Logger.getLogger(LoginServlet.class);
 
+	@SuppressWarnings("rawtypes")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
 		String telNo = request.getParameter(CommonConstants.TEL_NUMBER);

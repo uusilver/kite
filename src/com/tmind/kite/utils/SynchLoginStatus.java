@@ -1,9 +1,7 @@
 package com.tmind.kite.utils;
 
 import java.util.HashMap;
-import java.util.Map;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -25,6 +23,7 @@ public class SynchLoginStatus {
 	 * @param clientType
 	 * @return HashMap
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static HashMap synchLogin(String telNo, String clientType) {
 
 		HashMap resultMap = new HashMap();

@@ -32,8 +32,7 @@ public class DBUtils {
         }  
     }  
       
-    @SuppressWarnings("unused")
-	public static boolean freeConnection(Connection cn,Statement st,ResultSet rs){  
+    public static boolean freeConnection(Connection cn,Statement st,ResultSet rs){  
         boolean ret=true;  
         if(cn!=null){  
             try{  
