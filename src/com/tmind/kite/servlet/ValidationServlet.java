@@ -34,6 +34,7 @@ public class ValidationServlet extends HttpServlet {
 
 	protected static final Logger logger = Logger.getLogger(ValidationServlet.class);
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		
@@ -200,7 +201,6 @@ public class ValidationServlet extends HttpServlet {
 				flag = "notExist";
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
 			DBUtils.freeConnection(conn, ps, rs);

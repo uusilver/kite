@@ -97,7 +97,7 @@ public class OnlineServletFilter extends HttpServlet implements Filter {
 					if(path.equalsIgnoreCase("/login.html")||path.equalsIgnoreCase("/regist.html")||path.equalsIgnoreCase("/StopApp.html")
 							||path.equalsIgnoreCase("/pre-reset-pwd.html")||path.equalsIgnoreCase("/404.html")
 							||path.equalsIgnoreCase("/gen-pwd.html")||path.equalsIgnoreCase("/ValidationServlet.k")
-							||path.equalsIgnoreCase("/LoginServlet.k")||path.equalsIgnoreCase("/Regist.k")){
+							||path.equalsIgnoreCase("/LoginServlet.k")||path.equalsIgnoreCase("/Regist.k")||path.equalsIgnoreCase("/RandImage.k")){
 						// 已经登陆,继续此次请求
 						chain.doFilter(request, response);
 						logger.info("不需要登陆，可操作");
@@ -141,7 +141,7 @@ public class OnlineServletFilter extends HttpServlet implements Filter {
 			if(path.equalsIgnoreCase("/login.html")||path.equalsIgnoreCase("/regist.html")||path.equalsIgnoreCase("/StopApp.html")
 					||path.equalsIgnoreCase("/pre-reset-pwd.html")||path.equalsIgnoreCase("/404.html")
 					||path.equalsIgnoreCase("/gen-pwd.html")||path.equalsIgnoreCase("/ValidationServlet.k")
-					||path.equalsIgnoreCase("/LoginServlet.k")||path.equalsIgnoreCase("/Regist.k")){
+					||path.equalsIgnoreCase("/LoginServlet.k")||path.equalsIgnoreCase("/Regist.k")||path.equalsIgnoreCase("/RandImage.k")){
 				// 已经登陆,继续此次请求
 				chain.doFilter(request, response);
 				logger.info("不需要登陆，可操作");

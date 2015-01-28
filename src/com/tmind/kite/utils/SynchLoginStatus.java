@@ -99,7 +99,7 @@ public class SynchLoginStatus {
 						sessionManager.remove(user.getTelNo());
 					}
 
-					logger.info("用户 [TelNo:" + telNo + "，Id=" + user.getId()+ "] 已经退出Web App!");
+					logger.info("用户 [TelNo:" + telNo + "，Id=" + user.getId()+ "] 已经退出IOS App!");
 
 
 					String currentDateTime = DateUtils.formatChar12(DateUtils.getChar12());
@@ -125,7 +125,7 @@ public class SynchLoginStatus {
 						sessionManager.remove(user.getTelNo());
 					}
 
-					logger.info("用户 [TelNo:" + telNo + "，Id=" + user.getId()+ "] 已经退出Web App!");
+					logger.info("用户 [TelNo:" + telNo + "，Id=" + user.getId()+ "] 已经退出Android App!");
 
 
 					String currentDateTime = DateUtils.formatChar12(DateUtils.getChar12());
