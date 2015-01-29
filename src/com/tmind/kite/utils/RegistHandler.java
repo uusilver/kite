@@ -89,8 +89,9 @@ public class RegistHandler {
 	 * @param security_ans
 	 * @return
 	 */
-	public static boolean saveServicePwdAndQA(String telno, String service_pwd, String security_que, String security_ans){
-		boolean flag = false;
+	public static HashMap<String,String> saveServicePwdAndQA(String telno, String service_pwd, String security_que, String security_ans){
+
+		HashMap<String,String> map = new HashMap<String,String>();
 		Connection conn  = null;
 		PreparedStatement ps = null;
 		conn = DBUtils.getConnection();
@@ -105,13 +106,17 @@ public class RegistHandler {
 			ps.setString(3, security_ans);
 			ps.setString(4, telno);
 			ps.executeUpdate();
-			flag = true;
+			
+			logger.info("保存服务密码和安全问题成功");
+			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_REGIST_SUCCESS);
+			
 		} catch (SQLException e) {
+			logger.info("保存服务密码和安全问题失败");
+			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_REGIST_DB_EXCEPTION);
 			e.printStackTrace();
-			flag = false;
 		}finally{
 			DBUtils.freeConnection(conn, ps, null);
 		}
-		return flag;
+		return map;
 	}
 }
