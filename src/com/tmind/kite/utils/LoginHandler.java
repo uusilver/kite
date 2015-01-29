@@ -183,28 +183,6 @@ public class LoginHandler {
 		return map;
 	}
 	
-	/**
-	 * 和当前时间进行比较，如果时差超过指定的时长，则返回true，否则返回false
-	 * @param dateTime
-	 * @param timeRange
-	 * @return
-	 */
-	private static boolean isReleased(Date dateTime,int timeRange){
-		
-		boolean value = false;
-		
-		Date currentTime = DateUtils.convertString2Date(DateUtils.getChar14());
-		
-		long diff = currentTime.getTime() - dateTime.getTime();
-		
-		long minutes = (diff/(60*1000));
-		
-		if(minutes>timeRange){
-			value = true;
-		}
-		return value;
-	}
-	
 	public static boolean logoutInDBLevel(int flag,int id){
 		
 		int exeResult = 0;
@@ -231,5 +209,27 @@ public class LoginHandler {
 			DBUtils.freeConnection(conn, ps, rs);
 		}
 		return returnValue;
+	}
+	
+	/**
+	 * 和当前时间进行比较，如果时差超过指定的时长，则返回true，否则返回false
+	 * @param dateTime
+	 * @param timeRange
+	 * @return
+	 */
+	private static boolean isReleased(Date dateTime,int timeRange){
+		
+		boolean value = false;
+		
+		Date currentTime = DateUtils.convertString2Date(DateUtils.getChar14());
+		
+		long diff = currentTime.getTime() - dateTime.getTime();
+		
+		long minutes = (diff/(60*1000));
+		
+		if(minutes>timeRange){
+			value = true;
+		}
+		return value;
 	}
 }

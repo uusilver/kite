@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
 import com.tmind.kite.constants.CommonConstants;
+import com.tmind.kite.constants.MessageContent;
 import com.tmind.kite.model.User;
 import com.tmind.kite.utils.LoginHandler;
 import com.tmind.kite.utils.SessionUtils;
@@ -39,10 +40,10 @@ public class LoginRestService {
 		
 		//如果手机号码或者客户端类型为空，则跳转入异常提示页面
 		if(telno==null||"".equals(telno)||clientType==null||"".equals(clientType)){
-			logger.info("密码为空");
+			logger.info("手机号码或者客户端类型为空");
 			HashMap map = new HashMap<String,String>();
 			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
-			map.put(CommonConstants.REST_MSG_FORMAT_TIMES, "0");
+			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
 			return returnValue;

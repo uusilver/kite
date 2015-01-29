@@ -48,6 +48,12 @@ public class CommonConstants
 	/** 每页显示记录数量 */
 	public static final int MAX_PAGE_ITEMS = 10;
 	
+	/** 间隔时间：用户未回复服务器最大间隔时间，单位为分钟*/
+	public static final int MAX_STANDARD_CHECK_TIME = 15;
+	
+	/** 默认短信条数，用户注册时分配*/
+	public static final int MAX_DEFAULT_SMS_COUNTS = 20;
+	
 	/** 登陆尝试次数 */
 	public static final String MAX_LOGIN_ATTEMPT_TIMES = "3";
 	
@@ -116,6 +122,18 @@ public class CommonConstants
 	
 	/**用户密码错误*/
 	public static final String MSG_CODE_LOGIN_WRONG_PWD = "error06";
+	
+	
+	/**用户注册成功*/
+	public static final String MSG_CODE_REST_REGIST_SUCCESS = "success";
+	
+	/**手机号码已经存在*/
+	public static final String MSG_CODE_REST_REGIST_TELNO_EXIST = "lgn-error01";
+	
+	/**保存数据异常*/
+	public static final String MSG_CODE_REST_REGIST_DB_EXCEPTION = "lgn-error02";
+	
+	
 	
 	/**用户登陆成功*/
 	public static final String MSG_CODE_REST_LOGIN_SUCCESS = "success";
