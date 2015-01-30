@@ -61,7 +61,7 @@ public class RegistHandler {
 			ps_insert.setString(3, password);
 			ps_insert.setDate(4, new java.sql.Date(new java.util.Date().getTime()));
 			ps_insert.setString(5, clientType);
-			ps_insert.setString(6, "N");
+			ps_insert.setString(6, "Y");
 			ps_insert.setInt(7, CommonConstants.MAX_STANDARD_CHECK_TIME);
 			ps_insert.setInt(8, CommonConstants.MAX_DEFAULT_SMS_COUNTS);
 			ps_insert.execute();

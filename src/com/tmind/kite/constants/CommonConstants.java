@@ -108,6 +108,9 @@ public class CommonConstants
 	/**REST消息格式：msg*/
 	public static final String REST_MSG_FORMAT_MSG_CONTENT = "msg";
 	
+	/**REST消息格式：个人设置状态*/
+	public static final String REST_MSG_FORMAT_PROFILE_SETTING_STATUS = "pro-status";
+	
 	/**用户登陆成功*/
 	public static final String MSG_CODE_LOGIN_SUCCESS = "success";
 	
@@ -128,10 +131,16 @@ public class CommonConstants
 	public static final String MSG_CODE_REST_REGIST_SUCCESS = "success";
 	
 	/**手机号码已经存在*/
-	public static final String MSG_CODE_REST_REGIST_TELNO_EXIST = "lgn-error01";
+	public static final String MSG_CODE_REST_REGIST_TELNO_EXIST = "reg-error01";
 	
 	/**保存数据异常*/
-	public static final String MSG_CODE_REST_REGIST_DB_EXCEPTION = "lgn-error02";
+	public static final String MSG_CODE_REST_REGIST_DB_EXCEPTION = "reg-error02";
+	
+	/**未完成个人设置*/
+	public static final String MSG_CODE_REST_REGIST_PROFILE_NOT_DONE = "reg-error03";
+
+	/**完成个人设置*/
+	public static final String MSG_CODE_REST_REGIST_PROFILE_DONE = "reg-done";
 	
 	
 	

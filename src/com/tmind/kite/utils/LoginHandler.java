@@ -21,7 +21,7 @@ public class LoginHandler {
 	
 	protected static final Logger logger = Logger.getLogger(LoginHandler.class);
 
-	private static final String QUERY_SQL = "select id,user_pwd,login_err_times,locked_time from m_user where tel_no=? and active_flag='Y'";
+	private static final String QUERY_SQL = "select id,user_pwd,login_err_times,locked_time,service_pwd,security_que,security_ans from m_user where tel_no=? and active_flag='Y'";
 	
 	private static final String UPDATE_TIMES_SQL = "update m_user set login_err_times=? where id=?";
 	
@@ -83,12 +83,18 @@ public class LoginHandler {
 			String user_pwd = null;
 			String login_err_times = null;
 			Date lockTime = null;
+			String servicePwd = null;
+			String securityQue = null;
+			String securityAns = null;
 			while(rs.next()){
 				id = (new Integer(rs.getInt("Id"))).toString();
 				user_pwd = rs.getString("user_pwd");
 				login_err_times = (new Integer(rs.getInt("login_err_times"))).toString();
 				lockTime = rs.getTimestamp("locked_time");
-
+				servicePwd = rs.getString("service_pwd");
+				securityQue = rs.getString("security_que");
+				securityAns = rs.getString("security_ans");
+				
 				logger.debug("获取用户信息,[User ID:"+id+",TelNo:"+teleNo+"]");
 				
 				User user = new User();
@@ -96,6 +102,9 @@ public class LoginHandler {
 				user.setTelNo(teleNo);
 				user.setUserPwd(user_pwd);
 				user.setTxtTimes(login_err_times);
+				user.setServicePwd(servicePwd);
+				user.setSecurityQue(securityQue);
+				user.setSecurityAns(securityAns);
 				
 				userList.add(user);
 			}
@@ -130,6 +139,20 @@ public class LoginHandler {
 				//如果密码匹配，则登陆成功，登陆失败次数更新为0
 				else if(DigestHandler.makeMD5(pwd).equals(userPwd)){
 					resultCode = CommonConstants.MSG_CODE_REST_LOGIN_SUCCESS;
+					
+					//如果用户服务密码/安全问题/安全问题答案为空，则认为该用户没有完成注册
+					if(user.getServicePwd()==null||"".equals(user.getServicePwd())
+					 ||user.getSecurityQue()==null||"".equals(user.getSecurityQue())
+					 ||user.getSecurityAns()==null||"".equals(user.getSecurityAns())){
+						
+						map.put(CommonConstants.REST_MSG_FORMAT_PROFILE_SETTING_STATUS, 
+								CommonConstants.MSG_CODE_REST_REGIST_PROFILE_NOT_DONE);
+					}else{
+						
+						map.put(CommonConstants.REST_MSG_FORMAT_PROFILE_SETTING_STATUS, 
+								CommonConstants.MSG_CODE_REST_REGIST_PROFILE_DONE);
+					}
+					
 					updPs = conn.prepareStatement(UPDATE_LOGIN_SUCCESS_SQL);
 					errTimes = 0;
 					

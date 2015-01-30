@@ -2,12 +2,10 @@ package com.tmind.kite.webservice;
 
 import java.util.HashMap;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
@@ -15,19 +13,16 @@ import org.apache.log4j.Logger;
 import com.google.gson.Gson;
 import com.tmind.kite.constants.CommonConstants;
 import com.tmind.kite.constants.MessageContent;
-import com.tmind.kite.model.User;
 import com.tmind.kite.utils.DigestHandler;
 import com.tmind.kite.utils.RegistHandler;
-import com.tmind.kite.utils.SessionUtils;
-import com.tmind.kite.web.FrameworkApplication;
 
 @Path("registRest")
 public class RegistRestService {
 	
 	protected static final Logger logger = Logger.getLogger(RegistRestService.class);
 	
-	@Context 
-	private HttpServletRequest request;
+//	@Context 
+//	private HttpServletRequest request;
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GET
@@ -85,7 +80,7 @@ public class RegistRestService {
 
 		logger.debug("[Regist Web Service Request] : <User ID:"+telno+", Password:"+servicePwd+" , ClientType:"+clientType+">");
 		
-		//用户注册
+		//设置服务密码和安全问题与答案
 		HashMap resultMap = RegistHandler.saveServicePwdAndQA(telno, DigestHandler.makeMD5(servicePwd), securityQue, securityAns);
 
 		Gson gson = new Gson();

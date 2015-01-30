@@ -34,6 +34,15 @@ public class User {
 	//用户登录的客户端，1：ISO APP；2：Android；3：微信；4：WebAPP
 	private String clientType;
 	
+	//服务密码
+	private String servicePwd;
+	
+	//短信条数
+	private String securityQue;
+	
+	//短信条数
+	private String securityAns;
+	
 	public String getId() {
 		return id;
 	}
@@ -120,6 +129,30 @@ public class User {
 
 	public void setClientType(String clientType) {
 		this.clientType = clientType;
+	}
+
+	public String getServicePwd() {
+		return servicePwd;
+	}
+
+	public void setServicePwd(String servicePwd) {
+		this.servicePwd = servicePwd;
+	}
+
+	public String getSecurityQue() {
+		return securityQue;
+	}
+
+	public void setSecurityQue(String securityQue) {
+		this.securityQue = securityQue;
+	}
+
+	public String getSecurityAns() {
+		return securityAns;
+	}
+
+	public void setSecurityAns(String securityAns) {
+		this.securityAns = securityAns;
 	}
 	
 }
