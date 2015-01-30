@@ -15,6 +15,7 @@ import com.tmind.kite.constants.CommonConstants;
 import com.tmind.kite.constants.MessageContent;
 import com.tmind.kite.utils.DigestHandler;
 import com.tmind.kite.utils.RegistHandler;
+import com.tmind.kite.utils.UserProfileHandler;
 
 @Path("userProfile")
 public class UserProfileRestService {
@@ -42,8 +43,8 @@ public class UserProfileRestService {
 
 		logger.debug("[Regist Web Service Request] : <User ID:"+telno+", ClientType:"+clientType+">");
 		
-		//用户注册
-		HashMap resultMap = RegistHandler.saveUserTelAndPwd(userName, telno, DigestHandler.makeMD5(pwd),clientType);
+		//获取用户个人设置信息
+		HashMap resultMap = UserProfileHandler.getUserProfile(telno);
 
 		Gson gson = new Gson();
 		returnValue= gson.toJson(resultMap);

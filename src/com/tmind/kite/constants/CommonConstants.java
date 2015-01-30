@@ -143,6 +143,12 @@ public class CommonConstants
 	public static final String MSG_CODE_REST_REGIST_PROFILE_DONE = "reg-done";
 	
 	
+	/**获取用户个人设置成功*/
+	public static final String MSG_CODE_REST_GET_PROFILE_SUCCESS = "success";
+	
+	/**获取不到个人设置*/
+	public static final String MSG_CODE_REST_GET_EMPTY_PROFILE = "empty";
+	
 	
 	/**用户登陆成功*/
 	public static final String MSG_CODE_REST_LOGIN_SUCCESS = "success";

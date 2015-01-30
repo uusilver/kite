@@ -22,4 +22,7 @@ public class MessageContent {
 	
 	//未登录，拒绝被访问
 	public static final String MSG_ACCESS_DENIED_FOR_NO_LOGIN = "未登录,非法访问";
+	
+	//未登录，拒绝被访问
+	public static final String MSG_USER_PROFILE_EMPTY = "您尚未完成个人设置";
 }
