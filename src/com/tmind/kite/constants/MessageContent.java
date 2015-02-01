@@ -25,4 +25,7 @@ public class MessageContent {
 	
 	//未登录，拒绝被访问
 	public static final String MSG_USER_PROFILE_EMPTY = "您尚未完成个人设置";
+	
+	//手机号码不正确
+	public static final String MSG_USER_TELNO_INCORRECT = "您的手机号码不正确";
 }

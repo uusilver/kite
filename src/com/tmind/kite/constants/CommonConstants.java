@@ -191,5 +191,12 @@ public class CommonConstants
 	
 	/**用户在web端登录，但是APP端已经登录*/
 	public static final String MSG_CODE_REST_LOGIN_WEB_TO_APP = "lgn-error05-01";
+	
+	
+	/**退出成功*/
+	public static final String MSG_CODE_REST_LOGOUT_SUCCESS = "success";
+	
+	/**退出失败,手机号不匹配*/
+	public static final String MSG_CODE_REST_LOGOUT_TELNO_INCORRECT = "lgo-error01";
 
 }
