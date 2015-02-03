@@ -21,7 +21,7 @@ public class LoginHandler {
 	
 	protected static final Logger logger = Logger.getLogger(LoginHandler.class);
 
-	private static final String QUERY_SQL = "select id,user_pwd,login_err_times,locked_time,service_pwd,security_que,security_ans from m_user where tel_no=? and active_flag='Y'";
+	private static final String QUERY_SQL = "select id,user_pwd,login_err_times,locked_time,urgent_name,urgent_telno,service_pwd,security_que,security_ans from m_user where tel_no=? and active_flag='Y'";
 	
 	private static final String UPDATE_TIMES_SQL = "update m_user set login_err_times=? where id=?";
 	
@@ -83,6 +83,8 @@ public class LoginHandler {
 			String user_pwd = null;
 			String login_err_times = null;
 			Date lockTime = null;
+			String urgentName = null;
+			String urgentTelNo = null;
 			String servicePwd = null;
 			String securityQue = null;
 			String securityAns = null;
@@ -91,6 +93,8 @@ public class LoginHandler {
 				user_pwd = rs.getString("user_pwd");
 				login_err_times = (new Integer(rs.getInt("login_err_times"))).toString();
 				lockTime = rs.getTimestamp("locked_time");
+				urgentName = rs.getString("urgent_name");
+				urgentTelNo = rs.getString("urgent_telno");
 				servicePwd = rs.getString("service_pwd");
 				securityQue = rs.getString("security_que");
 				securityAns = rs.getString("security_ans");
@@ -102,6 +106,8 @@ public class LoginHandler {
 				user.setTelNo(teleNo);
 				user.setUserPwd(user_pwd);
 				user.setTxtTimes(login_err_times);
+				user.setUrgentUserName(urgentName);
+				user.setUrgentTelNo(urgentTelNo);
 				user.setServicePwd(servicePwd);
 				user.setSecurityQue(securityQue);
 				user.setSecurityAns(securityAns);

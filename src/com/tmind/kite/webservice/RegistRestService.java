@@ -57,6 +57,7 @@ public class RegistRestService {
 	}
 
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GET
 	@Path("servicePwdAndSecurityQASetting/{telno}/{servicePwd}/{securityQue}/{securityAns}/{clientType}")
 	@Produces(MediaType.TEXT_PLAIN)

@@ -55,7 +55,7 @@ public class LoginRestService {
 		HashMap loginStatus = SynchLoginStatus.synchLogin(telno, clientType);
 		if(loginStatus!=null && !loginStatus.isEmpty()){
 			String status = (String)loginStatus.get(CommonConstants.REST_MSG_FORMAT_STATUS);
-			String msg = (String)loginStatus.get(CommonConstants.REST_MSG_FORMAT_CONTENT);
+//			String msg = (String)loginStatus.get(CommonConstants.REST_MSG_FORMAT_CONTENT);
 			//向相应的客户端推送提示消息
 			if(status.equals(CommonConstants.MSG_CODE_REST_LOGIN_OTHER_CLIENT)){
 				if(clientType.equals(CommonConstants.ACCESS_FROM_IOS)){
@@ -87,7 +87,7 @@ public class LoginRestService {
 					sessionManager.put(user.getTelNo(), request.getSession());
 				}
 				
-				resultMap.remove(CommonConstants.LOGIN_USER_OBJECT);
+//				resultMap.remove(CommonConstants.LOGIN_USER_OBJECT);
 			}
 			Gson gson = new Gson();
 			returnValue= gson.toJson(resultMap);

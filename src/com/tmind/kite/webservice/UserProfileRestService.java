@@ -13,8 +13,6 @@ import org.apache.log4j.Logger;
 import com.google.gson.Gson;
 import com.tmind.kite.constants.CommonConstants;
 import com.tmind.kite.constants.MessageContent;
-import com.tmind.kite.utils.DigestHandler;
-import com.tmind.kite.utils.RegistHandler;
 import com.tmind.kite.utils.UserProfileHandler;
 
 @Path("userProfile")
