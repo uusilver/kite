@@ -86,8 +86,17 @@ public class LoginRestService {
 				if(sessionManager!=null){
 					sessionManager.put(user.getTelNo(), request.getSession());
 				}
+
+				//添加用户个人设置相关信息
+				resultMap.put(CommonConstants.URGENT_USER_NAME, user.getUrgentUserName());
+				resultMap.put(CommonConstants.URGENT_TEL_NO, user.getUrgentTelNo());
+				resultMap.put(CommonConstants.SERVICE_PASSWORD, user.getServicePwd());
+				resultMap.put(CommonConstants.SECURITY_QUESTION, user.getSecurityQue());
+				resultMap.put(CommonConstants.SECURITY_ANSWER, user.getSecurityAns());
 				
-//				resultMap.remove(CommonConstants.LOGIN_USER_OBJECT);
+				//移出用户对象
+				resultMap.remove(CommonConstants.LOGIN_USER_OBJECT);
+				
 			}
 			Gson gson = new Gson();
 			returnValue= gson.toJson(resultMap);

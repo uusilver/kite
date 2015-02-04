@@ -16,7 +16,7 @@ public class UserProfileHandler {
 	protected static final Logger logger = Logger.getLogger(UserProfileHandler.class);
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static HashMap getUserProfile(String telno){
+	public static HashMap getUrgentUserInfo(String telno){
 		
 		HashMap map = new HashMap();
 		
@@ -25,7 +25,7 @@ public class UserProfileHandler {
 		ResultSet rs = null;
 		conn = DBUtils.getConnection();
 		
-		String sql = " select urgent_name, urgent_telno, service_pwd, security_que,  security_ans "
+		String sql = " select urgent_name, urgent_telno "
 					+" from m_user where tel_no=?";
 		
 		logger.debug("查询用户个人设置:"+sql);
@@ -35,22 +35,13 @@ public class UserProfileHandler {
 			rs = ps.executeQuery();
 			String urgentName=null;
 			String urgentTelNo=null;
-			String servicePwd=null;
-			String securityQue=null;
-			String securityAns=null;
 			if(rs.next()){
 				urgentName = rs.getString("urgent_name");
 				urgentTelNo = rs.getString("urgent_telno");
-				servicePwd =  rs.getString("service_pwd");
-				securityQue =  rs.getString("security_que");
-				securityAns =  rs.getString("security_ans");
 				
 				HashMap contentMap = new HashMap();
 				contentMap.put("urgent_telno", urgentTelNo);
 				contentMap.put("urgent_name", urgentName);
-				contentMap.put("service_pwd", servicePwd);
-				contentMap.put("security_que", securityQue);
-				contentMap.put("security_ans", securityAns);
 				
 				map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_GET_PROFILE_SUCCESS);
 				map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, contentMap);

@@ -69,6 +69,21 @@ public class CommonConstants
 	/** 用户密码标识 */
 	public static final String USER_PASSWORD = "password";
 
+	/** 紧急联系人姓名 */
+	public static final String 	URGENT_USER_NAME = "urgentName";
+
+	/** 紧急联系人手机号码 */
+	public static final String URGENT_TEL_NO = "urgentTelNo";
+
+	/** 服务密码 */
+	public static final String SERVICE_PASSWORD = "servicePwd";
+
+	/** 安全问题 */
+	public static final String 	SECURITY_QUESTION = "securityQue";
+
+	/** 安全问题答案 */
+	public static final String SECURITY_ANSWER = "securityAns";
+
 	/** 短信验证类型代码标识 */
 	public static final String SMS_CODE_TYPE = "codeType";
 
@@ -140,8 +155,7 @@ public class CommonConstants
 	public static final String MSG_CODE_REST_REGIST_PROFILE_NOT_DONE = "reg-error03";
 
 	/**完成个人设置*/
-	public static final String MSG_CODE_REST_REGIST_PROFILE_DONE = "reg-done";
-	
+	public static final String MSG_CODE_REST_REGIST_PROFILE_DONE = "done";
 	
 	/**获取用户个人设置成功*/
 	public static final String MSG_CODE_REST_GET_PROFILE_SUCCESS = "success";

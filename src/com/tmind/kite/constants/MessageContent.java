@@ -28,4 +28,7 @@ public class MessageContent {
 	
 	//手机号码不正确
 	public static final String MSG_USER_TELNO_INCORRECT = "您的手机号码不正确";
+	
+	//个人设置信息为空，请求被拒绝
+	public static final String MSG_ACCESS_DENIED_FOR_NULL_USER_PROFILE = "个人设置信息为空，请求被拒绝";
 }
