@@ -163,6 +163,12 @@ public class CommonConstants
 	/**获取不到个人设置*/
 	public static final String MSG_CODE_REST_GET_EMPTY_PROFILE = "empty";
 	
+	/**保存个人设置成功*/
+	public static final String MSG_CODE_REST_SAVE_PROFILE_SUCCESS = "success";
+	
+	/**保存个人设置失败*/
+	public static final String MSG_CODE_REST_SAVE_PROFILE_FAILED = "failed";
+	
 	
 	/**用户登陆成功*/
 	public static final String MSG_CODE_REST_LOGIN_SUCCESS = "success";
