@@ -169,6 +169,12 @@ public class CommonConstants
 	/**保存个人设置失败*/
 	public static final String MSG_CODE_REST_SAVE_PROFILE_FAILED = "failed";
 	
+	/**保存紧急联系人信息成功*/
+	public static final String MSG_CODE_REST_SAVE_URGENT_USER_SUCCESS = "success";
+	
+	/**保存紧急联系人信息失败*/
+	public static final String MSG_CODE_REST_SAVE_URGENT_USER_FAILED = "failed";
+	
 	
 	/**用户登陆成功*/
 	public static final String MSG_CODE_REST_LOGIN_SUCCESS = "success";

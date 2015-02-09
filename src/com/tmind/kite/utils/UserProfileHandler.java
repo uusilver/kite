@@ -5,8 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-
-import javax.ws.rs.PathParam;
+import java.util.LinkedHashMap;
 
 import org.apache.log4j.Logger;
 
@@ -78,25 +77,62 @@ public class UserProfileHandler {
 			String servicePwd,String securityQue, String securityAns, String clientType){
 			
 			HashMap map = new HashMap();
-			
+			HashMap params = new LinkedHashMap(); 
 			Connection conn  = null;
 			PreparedStatement ps = null;
+			int index = 1;
 			int record = 0;
 			conn = DBUtils.getConnection();
 			
-			String sql = " update m_user "
-						+" set urgent_name=?, urgent_telno=?, service_pwd=?, security_que=?, security_ans=?  "
-						+" where tel_no=? ";
+			String sql = " update m_user set ";
+			
+			if(urgentName!=null){
+				sql += "urgent_name=?,";
+				params.put(index, urgentName);
+				index++;
+			}
+			
+			if(urgentTelNo!=null&&!"".equals(urgentTelNo)){
+				sql += "urgent_telno=?,";
+				params.put(index, urgentTelNo);
+				index++;
+			}
+			
+			if(servicePwd!=null&&!"".equals(servicePwd)){
+				sql += "service_pwd=?,";
+				params.put(index, servicePwd);
+				index++;
+			}
+			
+			if(securityQue!=null&&!"".equals(securityQue)){
+				sql += "security_que=?,";
+				params.put(index, securityQue);
+				index++;
+			}
+			
+			if(securityAns!=null&&!"".equals(securityAns)){
+				sql += "security_ans=?,";
+				params.put(index, securityAns);
+				index++;
+			}
+			
+			if(sql.lastIndexOf(",")!=-1){
+				sql = sql.substring(0,sql.length()-1);
+			}
+			
+			sql += " where tel_no=? ";
 			
 			logger.debug("查询用户个人设置:"+sql);
 			try {
 				ps = conn.prepareStatement(sql);
-				ps.setString(1, urgentName);
-				ps.setString(2, urgentTelNo);
-				ps.setString(3, servicePwd);
-				ps.setString(4, securityQue);
-				ps.setString(5, securityAns);
-				ps.setString(6, telno);
+				
+				if(!params.isEmpty()){
+					for(int i = 0 ; i<params.size(); i++){
+						ps.setString(i+1, (String)params.get(i+1));
+					}
+				}
+				ps.setString(params.size()+1, telno);
+				
 				record = ps.executeUpdate();
 				if(record==1){
 					map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_SUCCESS);

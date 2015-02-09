@@ -34,4 +34,7 @@ public class MessageContent {
 	
 	//个人设置信息为空，请求被拒绝
 	public static final String MSG_ACCESS_DENIED_FOR_NULL_USER_PROFILE = "个人设置信息为空，请求被拒绝";
+	
+	//紧急联系人信息为空，请求被拒绝
+	public static final String MSG_ACCESS_DENIED_FOR_NULL_URGENT_USER_PROFILE = "紧急联系人或者紧急联系人手机号码为空，请求被拒绝";
 }

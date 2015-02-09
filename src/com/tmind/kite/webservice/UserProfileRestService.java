@@ -20,6 +20,12 @@ public class UserProfileRestService {
 	
 	protected static final Logger logger = Logger.getLogger(UserProfileRestService.class);
 	
+	/**
+	 * 根据用户手机号码获取用户个人这是信息
+	 * @param telno
+	 * @param clientType
+	 * @return
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GET
 	@Path("getUrgentUserInfo/{telno}/{clientType}")
@@ -50,6 +56,17 @@ public class UserProfileRestService {
 		return returnValue;
 	}
 	
+	/**
+	 * 保存用户个人设置信息
+	 * @param telno
+	 * @param urgentName
+	 * @param urgentTelNo
+	 * @param servicePwd
+	 * @param securityQue
+	 * @param securityAns
+	 * @param clientType
+	 * @return
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GET
 	@Path("saveUserProfile/{telno}/{urgentName}/{urgentTelNo}/{servicePwd}/{securityQue}/{securityAns}/{clientType}")
@@ -87,11 +104,74 @@ public class UserProfileRestService {
 
 		logger.debug("[Regist Web Service Request] : <User ID:"+telno+", ClientType:"+clientType+">");
 		
-		//获取用户个人设置信息
-		HashMap resultMap = UserProfileHandler.getUrgentUserInfo(telno);
+		//保存用户个人设置信息
+		HashMap resultMap = UserProfileHandler.saveUserProfile(telno, urgentName, urgentTelNo, servicePwd, securityQue, securityAns, clientType);
 
 		Gson gson = new Gson();
 		returnValue= gson.toJson(resultMap);
+		
+		return returnValue;
+	}
+	
+	/**
+	 * 保存紧急联系人手机号码和姓名
+	 * @param telno
+	 * @param urgentName
+	 * @param urgentTelNo
+	 * @param clientType
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@GET
+	@Path("saveUrgentUserInfo/{telno}/{urgentName}/{urgentTelNo}/{clientType}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String saveUrgentUserInfo(@PathParam(value="telno") String telno,@PathParam(value="urgentName") String urgentName,
+			@PathParam(value="urgentTelNo") String urgentTelNo,@PathParam(value="clientType") String clientType){
+		
+		String returnValue = "";
+		HashMap map = null;
+		//如果手机号码或者客户端类型为空，则跳转入异常提示页面
+		if(telno==null||"".equals(telno)||clientType==null||"".equals(clientType)){
+			logger.info("手机号码或者客户端类型为空");
+			map = new HashMap<String,String>();
+			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
+			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
+			Gson gson = new Gson();
+			returnValue= gson.toJson(map);
+			return returnValue;
+		}
+		
+		if(urgentName==null||"".equals(urgentName)||urgentTelNo==null||"".equals(urgentTelNo)){
+			logger.info("紧急联系人或者紧急联系人手机号码为空");
+			map = new HashMap<String,String>();
+			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_FAILED);
+			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_URGENT_USER_PROFILE);
+			Gson gson = new Gson();
+			returnValue= gson.toJson(map);
+			return returnValue;
+		}
+
+		logger.debug("[Regist Web Service Request] : <User ID:"+telno+", ClientType:"+clientType+">");
+		
+		//保存紧急联系人姓名和手机号码
+		HashMap resultMap = UserProfileHandler.saveUserProfile(telno, urgentName, urgentTelNo, null, null, null, null);
+
+		HashMap returnMap = new HashMap();
+		
+		if(resultMap!=null&&!resultMap.isEmpty()){
+			String status = (String)resultMap.get(CommonConstants.REST_MSG_FORMAT_STATUS);
+			
+			//保存紧急联系人手机号码和姓名成功
+			if(CommonConstants.MSG_CODE_REST_SAVE_PROFILE_SUCCESS.equals(status)){
+				returnMap.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_URGENT_USER_SUCCESS);
+			}else{
+				//保存紧急联系人手机号码和姓名失败,包含数据库异常
+				returnMap.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_URGENT_USER_FAILED);
+			}
+		}
+		
+		Gson gson = new Gson();
+		returnValue= gson.toJson(returnMap);
 		
 		return returnValue;
 	}
