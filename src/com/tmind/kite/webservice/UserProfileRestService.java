@@ -175,4 +175,130 @@ public class UserProfileRestService {
 		
 		return returnValue;
 	}
+	
+	/**
+	 * 保存服务密码
+	 * @param telno
+	 * @param servicePwd
+	 * @param clientType
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@GET
+	@Path("saveServicePassword/{telno}/{servicePwd}/{clientType}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String saveServicePassword(@PathParam(value="telno") String telno,@PathParam(value="servicePwd") String servicePwd,
+			@PathParam(value="clientType") String clientType){
+		
+		String returnValue = "";
+		HashMap map = null;
+		//如果手机号码或者客户端类型为空，则跳转入异常提示页面
+		if(telno==null||"".equals(telno)||clientType==null||"".equals(clientType)){
+			logger.info("手机号码或者客户端类型为空");
+			map = new HashMap<String,String>();
+			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
+			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
+			Gson gson = new Gson();
+			returnValue= gson.toJson(map);
+			return returnValue;
+		}
+		
+		if(servicePwd==null||"".equals(servicePwd)){
+			logger.info("服务密码为空");
+			map = new HashMap<String,String>();
+			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_FAILED);
+			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_SERVICE_PWD);
+			Gson gson = new Gson();
+			returnValue= gson.toJson(map);
+			return returnValue;
+		}
+
+		logger.debug("[Regist Web Service Request] : <User ID:"+telno+", ClientType:"+clientType+">");
+		
+		//保存服务密码
+		HashMap resultMap = UserProfileHandler.saveUserProfile(telno, null, null, servicePwd, null, null, null);
+
+		HashMap returnMap = new HashMap();
+		
+		if(resultMap!=null&&!resultMap.isEmpty()){
+			String status = (String)resultMap.get(CommonConstants.REST_MSG_FORMAT_STATUS);
+			
+			//保存服务密码成功
+			if(CommonConstants.MSG_CODE_REST_SAVE_PROFILE_SUCCESS.equals(status)){
+				returnMap.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_SERVICE_PWD_SUCCESS);
+			}else{
+				//保存服务密码失败,包含数据库异常
+				returnMap.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_SERVICE_PWD_FAILED);
+			}
+		}
+		
+		Gson gson = new Gson();
+		returnValue= gson.toJson(returnMap);
+		
+		return returnValue;
+	}
+
+	
+	/**
+	 * 保存安全问答信息
+	 * @param telno
+	 * @param securityQue
+	 * @param securityAns
+	 * @param clientType
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@GET
+	@Path("saveSecurityInfo/{telno}/{securityQue}/{securityAns}/{clientType}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String saveSecurityInfo(@PathParam(value="telno") String telno,@PathParam(value="securityQue") String securityQue,
+			@PathParam(value="securityAns") String securityAns,@PathParam(value="clientType") String clientType){
+		
+		String returnValue = "";
+		HashMap map = null;
+		//如果手机号码或者客户端类型为空，则跳转入异常提示页面
+		if(telno==null||"".equals(telno)||clientType==null||"".equals(clientType)){
+			logger.info("手机号码或者客户端类型为空");
+			map = new HashMap<String,String>();
+			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
+			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
+			Gson gson = new Gson();
+			returnValue= gson.toJson(map);
+			return returnValue;
+		}
+		
+		if(securityQue==null||"".equals(securityQue)||securityAns==null||"".equals(securityAns)){
+			logger.info("安全问答信息为空");
+			map = new HashMap<String,String>();
+			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_FAILED);
+			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_SECURITY_QA);
+			Gson gson = new Gson();
+			returnValue= gson.toJson(map);
+			return returnValue;
+		}
+
+		logger.debug("[Regist Web Service Request] : <User ID:"+telno+", ClientType:"+clientType+">");
+		
+		//保存安全问答信息
+		HashMap resultMap = UserProfileHandler.saveUserProfile(telno, null, null, null, securityQue, securityAns, null);
+
+		HashMap returnMap = new HashMap();
+		
+		if(resultMap!=null&&!resultMap.isEmpty()){
+			String status = (String)resultMap.get(CommonConstants.REST_MSG_FORMAT_STATUS);
+			
+			//保存安全问答成功
+			if(CommonConstants.MSG_CODE_REST_SAVE_PROFILE_SUCCESS.equals(status)){
+				returnMap.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_SECURITY_QA_SUCCESS);
+			}else{
+				//保存安全问答失败,包含数据库异常
+				returnMap.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_SECURITY_QA_FAILED);
+			}
+		}
+		
+		Gson gson = new Gson();
+		returnValue= gson.toJson(returnMap);
+		
+		return returnValue;
+	}
 }

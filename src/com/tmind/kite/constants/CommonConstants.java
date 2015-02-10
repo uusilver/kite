@@ -175,6 +175,17 @@ public class CommonConstants
 	/**保存紧急联系人信息失败*/
 	public static final String MSG_CODE_REST_SAVE_URGENT_USER_FAILED = "failed";
 	
+	/**保存服务密码成功*/
+	public static final String MSG_CODE_REST_SAVE_SERVICE_PWD_SUCCESS = "success";
+	
+	/**保存服务密码失败*/
+	public static final String MSG_CODE_REST_SAVE_SERVICE_PWD_FAILED = "failed";
+	
+	/**保存安全问题成功*/
+	public static final String MSG_CODE_REST_SAVE_SECURITY_QA_SUCCESS = "success";
+	
+	/**保存安全问题失败*/
+	public static final String MSG_CODE_REST_SAVE_SECURITY_QA_FAILED = "failed";
 	
 	/**用户登陆成功*/
 	public static final String MSG_CODE_REST_LOGIN_SUCCESS = "success";
