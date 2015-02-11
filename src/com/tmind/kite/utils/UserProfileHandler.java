@@ -44,11 +44,11 @@ public class UserProfileHandler {
 				contentMap.put("urgent_telno", urgentTelNo);
 				contentMap.put("urgent_name", urgentName);
 				
-				map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_GET_PROFILE_SUCCESS);
+				map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_PROFILE_SUCCESS);
 				map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, contentMap);
 			}else{
 				
-				map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_GET_EMPTY_PROFILE);
+				map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_EMPTY_PROFILE);
 				map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_USER_PROFILE_EMPTY);
 			}
 			

@@ -95,7 +95,7 @@ public class UserProfileRestService {
 				||securityAns==null||"".equals(securityAns)){
 			logger.info("紧急联系人、紧急联系人手机号码、服务密码、或者安全问题为空");
 			map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_GET_EMPTY_PROFILE);
+			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_EMPTY_PROFILE);
 			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_USER_PROFILE);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);

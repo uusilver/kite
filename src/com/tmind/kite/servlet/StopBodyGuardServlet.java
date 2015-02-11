@@ -47,7 +47,7 @@ public class StopBodyGuardServlet extends HttpServlet{
 		String sql = " update m_user m,web_service_record r"
 				   + " set r.service_flag='N', r.service_stop_time=?  "
 				   + " where m.id = r.user_id "
-				   + " and tel_no=?";
+				   + " and m.tel_no=?";
 		logger.debug("用户关闭服务:"+sql);
 		try {
 			ps = conn.prepareStatement(sql);

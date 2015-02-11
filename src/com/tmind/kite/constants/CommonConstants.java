@@ -158,10 +158,16 @@ public class CommonConstants
 	public static final String MSG_CODE_REST_REGIST_PROFILE_DONE = "done";
 	
 	/**获取用户个人设置成功*/
-	public static final String MSG_CODE_REST_GET_PROFILE_SUCCESS = "success";
+	public static final String MSG_CODE_REST_PROFILE_SUCCESS = "success";
 	
 	/**获取不到个人设置*/
-	public static final String MSG_CODE_REST_GET_EMPTY_PROFILE = "empty";
+	public static final String MSG_CODE_REST_EMPTY_PROFILE = "empty";
+	
+	/**获取不到服务开启或关闭指令*/
+	public static final String MSG_CODE_REST_EMPTY_OPEN_OR_CLOSE_SERVICE_COMMAND = "empty";
+	
+	/**服务密码为空*/
+	public static final String MSG_CODE_REST_EMPTY_SERVICE_PWD = "empty";
 	
 	/**保存个人设置成功*/
 	public static final String MSG_CODE_REST_SAVE_PROFILE_SUCCESS = "success";
@@ -186,6 +192,24 @@ public class CommonConstants
 	
 	/**保存安全问题失败*/
 	public static final String MSG_CODE_REST_SAVE_SECURITY_QA_FAILED = "failed";
+	
+	/**开启风筝服务成功*/
+	public static final String MSG_CODE_REST_START_SERVICE_SUCCESS = "success";
+	
+	/**开启风筝服务失败*/
+	public static final String MSG_CODE_REST_START_SERVICE_FAILED = "failed";
+	
+	/**关闭风筝服务成功*/
+	public static final String MSG_CODE_REST_STOP_SERVICE_SUCCESS = "success";
+	
+	/**关闭风筝服务失败*/
+	public static final String MSG_CODE_REST_STOP_SERVICE_FAILED = "failed";
+	
+	/**校验服务密码成功*/
+	public static final String MSG_CODE_REST_VALID_SERVICE_PWD_SUCCESS = "success";
+	
+	/**校验服务密码失败*/
+	public static final String MSG_CODE_REST_VALID_SERVICE_PWD_FAILED = "failed";
 	
 	/**用户登陆成功*/
 	public static final String MSG_CODE_REST_LOGIN_SUCCESS = "success";
@@ -228,7 +252,6 @@ public class CommonConstants
 	
 	/**用户在web端登录，但是APP端已经登录*/
 	public static final String MSG_CODE_REST_LOGIN_WEB_TO_APP = "lgn-error05-01";
-	
 	
 	/**退出成功*/
 	public static final String MSG_CODE_REST_LOGOUT_SUCCESS = "success";
