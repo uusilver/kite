@@ -55,7 +55,7 @@ public class ValidationServlet extends HttpServlet {
 		//根据手机号码和客户端类型检查用户是否已经在IOS或者Android客户端登录,如果登录则终止此次登录，并跳转到登录页面
 		HashMap loginStatus = SynchLoginStatus.synchLogin(telNo, clientType);
 		if (loginStatus != null && !loginStatus.isEmpty()) {
-			String resultCode = (String) loginStatus.get(CommonConstants.REST_MSG_FORMAT_STATUS);
+			String resultCode = (String) loginStatus.get(CommonConstants.REST_MSG_KEY_STATUS);
 			if (resultCode != null&& !"".equals(resultCode)
 					&& CommonConstants.MSG_CODE_REST_LOGIN_WEB_TO_APP.equals(resultCode)) {
 				Gson gson = new Gson();
@@ -75,26 +75,26 @@ public class ValidationServlet extends HttpServlet {
 				errorCode = notExistOrLocked(telNo,pwd);
 				if("notExist".equals(errorCode)){
 					//error2:用户不存在
-					resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS,CommonConstants.MSG_CODE_LOGIN_NO_USER);
+					resultMap.put(CommonConstants.REST_MSG_KEY_STATUS,CommonConstants.MSG_CODE_LOGIN_NO_USER);
 					Gson gson = new Gson();
 					String returnValue = gson.toJson(resultMap);
 					out.write(returnValue);
 				}else if("locked".equals(errorCode)){
 					//error5：用户账号被锁住
-					resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS,CommonConstants.MSG_CODE_LOGIN_USER_LOCKED);
+					resultMap.put(CommonConstants.REST_MSG_KEY_STATUS,CommonConstants.MSG_CODE_LOGIN_USER_LOCKED);
 					Gson gson = new Gson();
 					String returnValue = gson.toJson(resultMap);
 					out.write(returnValue);
 				}else if(errorCode.startsWith("incorrectPwd")){
 					//用户密码错误
 					String leftAttampts = errorCode.substring(errorCode.indexOf(":"));
-					resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS,CommonConstants.MSG_CODE_LOGIN_WRONG_PWD);
-					resultMap.put(CommonConstants.REST_MSG_FORMAT_CONTENT,leftAttampts);
+					resultMap.put(CommonConstants.REST_MSG_KEY_STATUS,CommonConstants.MSG_CODE_LOGIN_WRONG_PWD);
+					resultMap.put(CommonConstants.REST_MSG_KEY_CONTENT,leftAttampts);
 					Gson gson = new Gson();
 					String returnValue = gson.toJson(resultMap);
 					out.write(returnValue);
 				}else{
-					resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS,CommonConstants.MSG_CODE_LOGIN_SUCCESS);
+					resultMap.put(CommonConstants.REST_MSG_KEY_STATUS,CommonConstants.MSG_CODE_LOGIN_SUCCESS);
 					Gson gson = new Gson();
 					String returnValue = gson.toJson(resultMap);
 					out.write(returnValue);
@@ -102,7 +102,7 @@ public class ValidationServlet extends HttpServlet {
 			}else{
 				if(!randomCode.equalsIgnoreCase(randomCodeOnServer))
 				{
-					resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS,CommonConstants.MSG_CODE_LOGIN_WRONG_RANDOM_CODE);
+					resultMap.put(CommonConstants.REST_MSG_KEY_STATUS,CommonConstants.MSG_CODE_LOGIN_WRONG_RANDOM_CODE);
 					Gson gson = new Gson();
 					String returnValue = gson.toJson(resultMap);
 					out.write(returnValue);
@@ -110,26 +110,26 @@ public class ValidationServlet extends HttpServlet {
 					errorCode = notExistOrLocked(telNo,pwd);
 					if("notExist".equals(errorCode)){
 						//error2:用户不存在
-						resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS,CommonConstants.MSG_CODE_LOGIN_NO_USER);
+						resultMap.put(CommonConstants.REST_MSG_KEY_STATUS,CommonConstants.MSG_CODE_LOGIN_NO_USER);
 						Gson gson = new Gson();
 						String returnValue = gson.toJson(resultMap);
 						out.write(returnValue);
 					}else if("locked".equals(errorCode)){
 						//error5：用户账号被锁住
-						resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS,CommonConstants.MSG_CODE_LOGIN_USER_LOCKED);
+						resultMap.put(CommonConstants.REST_MSG_KEY_STATUS,CommonConstants.MSG_CODE_LOGIN_USER_LOCKED);
 						Gson gson = new Gson();
 						String returnValue = gson.toJson(resultMap);
 						out.write(returnValue);
 					}else if(errorCode.startsWith("incorrectPwd")){
 						//用户密码错误
 						String leftAttampts = errorCode.substring(errorCode.indexOf(":"));
-						resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS,CommonConstants.MSG_CODE_LOGIN_WRONG_PWD);
-						resultMap.put(CommonConstants.REST_MSG_FORMAT_CONTENT,leftAttampts);
+						resultMap.put(CommonConstants.REST_MSG_KEY_STATUS,CommonConstants.MSG_CODE_LOGIN_WRONG_PWD);
+						resultMap.put(CommonConstants.REST_MSG_KEY_CONTENT,leftAttampts);
 						Gson gson = new Gson();
 						String returnValue = gson.toJson(resultMap);
 						out.write(returnValue);
 					}else{
-						resultMap.put(CommonConstants.REST_MSG_FORMAT_STATUS,CommonConstants.MSG_CODE_LOGIN_SUCCESS);
+						resultMap.put(CommonConstants.REST_MSG_KEY_STATUS,CommonConstants.MSG_CODE_LOGIN_SUCCESS);
 						Gson gson = new Gson();
 						String returnValue = gson.toJson(resultMap);
 						out.write(returnValue);
@@ -170,7 +170,7 @@ public class ValidationServlet extends HttpServlet {
 				int loginErrTimes = rs.getInt("login_err_times");
 				int interval = rs.getInt("val");
 				String pwd = rs.getString("user_pwd");
-				if(CommonConstants.MAX_LOGIN_ATTEMPT_TIMES.equals(loginErrTimes+"") && CommonConstants.LOGIN_LOCK_TIME>interval){
+				if(CommonConstants.MAX_LOGIN_ATTEMPT_TIMES==loginErrTimes && CommonConstants.LOGIN_LOCK_TIME>interval){
 					flag = "locked";
 				}else if(!pwd.equals(DigestHandler.makeMD5(password))){
 					flag="incorrectPwd";

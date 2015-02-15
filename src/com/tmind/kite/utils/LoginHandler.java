@@ -39,16 +39,16 @@ public class LoginHandler {
 		if(teleNo==null||"".equals(teleNo)){
 			logger.info("用户名为空");
 			resultCode = CommonConstants.MSG_CODE_REST_LOGIN_NULL_USERID;
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, resultCode);
-			map.put(CommonConstants.REST_MSG_FORMAT_TIMES, "0");
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, resultCode);
+			map.put(CommonConstants.REST_MSG_KEY_TIMES, "0");
 			return map;
 		}
 		
 		if(password==null||"".equals(password)){
 			logger.info("密码为空");
 			resultCode = CommonConstants.MSG_CODE_REST_LOGIN_NULL_PWD;
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, resultCode);
-			map.put(CommonConstants.REST_MSG_FORMAT_TIMES, "0");
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, resultCode);
+			map.put(CommonConstants.REST_MSG_KEY_TIMES, "0");
 			return map;
 		}
 		
@@ -61,8 +61,8 @@ public class LoginHandler {
 			logger.info("用户密码解密失败，异常信息如下：");
 			logger.info(e1.getMessage());
 			resultCode = CommonConstants.MSG_CODE_REST_LOGIN_DECODE_PWD_ERR;
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, resultCode);
-			map.put(CommonConstants.REST_MSG_FORMAT_TIMES, "0");
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, resultCode);
+			map.put(CommonConstants.REST_MSG_KEY_TIMES, "0");
 			return map;
 		}
 		
@@ -117,17 +117,17 @@ public class LoginHandler {
 			
 			//用户信息不存在
 			if(userList.size()==0){
-				resultCode = CommonConstants.MSG_CODE_REST_LOGIN_NO_USER;
-				map.put(CommonConstants.REST_MSG_FORMAT_STATUS, resultCode);
-				map.put(CommonConstants.REST_MSG_FORMAT_TIMES, "0");
+				resultCode = CommonConstants.MSG_CODE_REST_LOGIN_USER_NOT_EXIST;
+				map.put(CommonConstants.REST_MSG_KEY_STATUS, resultCode);
+				map.put(CommonConstants.REST_MSG_KEY_TIMES, "0");
 				return map;
 			}
 			
 			//存在多个用户信息
 			if(userList.size()>1){
 				resultCode = CommonConstants.MSG_CODE_REST_LOGIN_MULTIPLE_USER;
-				map.put(CommonConstants.REST_MSG_FORMAT_STATUS, resultCode);
-				map.put(CommonConstants.REST_MSG_FORMAT_TIMES, "0");
+				map.put(CommonConstants.REST_MSG_KEY_STATUS, resultCode);
+				map.put(CommonConstants.REST_MSG_KEY_TIMES, "0");
 				return map;
 			}
 			
@@ -151,11 +151,11 @@ public class LoginHandler {
 					 ||user.getSecurityQue()==null||"".equals(user.getSecurityQue())
 					 ||user.getSecurityAns()==null||"".equals(user.getSecurityAns())){
 						
-						map.put(CommonConstants.REST_MSG_FORMAT_PROFILE_SETTING_STATUS, 
+						map.put(CommonConstants.REST_MSG_KEY_PROFILE_SETTING_STATUS, 
 								CommonConstants.MSG_CODE_REST_REGIST_PROFILE_NOT_DONE);
 					}else{
 						
-						map.put(CommonConstants.REST_MSG_FORMAT_PROFILE_SETTING_STATUS, 
+						map.put(CommonConstants.REST_MSG_KEY_PROFILE_SETTING_STATUS, 
 								CommonConstants.MSG_CODE_REST_REGIST_PROFILE_DONE);
 					}
 					
@@ -198,8 +198,8 @@ public class LoginHandler {
 					updPs.executeUpdate();
 					updPs.close();
 				}
-				map.put(CommonConstants.REST_MSG_FORMAT_STATUS, resultCode);
-				map.put(CommonConstants.REST_MSG_FORMAT_TIMES, errTimes);
+				map.put(CommonConstants.REST_MSG_KEY_STATUS, resultCode);
+				map.put(CommonConstants.REST_MSG_KEY_TIMES, errTimes);
 			}
 				
 		} catch (SQLException e) {

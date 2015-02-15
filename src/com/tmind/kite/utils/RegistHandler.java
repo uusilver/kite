@@ -48,7 +48,7 @@ public class RegistHandler {
 			rs = ps_check.executeQuery();
 			if(rs.next()){
 				logger.info("用户["+telno+"]已经存在");
-				map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_REGIST_TELNO_EXIST);
+				map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_REGIST_TELNO_EXIST);
 				rs.close();
 				ps_check.close();
 				return map;
@@ -67,11 +67,11 @@ public class RegistHandler {
 			ps_insert.execute();
 			
 			logger.info("用户["+telno+"]保存成功");
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_REGIST_SUCCESS);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_REGIST_SUCCESS);
 			
 		} catch (SQLException e) {
 			logger.info("用户["+telno+"]保存成功");
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_REGIST_DB_EXCEPTION);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_DB_EXCEPTION);
 			
 			e.printStackTrace();
 		}finally{
@@ -108,11 +108,11 @@ public class RegistHandler {
 			ps.executeUpdate();
 			
 			logger.info("保存服务密码和安全问题成功");
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_REGIST_SUCCESS);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_REGIST_SUCCESS);
 			
 		} catch (SQLException e) {
 			logger.info("保存服务密码和安全问题失败");
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_REGIST_DB_EXCEPTION);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_DB_EXCEPTION);
 			e.printStackTrace();
 		}finally{
 			DBUtils.freeConnection(conn, ps, null);

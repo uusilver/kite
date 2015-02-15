@@ -44,8 +44,8 @@ public class StartOrStopRestService {
 		if(telno==null||"".equals(telno)||clientType==null||"".equals(clientType)){
 			logger.info("手机号码或者客户端类型为空");
 			map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
-			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
+			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
 			return returnValue;
@@ -56,7 +56,7 @@ public class StartOrStopRestService {
 		if(serviceType==null||"".equals(serviceType)||freq==null||"".equals(freq)||optType==null||"".equals(optType)){
 			logger.info("服务类型、间隔时间或者服务开启/关闭指令为空");
 			map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_EMPTY_OPEN_OR_CLOSE_SERVICE_COMMAND);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_EMPTY_OPEN_OR_CLOSE_SERVICE_COMMAND);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
 			return returnValue;
@@ -67,9 +67,9 @@ public class StartOrStopRestService {
 
 		map = new HashMap<String,String>();
 		if(resultFlag!=null && "OK".equals(resultFlag)){
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_START_SERVICE_SUCCESS);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_START_SERVICE_SUCCESS);
 		}else{
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_START_SERVICE_FAILED);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_START_SERVICE_FAILED);
 		}
 
 		Gson gson = new Gson();
@@ -91,8 +91,8 @@ public class StartOrStopRestService {
 		if(telno==null||"".equals(telno)||clientType==null||"".equals(clientType)){
 			logger.info("手机号码或者客户端类型为空");
 			map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
-			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
+			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
 			return returnValue;
@@ -103,7 +103,7 @@ public class StartOrStopRestService {
 		if(servicePwd==null||"".equals(servicePwd)){
 			logger.info("服务密码为空");
 			map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_EMPTY_SERVICE_PWD);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_EMPTY_SERVICE_PWD);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
 			return returnValue;
@@ -118,8 +118,8 @@ public class StartOrStopRestService {
 			// TODO Auto-generated catch block
 			logger.info("用户密码解密失败，异常信息如下：");
 			logger.info(e1.getMessage());
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_DECODE_PWD_ERR);
-			map.put(CommonConstants.REST_MSG_FORMAT_TIMES, "0");
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_DECODE_PWD_ERR);
+			map.put(CommonConstants.REST_MSG_KEY_TIMES, "0");
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
 			return returnValue;
@@ -135,12 +135,12 @@ public class StartOrStopRestService {
 
 			map = new HashMap<String,String>();
 			if(resultFlag!=null && "OK".equals(resultFlag)){
-				map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_STOP_SERVICE_SUCCESS);
+				map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_STOP_SERVICE_SUCCESS);
 			}else{
-				map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_STOP_SERVICE_FAILED);
+				map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_STOP_SERVICE_FAILED);
 			}
 		}else{
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_VALID_SERVICE_PWD_FAILED);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_VALID_SERVICE_PWD_FAILED);
 		}
 		
 

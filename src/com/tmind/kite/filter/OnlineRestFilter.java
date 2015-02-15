@@ -56,8 +56,8 @@ public class OnlineRestFilter extends HttpServlet implements Filter  {
 			if(!clientType.startsWith("/")){
 				Gson gson = new Gson();
 				Map errCode = new LinkedHashMap();
-				errCode.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_WRONG_ACCESS_FORMAT);
-				errCode.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_WRONG_CLIENT_FORMAT);
+				errCode.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_WRONG_ACCESS_FORMAT);
+				errCode.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_WRONG_CLIENT_FORMAT);
 				String returnValue= gson.toJson(errCode);
 //				res.setContentType("text/html;charset=UTF-8");
 				res.getOutputStream().write(returnValue.getBytes());
@@ -84,8 +84,8 @@ public class OnlineRestFilter extends HttpServlet implements Filter  {
 		if(clientType==null||"".equals(clientType)){
 			Gson gson = new Gson();
 			Map errCode = new LinkedHashMap();
-			errCode.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_UNKNOWN_CLIENT_ACCESS_DENIED);
-			errCode.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_UNKNOWN_CLIENT);
+			errCode.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_UNKNOWN_CLIENT_ACCESS_DENIED);
+			errCode.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_UNKNOWN_CLIENT);
 			String returnValue= gson.toJson(errCode);
 //			res.setContentType("text/html;charset=UTF-8");
 			res.getOutputStream().write(returnValue.getBytes());
@@ -122,8 +122,8 @@ public class OnlineRestFilter extends HttpServlet implements Filter  {
 				}else{
 					Gson gson = new Gson();
 					Map errCode = new LinkedHashMap();
-					errCode.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_NO_LOGIN_ACCESS_DENIED);
-					errCode.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NO_LOGIN);
+					errCode.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_NO_LOGIN_ACCESS_DENIED);
+					errCode.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NO_LOGIN);
 					String returnValue= gson.toJson(errCode);
 //					res.setContentType("text/html;charset=UTF-8");
 					res.getOutputStream().write(returnValue.getBytes());

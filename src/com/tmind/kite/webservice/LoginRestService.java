@@ -42,8 +42,8 @@ public class LoginRestService {
 		if(telno==null||"".equals(telno)||clientType==null||"".equals(clientType)){
 			logger.info("手机号码或者客户端类型为空");
 			HashMap map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
-			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
+			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
 			return returnValue;
@@ -54,8 +54,8 @@ public class LoginRestService {
 		//根据手机号码和客户端类型检查用户是否已经在其他客户端登录,如果登录则根据情况同步登录状态
 		HashMap loginStatus = SynchLoginStatus.synchLogin(telno, clientType);
 		if(loginStatus!=null && !loginStatus.isEmpty()){
-			String status = (String)loginStatus.get(CommonConstants.REST_MSG_FORMAT_STATUS);
-//			String msg = (String)loginStatus.get(CommonConstants.REST_MSG_FORMAT_CONTENT);
+			String status = (String)loginStatus.get(CommonConstants.REST_MSG_KEY_STATUS);
+//			String msg = (String)loginStatus.get(CommonConstants.REST_MSG_KEY_CONTENT);
 			//向相应的客户端推送提示消息
 			if(status.equals(CommonConstants.MSG_CODE_REST_LOGIN_OTHER_CLIENT)){
 				if(clientType.equals(CommonConstants.ACCESS_FROM_IOS)){

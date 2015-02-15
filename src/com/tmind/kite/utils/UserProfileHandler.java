@@ -44,12 +44,12 @@ public class UserProfileHandler {
 				contentMap.put("urgent_telno", urgentTelNo);
 				contentMap.put("urgent_name", urgentName);
 				
-				map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_PROFILE_SUCCESS);
-				map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, contentMap);
+				map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_GET_PROFILE_SUCCESS);
+				map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, contentMap);
 			}else{
 				
-				map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_EMPTY_PROFILE);
-				map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_USER_PROFILE_EMPTY);
+				map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_EMPTY_PROFILE);
+				map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_USER_PROFILE_EMPTY);
 			}
 			
 		} catch (SQLException e) {
@@ -135,17 +135,17 @@ public class UserProfileHandler {
 				
 				record = ps.executeUpdate();
 				if(record==1){
-					map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_SUCCESS);
+					map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_SUCCESS);
 				}else{
-					map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_FAILED);
+					map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_FAILED);
 				}
 				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				logger.info(e.getMessage());
-				map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_FAILED);
-				map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_DATABASE_EXECUTE_EXCEPTION);
+				map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_FAILED);
+				map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_DATABASE_EXECUTE_EXCEPTION);
 			}finally{
 				DBUtils.freeConnection(conn, ps, null);
 			}

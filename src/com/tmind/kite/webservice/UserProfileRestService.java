@@ -38,8 +38,8 @@ public class UserProfileRestService {
 		if(telno==null||"".equals(telno)||clientType==null||"".equals(clientType)){
 			logger.info("手机号码或者客户端类型为空");
 			map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
-			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
+			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
 			return returnValue;
@@ -82,8 +82,8 @@ public class UserProfileRestService {
 		if(telno==null||"".equals(telno)||clientType==null||"".equals(clientType)){
 			logger.info("手机号码或者客户端类型为空");
 			map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
-			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
+			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
 			return returnValue;
@@ -95,8 +95,8 @@ public class UserProfileRestService {
 				||securityAns==null||"".equals(securityAns)){
 			logger.info("紧急联系人、紧急联系人手机号码、服务密码、或者安全问题为空");
 			map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_EMPTY_PROFILE);
-			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_USER_PROFILE);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_EMPTY_PROFILE);
+			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_USER_PROFILE);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
 			return returnValue;
@@ -134,8 +134,8 @@ public class UserProfileRestService {
 		if(telno==null||"".equals(telno)||clientType==null||"".equals(clientType)){
 			logger.info("手机号码或者客户端类型为空");
 			map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
-			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
+			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
 			return returnValue;
@@ -144,8 +144,8 @@ public class UserProfileRestService {
 		if(urgentName==null||"".equals(urgentName)||urgentTelNo==null||"".equals(urgentTelNo)){
 			logger.info("紧急联系人或者紧急联系人手机号码为空");
 			map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_FAILED);
-			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_URGENT_USER_PROFILE);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_FAILED);
+			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_URGENT_USER_PROFILE);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
 			return returnValue;
@@ -159,14 +159,14 @@ public class UserProfileRestService {
 		HashMap returnMap = new HashMap();
 		
 		if(resultMap!=null&&!resultMap.isEmpty()){
-			String status = (String)resultMap.get(CommonConstants.REST_MSG_FORMAT_STATUS);
+			String status = (String)resultMap.get(CommonConstants.REST_MSG_KEY_STATUS);
 			
 			//保存紧急联系人手机号码和姓名成功
 			if(CommonConstants.MSG_CODE_REST_SAVE_PROFILE_SUCCESS.equals(status)){
-				returnMap.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_URGENT_USER_SUCCESS);
+				returnMap.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_SAVE_URGENT_USER_SUCCESS);
 			}else{
 				//保存紧急联系人手机号码和姓名失败,包含数据库异常
-				returnMap.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_URGENT_USER_FAILED);
+				returnMap.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_SAVE_URGENT_USER_FAILED);
 			}
 		}
 		
@@ -196,8 +196,8 @@ public class UserProfileRestService {
 		if(telno==null||"".equals(telno)||clientType==null||"".equals(clientType)){
 			logger.info("手机号码或者客户端类型为空");
 			map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
-			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
+			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
 			return returnValue;
@@ -206,8 +206,8 @@ public class UserProfileRestService {
 		if(servicePwd==null||"".equals(servicePwd)){
 			logger.info("服务密码为空");
 			map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_FAILED);
-			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_SERVICE_PWD);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_FAILED);
+			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_SERVICE_PWD);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
 			return returnValue;
@@ -221,14 +221,14 @@ public class UserProfileRestService {
 		HashMap returnMap = new HashMap();
 		
 		if(resultMap!=null&&!resultMap.isEmpty()){
-			String status = (String)resultMap.get(CommonConstants.REST_MSG_FORMAT_STATUS);
+			String status = (String)resultMap.get(CommonConstants.REST_MSG_KEY_STATUS);
 			
 			//保存服务密码成功
 			if(CommonConstants.MSG_CODE_REST_SAVE_PROFILE_SUCCESS.equals(status)){
-				returnMap.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_SERVICE_PWD_SUCCESS);
+				returnMap.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_SAVE_SERVICE_PWD_SUCCESS);
 			}else{
 				//保存服务密码失败,包含数据库异常
-				returnMap.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_SERVICE_PWD_FAILED);
+				returnMap.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_SAVE_SERVICE_PWD_FAILED);
 			}
 		}
 		
@@ -260,8 +260,8 @@ public class UserProfileRestService {
 		if(telno==null||"".equals(telno)||clientType==null||"".equals(clientType)){
 			logger.info("手机号码或者客户端类型为空");
 			map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
-			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
+			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
 			return returnValue;
@@ -270,8 +270,8 @@ public class UserProfileRestService {
 		if(securityQue==null||"".equals(securityQue)||securityAns==null||"".equals(securityAns)){
 			logger.info("安全问答信息为空");
 			map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_FAILED);
-			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_SECURITY_QA);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_FAILED);
+			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_SECURITY_QA);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
 			return returnValue;
@@ -285,14 +285,14 @@ public class UserProfileRestService {
 		HashMap returnMap = new HashMap();
 		
 		if(resultMap!=null&&!resultMap.isEmpty()){
-			String status = (String)resultMap.get(CommonConstants.REST_MSG_FORMAT_STATUS);
+			String status = (String)resultMap.get(CommonConstants.REST_MSG_KEY_STATUS);
 			
 			//保存安全问答成功
 			if(CommonConstants.MSG_CODE_REST_SAVE_PROFILE_SUCCESS.equals(status)){
-				returnMap.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_SECURITY_QA_SUCCESS);
+				returnMap.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_SAVE_SECURITY_QA_SUCCESS);
 			}else{
 				//保存安全问答失败,包含数据库异常
-				returnMap.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_SAVE_SECURITY_QA_FAILED);
+				returnMap.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_SAVE_SECURITY_QA_FAILED);
 			}
 		}
 		
