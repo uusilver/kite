@@ -44,7 +44,7 @@ public class StartOrStopRestService {
 		if(telno==null||"".equals(telno)||clientType==null||"".equals(clientType)){
 			logger.info("手机号码或者客户端类型为空");
 			map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_ACCESS_URL_NULL_PARAMS);
 			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
@@ -91,7 +91,7 @@ public class StartOrStopRestService {
 		if(telno==null||"".equals(telno)||clientType==null||"".equals(clientType)){
 			logger.info("手机号码或者客户端类型为空");
 			map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_ACCESS_URL_NULL_PARAMS);
 			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);

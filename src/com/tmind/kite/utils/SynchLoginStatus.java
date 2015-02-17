@@ -78,7 +78,7 @@ public class SynchLoginStatus {
 					logger.info("用户 [TelNo:" + telNo + "，Id=" + user.getId() + "] 已经退出Web App!");
 					String[] values = { loginedClient, loginedClient };
 					String msg = ComposeMessage.composeMessage(MessageContent.MSG_LOGIN_OTHER_CLIENT_FOR_WEB, values);
-					resultMap.put(CommonConstants.REST_MSG_KEY_STATUS,CommonConstants.MSG_CODE_REST_LOGIN_OTHER_CLIENT);
+					resultMap.put(CommonConstants.REST_MSG_KEY_STATUS,CommonConstants.MSG_CODE_REST_SWITCH_WEB_TO_APP);
 					resultMap.put(CommonConstants.REST_MSG_KEY_CONTENT, msg);
 				}
 
@@ -104,7 +104,7 @@ public class SynchLoginStatus {
 					String currentDateTime = DateUtils.formatChar12(DateUtils.getChar12());
 					String[] values = { currentDateTime, "Andorid" };
 					String msg = ComposeMessage.composeMessage(MessageContent.MSG_LOGIN_OTHER_CLIENT_FOR_APP, values);
-					resultMap.put(CommonConstants.REST_MSG_KEY_STATUS,CommonConstants.MSG_CODE_REST_LOGIN_OTHER_CLIENT);
+					resultMap.put(CommonConstants.REST_MSG_KEY_STATUS,CommonConstants.MSG_CODE_REST_SWITCH_IOS_TO_ANDROID);
 					resultMap.put(CommonConstants.REST_MSG_KEY_CONTENT, msg);
 				}
 
@@ -130,7 +130,7 @@ public class SynchLoginStatus {
 					String currentDateTime = DateUtils.formatChar12(DateUtils.getChar12());
 					String[] values = { currentDateTime, "Apple" };
 					String msg = ComposeMessage.composeMessage(MessageContent.MSG_LOGIN_OTHER_CLIENT_FOR_APP, values);
-					resultMap.put(CommonConstants.REST_MSG_KEY_STATUS,CommonConstants.MSG_CODE_REST_LOGIN_OTHER_CLIENT);
+					resultMap.put(CommonConstants.REST_MSG_KEY_STATUS,CommonConstants.MSG_CODE_REST_SWITCH_ANDROID_TO_IOS);
 					resultMap.put(CommonConstants.REST_MSG_KEY_CONTENT, msg);
 				}
 			}
@@ -150,7 +150,7 @@ public class SynchLoginStatus {
 					// 已经在IOS或者Android登录,需跳转到强制关闭服务页面将用户退出IOS或者Android APP
 					String[] values = { loginedClient };
 					String msg = ComposeMessage.composeMessage(MessageContent.MSG_LOGIN_APP_CLIENT_FOR_WEB, values);
-					resultMap.put(CommonConstants.REST_MSG_KEY_STATUS,CommonConstants.MSG_CODE_REST_LOGIN_WEB_TO_APP);
+					resultMap.put(CommonConstants.REST_MSG_KEY_STATUS,CommonConstants.MSG_CODE_REST_LOGINNED_IN_APP);
 					resultMap.put(CommonConstants.REST_MSG_KEY_CONTENT, msg);
 				} 
 			}

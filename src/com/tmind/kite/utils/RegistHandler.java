@@ -72,7 +72,6 @@ public class RegistHandler {
 		} catch (SQLException e) {
 			logger.info("用户["+telno+"]保存成功");
 			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_DB_EXCEPTION);
-			
 			e.printStackTrace();
 		}finally{
 			DBUtils.freeConnection(conn, ps_insert, rs);
@@ -95,20 +94,30 @@ public class RegistHandler {
 		Connection conn  = null;
 		PreparedStatement ps = null;
 		conn = DBUtils.getConnection();
+		
+		int record = 0;
 		//
 		String sql = "update m_user set service_pwd=?,security_que=?,security_ans=? "
 				+ " where tel_no=? ";
 		logger.debug("用户设置服务密码和安全问题:"+sql);
 		try {
+			conn.setAutoCommit(false);
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, service_pwd);
 			ps.setString(2, security_que);
 			ps.setString(3, security_ans);
 			ps.setString(4, telno);
-			ps.executeUpdate();
+			record = ps.executeUpdate();
 			
-			logger.info("保存服务密码和安全问题成功");
-			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_REGIST_SUCCESS);
+			if(record==1){
+				logger.info("保存服务密码和安全问题成功");
+				map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_SUCCESS);
+				conn.commit();
+			}else{
+				logger.info("保存服务密码和安全问题成功");
+				map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_FAILED);
+				conn.rollback();
+			}
 			
 		} catch (SQLException e) {
 			logger.info("保存服务密码和安全问题失败");

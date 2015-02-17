@@ -144,11 +144,17 @@ public class CommonConstants
 	/**多用户账号存在*/
 	public static final String MSG_CODE_REST_LOGIN_MULTIPLE_USER = "1008";
 	
-	/**用户在其他客户端登录*/
-	public static final String MSG_CODE_REST_LOGIN_OTHER_CLIENT = "1009";
+	/**用户在App端登录，但是Web端已经登录*/
+	public static final String MSG_CODE_REST_SWITCH_WEB_TO_APP = "1009";
 	
 	/**用户在web端登录，但是APP端已经登录*/
-	public static final String MSG_CODE_REST_LOGIN_WEB_TO_APP = "1010";
+	public static final String MSG_CODE_REST_LOGINNED_IN_APP = "1010";
+	
+	/**用户在Android端登录，但是IOS端已经登录*/
+	public static final String MSG_CODE_REST_SWITCH_IOS_TO_ANDROID = "1011";
+	
+	/**用户在IOS端登录，但是Android端已经登录*/
+	public static final String MSG_CODE_REST_SWITCH_ANDROID_TO_IOS = "1012";
 	
 	
 	//用户注册相关消息代码
@@ -244,7 +250,10 @@ public class CommonConstants
 	public static final String MSG_CODE_NO_LOGIN_ACCESS_DENIED = "6001";
 	
 	/**拒绝用户访问:请求URI中客户端类型格式错误*/
-	public static final String MSG_CODE_REST_WRONG_ACCESS_FORMAT = "6002";
+	public static final String MSG_CODE_REST_WRONG_ACCESS_URL_FORMAT = "6002";
+	
+	/**拒绝用户访问:请求URI中所需参数为空*/
+	public static final String MSG_CODE_REST_ACCESS_URL_NULL_PARAMS = "6003";
 	
 	
 	/**保存数据异常*/

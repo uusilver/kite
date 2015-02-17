@@ -56,7 +56,7 @@ public class OnlineRestFilter extends HttpServlet implements Filter  {
 			if(!clientType.startsWith("/")){
 				Gson gson = new Gson();
 				Map errCode = new LinkedHashMap();
-				errCode.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_WRONG_ACCESS_FORMAT);
+				errCode.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_WRONG_ACCESS_URL_FORMAT);
 				errCode.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_WRONG_CLIENT_FORMAT);
 				String returnValue= gson.toJson(errCode);
 //				res.setContentType("text/html;charset=UTF-8");

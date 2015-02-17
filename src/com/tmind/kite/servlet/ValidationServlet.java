@@ -57,7 +57,7 @@ public class ValidationServlet extends HttpServlet {
 		if (loginStatus != null && !loginStatus.isEmpty()) {
 			String resultCode = (String) loginStatus.get(CommonConstants.REST_MSG_KEY_STATUS);
 			if (resultCode != null&& !"".equals(resultCode)
-					&& CommonConstants.MSG_CODE_REST_LOGIN_WEB_TO_APP.equals(resultCode)) {
+					&& CommonConstants.MSG_CODE_REST_LOGINNED_IN_APP.equals(resultCode)) {
 				Gson gson = new Gson();
 				String returnValue = gson.toJson(loginStatus);
 				out.write(returnValue);
