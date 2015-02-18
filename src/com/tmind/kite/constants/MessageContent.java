@@ -26,9 +26,21 @@ public class MessageContent {
 	//未登录，拒绝被访问
 	public static final String MSG_USER_PROFILE_EMPTY = "您尚未完成个人设置";
 	
+	//数据库操作异常
+	public static final String MSG_DATABASE_EXECUTE_EXCEPTION = "数据库操作异常";
+	
 	//手机号码不正确
 	public static final String MSG_USER_TELNO_INCORRECT = "您的手机号码不正确";
 	
 	//个人设置信息为空，请求被拒绝
 	public static final String MSG_ACCESS_DENIED_FOR_NULL_USER_PROFILE = "个人设置信息为空，请求被拒绝";
+	
+	//紧急联系人信息为空，请求被拒绝
+	public static final String MSG_ACCESS_DENIED_FOR_NULL_URGENT_USER_PROFILE = "紧急联系人或者紧急联系人手机号码为空，请求被拒绝";
+	
+	//服务密码为空，请求被拒绝
+	public static final String MSG_ACCESS_DENIED_FOR_NULL_SERVICE_PWD = "服务密码为空，请求被拒绝";
+	
+	//安全问题为空，请求被拒绝
+	public static final String MSG_ACCESS_DENIED_FOR_NULL_SECURITY_QA = "安全问题为空，请求被拒绝";
 }

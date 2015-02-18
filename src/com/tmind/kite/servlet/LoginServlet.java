@@ -69,7 +69,7 @@ public class LoginServlet extends HttpServlet {
 			password = new String(Base64.encodeBase64(password.getBytes()),CommonConstants.CHARSETNAME_UTF_8);
 			
 			HashMap resultMap = LoginHandler.login(telNo, password, clientType);
-			String status = (String) resultMap.get(CommonConstants.REST_MSG_FORMAT_STATUS);
+			String status = (String) resultMap.get(CommonConstants.REST_MSG_KEY_STATUS);
 			if ("success".equals(status)) {
 				User user = (User) resultMap.get(CommonConstants.LOGIN_USER_OBJECT);
 				

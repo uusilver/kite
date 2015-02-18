@@ -41,8 +41,8 @@ public class LogoutRestService {
 		//如果手机号码或者客户端类型为空，则跳转入异常提示页面
 		if(telno==null||"".equals(telno)||clientType==null||"".equals(clientType)){
 			logger.info("手机号码或者客户端类型为空");
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE);
-			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_ACCESS_URL_NULL_PARAMS);
+			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_TELNO_CLIENTTYPE);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
 			return returnValue;
@@ -70,23 +70,23 @@ public class LogoutRestService {
 				
 				logger.info("用户"+telNo+"登出");
 				
-				map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_LOGOUT_SUCCESS);
-				map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, "");
+				map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_LOGOUT_SUCCESS);
+				map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, "");
 				Gson gson = new Gson();
 				returnValue= gson.toJson(map);
 				
 			}else{
 
-				map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_REST_LOGOUT_TELNO_INCORRECT);
-				map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_USER_TELNO_INCORRECT);
+				map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_LOGOUT_TELNO_INCORRECT);
+				map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_USER_TELNO_INCORRECT);
 				Gson gson = new Gson();
 				returnValue= gson.toJson(map);
 			}
 		}else{
 			logger.info("用户未登录，无需退出");
 
-			map.put(CommonConstants.REST_MSG_FORMAT_STATUS, CommonConstants.MSG_CODE_NO_LOGIN_ACCESS_DENIED);
-			map.put(CommonConstants.REST_MSG_FORMAT_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NO_LOGIN);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_NO_LOGIN_ACCESS_DENIED);
+			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NO_LOGIN);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
 		}

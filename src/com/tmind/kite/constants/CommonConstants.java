@@ -8,42 +8,6 @@ package com.tmind.kite.constants;
  */
 public class CommonConstants
 {
-
-	/**超级管理员帐号*/
-	public static final String SUPER_ADMIN_NAME = "admin";
-
-	/**逗号分割符*/
-	public static final String SPLIT_SYMBOL_COMMA = ",";
-
-	/**竖杆分割符*/
-	public static final String SPLIT_SYMBOL_VERTICAL_LINE = "|";
-
-	/**横线分割符*/
-	public static final String SPLIT_SYMBOL_TRANSVERSE_LINE = "-";
-
-	/**冒号分割符*/
-	public static final String SPLIT_SYMBOL_COLON = ":";
-
-	/**下划线分割符*/
-	public static final String SPLIT_SYMBOL_UNDERLINE = "_";
-
-	/**文件后缀名（文本文件）*/
-	public static final String FILE_SUFFIX_TXT = ".txt";
-
-	/**文件路径分割符*/
-	public static final String FILE_SEPARATOR = "/";
-
-	/**无上级单位的页面展示数据*/
-	public static final String NO_PARENT_CORP = "---";
-	
-	/**文字编码字符集：UTF－8*/
-	public static final String CHARSETNAME_UTF_8 = "UTF-8";
-	
-	/** 用户登录令牌 */
-	public static final String USER_LOGIN_TOKEN = "loginToken";
-	
-	/** 登录成功的用户 */
-	public static final String LOGIN_USER_OBJECT = "user";
 	
 	/** 每页显示记录数量 */
 	public static final int MAX_PAGE_ITEMS = 10;
@@ -55,10 +19,19 @@ public class CommonConstants
 	public static final int MAX_DEFAULT_SMS_COUNTS = 20;
 	
 	/** 登陆尝试次数 */
-	public static final String MAX_LOGIN_ATTEMPT_TIMES = "3";
+	public static final int MAX_LOGIN_ATTEMPT_TIMES = 3;
 	
 	/** 尝试登陆失败x次后账号被锁定多分钟数 */
 	public static final int LOGIN_LOCK_TIME = 20;
+	
+	/**文字编码字符集：UTF－8*/
+	public static final String CHARSETNAME_UTF_8 = "UTF-8";
+	
+	/** 用户登录令牌 */
+	public static final String USER_LOGIN_TOKEN = "loginToken";
+	
+	/** 登录成功的用户 */
+	public static final String LOGIN_USER_OBJECT = "user";
 
 	/** 用户姓名 */
 	public static final String 	USER_NAME = "userName";
@@ -112,19 +85,19 @@ public class CommonConstants
 	public static final String ACCESS_FROM_WEBAPP = "4";
 	
 	/**REST消息格式：status*/
-	public static final String REST_MSG_FORMAT_STATUS = "status";
+	public static final String REST_MSG_KEY_STATUS = "status";
 	
 	/**REST消息格式：times*/
-	public static final String REST_MSG_FORMAT_TIMES = "times";
+	public static final String REST_MSG_KEY_TIMES = "times";
 	
 	/**REST消息格式：content*/
-	public static final String REST_MSG_FORMAT_CONTENT = "content";
+	public static final String REST_MSG_KEY_CONTENT = "content";
 	
 	/**REST消息格式：msg*/
-	public static final String REST_MSG_FORMAT_MSG_CONTENT = "msg";
+	public static final String REST_MSG_KEY_MSG_CONTENT = "msg";
 	
 	/**REST消息格式：个人设置状态*/
-	public static final String REST_MSG_FORMAT_PROFILE_SETTING_STATUS = "pro-status";
+	public static final String REST_MSG_KEY_PROFILE_SETTING_STATUS = "pro-status";
 	
 	/**用户登陆成功*/
 	public static final String MSG_CODE_LOGIN_SUCCESS = "success";
@@ -142,75 +115,148 @@ public class CommonConstants
 	public static final String MSG_CODE_LOGIN_WRONG_PWD = "error06";
 	
 	
-	/**用户注册成功*/
-	public static final String MSG_CODE_REST_REGIST_SUCCESS = "success";
-	
-	/**手机号码已经存在*/
-	public static final String MSG_CODE_REST_REGIST_TELNO_EXIST = "reg-error01";
-	
-	/**保存数据异常*/
-	public static final String MSG_CODE_REST_REGIST_DB_EXCEPTION = "reg-error02";
-	
-	/**未完成个人设置*/
-	public static final String MSG_CODE_REST_REGIST_PROFILE_NOT_DONE = "reg-error03";
+	//用户登录相关消息代码
 
-	/**完成个人设置*/
-	public static final String MSG_CODE_REST_REGIST_PROFILE_DONE = "done";
-	
-	/**获取用户个人设置成功*/
-	public static final String MSG_CODE_REST_GET_PROFILE_SUCCESS = "success";
-	
-	/**获取不到个人设置*/
-	public static final String MSG_CODE_REST_GET_EMPTY_PROFILE = "empty";
-	
-	
 	/**用户登陆成功*/
-	public static final String MSG_CODE_REST_LOGIN_SUCCESS = "success";
-	
-	/**拒绝用户访问:不明客户端类型*/
-	public static final String MSG_CODE_UNKNOWN_CLIENT_ACCESS_DENIED = "acc-denied-01";
-	
-	/**拒绝用户访问:未登录*/
-	public static final String MSG_CODE_NO_LOGIN_ACCESS_DENIED = "acc-denied-02";
-	
-	/**拒绝用户访问:请求URI中客户端类型格式错误*/
-	public static final String MSG_CODE_REST_WRONG_ACCESS_FORMAT = "acc-denied-03";
+	public static final String MSG_CODE_REST_LOGIN_SUCCESS = "1000";
 	
 	/**空用户ID*/
-	public static final String MSG_CODE_REST_LOGIN_NULL_USERID = "lgn-error00-1";
+	public static final String MSG_CODE_REST_LOGIN_NULL_USERID = "1001";
 	
 	/**空用户密码*/
-	public static final String MSG_CODE_REST_LOGIN_NULL_PWD = "lgn-error00-2";
+	public static final String MSG_CODE_REST_LOGIN_NULL_PWD = "1002";
 	
 	/**解密用户密码异常*/
-	public static final String MSG_CODE_REST_LOGIN_DECODE_PWD_ERR = "lgn-error00-3";
+	public static final String MSG_CODE_REST_LOGIN_DECODE_PWD_ERR = "1003";
 	
 	/**客户端类型为空*/
-	public static final String MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE = "lgn-error00-4";
+	public static final String MSG_CODE_REST_LOGIN_NULL_CLIENT_TYPE = "1004";
 	
 	/**用户不存在*/
-	public static final String MSG_CODE_REST_LOGIN_NO_USER = "lgn-error01";
+	public static final String MSG_CODE_REST_LOGIN_USER_NOT_EXIST = "1005";
 	
-	/**用户密码不存在*/
-	public static final String MSG_CODE_REST_LOGIN_INCORRECT_PWD = "lgn-error02";
+	/**用户密码不不正確*/
+	public static final String MSG_CODE_REST_LOGIN_INCORRECT_PWD = "1006";
 	
 	/**用户被锁住*/
-	public static final String MSG_CODE_REST_LOGIN_LOCKED_USER = "lgn-error03";
+	public static final String MSG_CODE_REST_LOGIN_LOCKED_USER = "1007";
 	
 	/**多用户账号存在*/
-	public static final String MSG_CODE_REST_LOGIN_MULTIPLE_USER = "lgn-error04";
+	public static final String MSG_CODE_REST_LOGIN_MULTIPLE_USER = "1008";
 	
-	/**用户在其他客户端登录*/
-	public static final String MSG_CODE_REST_LOGIN_OTHER_CLIENT = "lgn-error05";
+	/**用户在App端登录，但是Web端已经登录*/
+	public static final String MSG_CODE_REST_SWITCH_WEB_TO_APP = "1009";
 	
 	/**用户在web端登录，但是APP端已经登录*/
-	public static final String MSG_CODE_REST_LOGIN_WEB_TO_APP = "lgn-error05-01";
+	public static final String MSG_CODE_REST_LOGINNED_IN_APP = "1010";
 	
+	/**用户在Android端登录，但是IOS端已经登录*/
+	public static final String MSG_CODE_REST_SWITCH_IOS_TO_ANDROID = "1011";
+	
+	/**用户在IOS端登录，但是Android端已经登录*/
+	public static final String MSG_CODE_REST_SWITCH_ANDROID_TO_IOS = "1012";
+	
+	
+	//用户注册相关消息代码
+	
+	/**用户注册成功*/
+	public static final String MSG_CODE_REST_REGIST_SUCCESS = "2000";
+	
+	/**手机号码已经存在*/
+	public static final String MSG_CODE_REST_REGIST_TELNO_EXIST = "2001";
+	
+	
+	//个人设置相关消息代码 
+	
+	/**保存个人设置成功*/
+	public static final String MSG_CODE_REST_SAVE_PROFILE_SUCCESS = "3000";
+	
+	/**保存个人设置失败*/
+	public static final String MSG_CODE_REST_SAVE_PROFILE_FAILED = "3001";
+
+	/**个人设置完成*/
+	public static final String MSG_CODE_REST_REGIST_PROFILE_DONE = "3100";
+	
+	/**未完成个人设置*/
+	public static final String MSG_CODE_REST_REGIST_PROFILE_NOT_DONE = "3101";
+	
+	/**获取用户个人设置成功*/
+	public static final String MSG_CODE_REST_GET_PROFILE_SUCCESS = "3102";
+	
+	/**获取不到个人设置*/
+	public static final String MSG_CODE_REST_EMPTY_PROFILE = "3103";
+	
+	/**保存紧急联系人信息成功*/
+	public static final String MSG_CODE_REST_SAVE_URGENT_USER_SUCCESS = "3200";
+	
+	/**保存紧急联系人信息失败*/
+	public static final String MSG_CODE_REST_SAVE_URGENT_USER_FAILED = "3201";
+	
+	/**保存服务密码成功*/
+	public static final String MSG_CODE_REST_SAVE_SERVICE_PWD_SUCCESS = "3300";
+	
+	/**保存服务密码失败*/
+	public static final String MSG_CODE_REST_SAVE_SERVICE_PWD_FAILED = "3301";
+	
+	/**保存安全问题成功*/
+	public static final String MSG_CODE_REST_SAVE_SECURITY_QA_SUCCESS = "3400";
+	
+	/**保存安全问题失败*/
+	public static final String MSG_CODE_REST_SAVE_SECURITY_QA_FAILED = "3401";
+	
+	
+	//用户退出相关消息代码
 	
 	/**退出成功*/
-	public static final String MSG_CODE_REST_LOGOUT_SUCCESS = "success";
+	public static final String MSG_CODE_REST_LOGOUT_SUCCESS = "4000";
 	
 	/**退出失败,手机号不匹配*/
-	public static final String MSG_CODE_REST_LOGOUT_TELNO_INCORRECT = "lgo-error01";
+	public static final String MSG_CODE_REST_LOGOUT_TELNO_INCORRECT = "4001";
+	
+	
+	//服务开启或关闭消息代码
+	
+	/**开启风筝服务成功*/
+	public static final String MSG_CODE_REST_START_SERVICE_SUCCESS = "5000";
+	
+	/**开启风筝服务失败*/
+	public static final String MSG_CODE_REST_START_SERVICE_FAILED = "5001";
+	
+	/**关闭风筝服务成功*/
+	public static final String MSG_CODE_REST_STOP_SERVICE_SUCCESS = "5100";
+	
+	/**关闭风筝服务失败*/
+	public static final String MSG_CODE_REST_STOP_SERVICE_FAILED = "5101";
+	
+	/**校验服务密码成功*/
+	public static final String MSG_CODE_REST_VALID_SERVICE_PWD_SUCCESS = "5200";
+	
+	/**校验服务密码失败*/
+	public static final String MSG_CODE_REST_VALID_SERVICE_PWD_FAILED = "5201";
+	
+	/**服务密码为空*/
+	public static final String MSG_CODE_REST_EMPTY_SERVICE_PWD = "5203";
+	
+	/**获取不到服务开启或关闭指令*/
+	public static final String MSG_CODE_REST_EMPTY_OPEN_OR_CLOSE_SERVICE_COMMAND = "5204";
+	
+	
+	//消息格式校验相关消息代码
+	
+	/**拒绝用户访问:不明客户端类型*/
+	public static final String MSG_CODE_UNKNOWN_CLIENT_ACCESS_DENIED = "6000";
+	
+	/**拒绝用户访问:未登录*/
+	public static final String MSG_CODE_NO_LOGIN_ACCESS_DENIED = "6001";
+	
+	/**拒绝用户访问:请求URI中客户端类型格式错误*/
+	public static final String MSG_CODE_REST_WRONG_ACCESS_URL_FORMAT = "6002";
+	
+	/**拒绝用户访问:请求URI中所需参数为空*/
+	public static final String MSG_CODE_REST_ACCESS_URL_NULL_PARAMS = "6003";
+	
+	
+	/**保存数据异常*/
+	public static final String MSG_CODE_REST_DB_EXCEPTION = "7001";
 
 }

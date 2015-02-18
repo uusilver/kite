@@ -39,11 +39,30 @@ public class StartBodyGuardServlet extends HttpServlet{
 		String telno = user.getTelNo();
 
 		String clientType = String.valueOf(SessionUtils.getObjectAttribute(request, CommonConstants.CLIENT_TYPE));
+
+		logger.info("用户手机号码：" + telno + "开启服务,登录入口："+ clientType);
+		
+		//如果手机号码或者客户端类型为空，则跳转入异常提示页面
+		if(telno==null||"".equals(telno)||clientType==null||"".equals(clientType)){
+			try {
+				response.sendRedirect("access_denied.html");
+				return;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		//1长线风筝,2短线风筝
+		String serviceType = request.getParameter("serviceType");
+		
+		//系统发短消息或者向APP推送消息的间隔时间，单位为分钟
+		String frenqency = request.getParameter("freq");
 	    
 		String status = "ERROR";
 	    
-		if(telno!=null&&!"".equals(telno)&&clientType!=null&&!"".equals(clientType)){
-		    status = startService(telno,clientType);
+		if(serviceType!=null&&!"".equals(serviceType)&&frenqency!=null&&!"".equals(frenqency)){
+		    status = startService(telno,serviceType,frenqency,clientType);
 	    }
 	    
 		if(status.equalsIgnoreCase("OK")){
@@ -59,9 +78,16 @@ public class StartBodyGuardServlet extends HttpServlet{
 	}
 	
 	
-	
+	/**
+	 * 开启风筝服务,在服务信息表中插入服务记录
+	 * @param telno
+	 * @param serviceType  1长线风筝,2短线风筝
+	 * @param frenqency 推送消息间隔时间
+	 * @param clientType 客户端类型
+	 * @return
+	 */
 	@SuppressWarnings("resource")
-	private String startService(String telno,String clientType){
+	private String startService(String telno,String serviceType,String frenqency,String clientType){
 		String flag = "OK";
 		Connection conn  = null;
 		PreparedStatement ps = null;
@@ -85,8 +111,8 @@ public class StartBodyGuardServlet extends HttpServlet{
 //					sql = "update m_user set service_flag='Y', service_start_time=?, service_start_minute=?, touch_freq=? where tel_no=?";
 					
 					sql = " insert into web_service_record "
-						+ " (user_id,service_start_time,service_start_minute,access_client,service_flag)"
-						+ " values(?,?,?,?,?)";
+						+ " (user_id,service_start_time,service_start_minute,access_client,service_flag,service_type,touch_freq)"
+						+ " values(?,?,?,?,?,?,?)";
 					logger.debug("用户开启服务:"+sql);
 					ps = conn.prepareStatement(sql);
 					ps.setInt(1, userId);
@@ -96,6 +122,8 @@ public class StartBodyGuardServlet extends HttpServlet{
 					ps.setInt(3, calNow.get(Calendar.MINUTE));
 					ps.setInt(4, new Integer(clientType));
 					ps.setString(5, "Y");
+					ps.setString(6, serviceType);
+					ps.setInt(7, new Integer(frenqency));
 					ps.execute();
 					flag = "OK";
 				}
