@@ -40,12 +40,14 @@ public class UserProfileHandler {
 				urgentName = rs.getString("urgent_name");
 				urgentTelNo = rs.getString("urgent_telno");
 				
-				HashMap contentMap = new HashMap();
-				contentMap.put("urgent_telno", urgentTelNo);
-				contentMap.put("urgent_name", urgentName);
+//				HashMap contentMap = new HashMap();
+//				contentMap.put("urgent_telno", urgentTelNo);
+//				contentMap.put("urgent_name", urgentName);
 				
 				map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_GET_PROFILE_SUCCESS);
-				map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, contentMap);
+//				map.put(CommonConstants.REST_MSG_KEY_CONTENT, contentMap);
+				map.put("urgentTelno", urgentTelNo);
+				map.put("urgentName", urgentName);
 			}else{
 				
 				map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_EMPTY_PROFILE);
@@ -55,6 +57,9 @@ public class UserProfileHandler {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.info(e.getMessage());
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_DB_EXCEPTION);
+			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_DATABASE_EXECUTE_EXCEPTION);
 		}finally{
 			DBUtils.freeConnection(conn, ps, rs);
 		}
@@ -144,7 +149,7 @@ public class UserProfileHandler {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				logger.info(e.getMessage());
-				map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_FAILED);
+				map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_DB_EXCEPTION);
 				map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_DATABASE_EXECUTE_EXCEPTION);
 			}finally{
 				DBUtils.freeConnection(conn, ps, null);

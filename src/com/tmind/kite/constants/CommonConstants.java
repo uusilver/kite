@@ -147,14 +147,14 @@ public class CommonConstants
 	/**用户在App端登录，但是Web端已经登录*/
 	public static final String MSG_CODE_REST_SWITCH_WEB_TO_APP = "1009";
 	
-	/**用户在web端登录，但是APP端已经登录*/
-	public static final String MSG_CODE_REST_LOGINNED_IN_APP = "1010";
-	
 	/**用户在Android端登录，但是IOS端已经登录*/
-	public static final String MSG_CODE_REST_SWITCH_IOS_TO_ANDROID = "1011";
+	public static final String MSG_CODE_REST_SWITCH_IOS_TO_ANDROID = "1010";
 	
 	/**用户在IOS端登录，但是Android端已经登录*/
-	public static final String MSG_CODE_REST_SWITCH_ANDROID_TO_IOS = "1012";
+	public static final String MSG_CODE_REST_SWITCH_ANDROID_TO_IOS = "1011";
+	
+	/**用户在web端登录，但是APP端已经登录*/
+	public static final String MSG_CODE_REST_LOGINNED_IN_APP = "1012";
 	
 	
 	//用户注册相关消息代码
@@ -183,7 +183,7 @@ public class CommonConstants
 	/**获取用户个人设置成功*/
 	public static final String MSG_CODE_REST_GET_PROFILE_SUCCESS = "3102";
 	
-	/**获取不到个人设置*/
+	/**获取不到个人设置参数值*/
 	public static final String MSG_CODE_REST_EMPTY_PROFILE = "3103";
 	
 	/**保存紧急联系人信息成功*/

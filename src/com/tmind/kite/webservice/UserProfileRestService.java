@@ -96,7 +96,7 @@ public class UserProfileRestService {
 				||securityAns==null||"".equals(securityAns)){
 			logger.info("紧急联系人、紧急联系人手机号码、服务密码、或者安全问题为空");
 			map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_EMPTY_PROFILE);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_ACCESS_URL_NULL_PARAMS);
 			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_USER_PROFILE);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
@@ -207,7 +207,7 @@ public class UserProfileRestService {
 		if(servicePwd==null||"".equals(servicePwd)){
 			logger.info("服务密码为空");
 			map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_FAILED);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_ACCESS_URL_NULL_PARAMS);
 			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_SERVICE_PWD);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);
@@ -271,7 +271,7 @@ public class UserProfileRestService {
 		if(securityQue==null||"".equals(securityQue)||securityAns==null||"".equals(securityAns)){
 			logger.info("安全问答信息为空");
 			map = new HashMap<String,String>();
-			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_SAVE_PROFILE_FAILED);
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_ACCESS_URL_NULL_PARAMS);
 			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_ACCESS_DENIED_FOR_NULL_SECURITY_QA);
 			Gson gson = new Gson();
 			returnValue= gson.toJson(map);

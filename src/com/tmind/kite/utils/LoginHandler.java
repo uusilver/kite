@@ -15,6 +15,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 
 import com.tmind.kite.constants.CommonConstants;
+import com.tmind.kite.constants.MessageContent;
 import com.tmind.kite.model.User;
 
 public class LoginHandler {
@@ -158,6 +159,7 @@ public class LoginHandler {
 						map.put(CommonConstants.REST_MSG_KEY_PROFILE_SETTING_STATUS, 
 								CommonConstants.MSG_CODE_REST_REGIST_PROFILE_DONE);
 					}
+					map.put(CommonConstants.LOGIN_USER_OBJECT, user);
 					
 					updPs = conn.prepareStatement(UPDATE_LOGIN_SUCCESS_SQL);
 					errTimes = 0;
@@ -176,7 +178,6 @@ public class LoginHandler {
 					updPs.setInt(5, userId);
 					updPs.executeUpdate();
 					updPs.close();
-					map.put(CommonConstants.LOGIN_USER_OBJECT, user);
 				}
 				//用户密码不正确，失败计数累计
 				else{
@@ -206,6 +207,8 @@ public class LoginHandler {
 			// TODO Auto-generated catch block
 			logger.info("[UserID:"+teleNo+"]-查询登陆用户信息失败，异常信息如下：");
 			logger.info(e.getMessage());
+			map.put(CommonConstants.REST_MSG_KEY_STATUS, CommonConstants.MSG_CODE_REST_DB_EXCEPTION);
+			map.put(CommonConstants.REST_MSG_KEY_MSG_CONTENT, MessageContent.MSG_DATABASE_EXECUTE_EXCEPTION);
 		}finally{
 			DBUtils.freeConnection(conn, ps, rs);
 		}
