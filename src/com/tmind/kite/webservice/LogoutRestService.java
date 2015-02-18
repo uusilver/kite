@@ -31,9 +31,9 @@ public class LogoutRestService {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GET
-	@Path("logout/{userName}/{clientType}")
+	@Path("logout/{telno}/{clientType}")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String logout(@PathParam(value="userName") String telno,@PathParam(value="clientType") String clientType){
+	public String logout(@PathParam(value="telno") String telno,@PathParam(value="clientType") String clientType){
 		
 		String returnValue = "";
 
