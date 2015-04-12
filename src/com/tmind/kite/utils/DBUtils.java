@@ -2,6 +2,7 @@ package com.tmind.kite.utils;
 
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Properties;
@@ -32,11 +33,11 @@ public class DBUtils {
         }  
     }  
       
-    public static boolean freeConnection(Connection cn,Statement st,ResultSet rs){  
+    public static boolean freeConnection(Connection conn,Statement st,ResultSet rs){  
         boolean ret=true;  
-        if(cn!=null){  
+        if(conn!=null){  
             try{  
-                cn.close();  
+            	conn.close();  
             }catch(Exception e){  
                 throw new RuntimeException(e);  
             }finally{  
@@ -63,4 +64,6 @@ public class DBUtils {
         }  
         return ret;  
     }  
+    
+    	
 }
