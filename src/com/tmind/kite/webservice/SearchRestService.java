@@ -14,6 +14,8 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 
+import com.tmind.kite.biz.SearchOperator;
+
 @Path("searchRest")
 public class SearchRestService {
 
@@ -35,14 +37,16 @@ public class SearchRestService {
 			                            @PathParam(value="password") String pwd,
 							            @PathParam(value="clientType") String clientType
 							            ){
-		//TODO 根据传入的keywords信息来进行搜索
+		//TODO 校验用户的基本信息是否合法
 		
-		return null;
+		return SearchOperator.autoCompleteBoxSearch(keyWords,5, 0);
 	}
 	
 	/**
 	 * 
 	 * @param keyWords
+	 * @param pageSize
+	 * @param currentPageNo
 	 * @param telno
 	 * @param pwd
 	 * @param clientType
@@ -50,13 +54,17 @@ public class SearchRestService {
 	 * 用户点击搜索后完成搜索，返回搜索结果(结果必须包含ID，这样可以用于进一步查询，被查询对象的详细证据时的数据)
 	 */
 	@GET
-	@Path("getSearchResult/{keyWords}/{telno}/{password}/{clientType}")
+	@Path("getSearchResult/{keyWords}/{pageSize}/{currentPageNo}/{telno}/{password}/{clientType}")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getSearchResult(@PathParam(value="keyWords") String keyWords,
+								  @PathParam(value="pageSize") int pageSize,
+						          @PathParam(value="currentPageNo") int currentPageNo,
 			                      @PathParam(value="telno") String telno,
 			                      @PathParam(value="password") String pwd,
 							      @PathParam(value="clientType") String clientType){
-		return null;
+		//TODO 校验用户的基本信息是否合法
+		
+		return SearchOperator.autoCompleteBoxSearch(keyWords,pageSize, currentPageNo);
 	}
 	
 	/**
@@ -76,7 +84,9 @@ public class SearchRestService {
             						     @PathParam(value="telno") String telno,
                                          @PathParam(value="password") String pwd,
 		                                 @PathParam(value="clientType") String clientType){
-		return null;
+		//TODO 校验用户的基本信息是否合法
+		
+		return SearchOperator.queryDetailInfoById(queryId);
 	}
 	
 	/**
