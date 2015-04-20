@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.log4j.Logger;
 
 import com.tmind.kite.biz.SearchOperator;
+import com.tmind.kite.constants.CommonConstants;
 
 @Path("searchRest")
 public class SearchRestService {
@@ -106,6 +107,10 @@ public class SearchRestService {
             						                @PathParam(value="password") String pwd,
             						                @PathParam(value="clientType") String clientType){
 		//TODO 创建用户的搜索纪录表
-		return null;
+		if(SearchOperator.addIntoSearchHistory(keyWords, telno)){
+			return CommonConstants.SUCCESS;
+		}else{
+			return CommonConstants.ERROR;
+		}
 	}
 }

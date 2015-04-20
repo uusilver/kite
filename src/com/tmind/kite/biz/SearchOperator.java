@@ -5,10 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.tmind.kite.constants.CommonConstants;
 import com.tmind.kite.model.SearchBoxAutoCompleteModel;
 import com.tmind.kite.model.SearchBoxWrapModel;
 import com.tmind.kite.model.SearchDetailInfoModel;
@@ -117,7 +119,14 @@ public class SearchOperator {
 		return GetGsonObject.getInstance().toJson(detailModel);
 	}
 	
-	/***********************************************私有方法***********************************************************/
+	public static boolean addIntoSearchHistory(String keyWords, String telno){
+		if(addIntoHistory(keyWords, telno)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+/******************************************************私有方法***********************************************************/
 	//查询含有telno的结果集
 	private static ResultSet queryByTelno(String telno, int pre, int post){
 		Connection conn = null;
@@ -183,6 +192,30 @@ public class SearchOperator {
 	    	}catch(Exception e){
 	    		DBUtils.freeConnection(conn, ps, rs);
 	    		return null;
+	    	}finally{
+	    		//ResultSet要传出，因此不能在final中关闭，当有异常抛出时才可关闭ResultSet
+	    		DBUtils.freeConnection(conn, ps, null);
+	    	}
+		}
+		
+	//添加搜索纪录
+		private static boolean addIntoHistory(String keyWords, String telno ){
+			Connection conn = null;
+	    	PreparedStatement ps = null;
+	    	try{
+	    		//TODO 未来修改成mysql的全文索引
+	    		//TODO 限制查询的条数为5条
+	    		String sql = "insert into search_history(search_key_words, add_date, add_by) values(?,?,?)";
+	    		conn = DBUtils.getConnection();
+	    		ps = conn.prepareStatement(sql);
+	    		ps.setString(1, keyWords);
+	    		ps.setDate(2, (java.sql.Date) new Date());
+	    		ps.setString(3, telno);
+	    		ps.execute();
+	    		return true;
+	    	}catch(Exception e){
+	    		DBUtils.freeConnection(conn, ps, null);
+	    		return false;
 	    	}finally{
 	    		//ResultSet要传出，因此不能在final中关闭，当有异常抛出时才可关闭ResultSet
 	    		DBUtils.freeConnection(conn, ps, null);
