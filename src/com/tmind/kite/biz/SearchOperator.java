@@ -89,7 +89,7 @@ public class SearchOperator {
     	ResultSet rs = null;
     	try{
     		String sql = "select id, telno_keywords, name_keywords, useful_mark_num, look_score, talk_score, act_score, "
-    				+ "peronal_score, come_from, comments_table_name, detail_info_table_name from m_search_info where id = ?";
+    				+ "peronal_score, come_from, comments_table_name, detail_info_table_name from m_search_info where id = ? and active_flag='Y'";
     		conn = DBUtils.getConnection();
     		ps = conn.prepareStatement(sql);
     		ps.setString(1, queryId);
@@ -135,7 +135,7 @@ public class SearchOperator {
     	try{
     		//TODO 未来修改成mysql的全文索引
     		//TODO 限制查询的条数为5条
-    		String sql = "select id, telno_keywords, name_keywords from m_search_info where telno_keywords like '%?%' limit ?, ?";
+    		String sql = "select id, telno_keywords, name_keywords from m_search_info where telno_keywords like '%?%' and active_flag='Y' limit ?, ?";
     		conn = DBUtils.getConnection();
     		ps = conn.prepareStatement(sql);
     		ps.setString(1, telno);
@@ -159,7 +159,7 @@ public class SearchOperator {
 	    	try{
 	    		//TODO 未来修改成mysql的全文索引
 	    		//TODO 限制查询的条数为5条
-	    		String sql = "select id, telno_keywords, name_keywords from m_search_info where name_keywords like '%?%' limit ?, ?";
+	    		String sql = "select id, telno_keywords, name_keywords from m_search_info where name_keywords like '%?%' and active_flag='Y' limit ?, ? ";
 	    		conn = DBUtils.getConnection();
 	    		ps = conn.prepareStatement(sql);
 	    		ps.setString(1, name);
@@ -182,7 +182,7 @@ public class SearchOperator {
 	    	try{
 	    		//TODO 未来修改成mysql的全文索引
 	    		//TODO 限制查询的条数为5条
-	    		String sql = "select id, telno_keywords, name_keywords from m_search_info where full_text_keywords like '%?%' limit ?, ?";
+	    		String sql = "select id, telno_keywords, name_keywords from m_search_info where full_text_keywords like '%?%' and active_flag='Y' limit ?, ? ";
 	    		conn = DBUtils.getConnection();
 	    		ps = conn.prepareStatement(sql);
 	    		ps.setString(1, context);

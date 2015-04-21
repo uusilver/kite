@@ -59,6 +59,27 @@ public class DatePersonInfoOperator {
 		
 	}
 	
+	public static boolean deleteDatePersonBasicInfo(String queryId){
+		Connection conn = null;
+    	PreparedStatement ps = null;
+    	try{
+    		//TODO 未来修改成mysql的全文索引
+    		//TODO 限制查询的条数为5条
+    		String sql = "update m_search_info set active_flag = 'N' where id=?";
+    		conn = DBUtils.getConnection();
+    		ps = conn.prepareStatement(sql);
+    		ps.setString(1, queryId);
+    		ps.execute();
+    		return true;
+    	}catch(Exception e){
+    		DBUtils.freeConnection(conn, ps, null);
+    		return false;
+    	}finally{
+    		//ResultSet要传出，因此不能在final中关闭，当有异常抛出时才可关闭ResultSet
+    		DBUtils.freeConnection(conn, ps, null);
+    	}
+	}
+	
 	//点赞
 	public static boolean markInfoUseful(String queryId){
 		Connection conn = null;
@@ -89,7 +110,7 @@ public class DatePersonInfoOperator {
     	try{
     		//TODO 未来修改成mysql的全文索引
     		//TODO 限制查询的条数为5条
-    		String sql = "select id, comments_content from search_comments where query_id=?";
+    		String sql = "select id, comments_content from search_comments where query_id=? and active_flag='Y'";
     		conn = DBUtils.getConnection();
     		ps = conn.prepareStatement(sql);
     		ps.setString(1, queryId);
@@ -110,5 +131,47 @@ public class DatePersonInfoOperator {
     		//ResultSet要传出，因此不能在final中关闭，当有异常抛出时才可关闭ResultSet
     		DBUtils.freeConnection(conn, ps, rs);
     	}
+	}
+	
+	public static boolean commentAdd(String queryId, String commentContent, String telno){
+		Connection conn = null;
+    	PreparedStatement ps = null;
+    	try{
+			String sql = "insert into search_comments (query_id, comments_content, add_date, add_by, active_flag) "
+					+ "values(?,?,?,?,'Y')";
+			conn = DBUtils.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, queryId);
+			ps.setString(2, commentContent);
+			ps.setDate(3, (java.sql.Date)new java.util.Date());
+			ps.setString(4, telno);
+			ps.execute();
+			return true;
+		}catch(Exception e){
+			DBUtils.freeConnection(conn, ps, null);
+			return false;
+		}finally{
+			//ResultSet要传出，因此不能在final中关闭，当有异常抛出时才可关闭ResultSet
+			DBUtils.freeConnection(conn, ps, null);
+		}
+	}
+	
+	public static boolean commentDelete(String commandId){
+		Connection conn = null;
+    	PreparedStatement ps = null;
+    	try{
+			String sql = "update search_comments set active_flag='N' where id=? ";
+			conn = DBUtils.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, commandId);
+			ps.execute();
+			return true;
+		}catch(Exception e){
+			DBUtils.freeConnection(conn, ps, null);
+			return false;
+		}finally{
+			//ResultSet要传出，因此不能在final中关闭，当有异常抛出时才可关闭ResultSet
+			DBUtils.freeConnection(conn, ps, null);
+		}
 	}
 }
