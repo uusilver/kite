@@ -3,9 +3,14 @@ package com.tmind.kite.biz;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import com.tmind.kite.model.CommandListModel;
 import com.tmind.kite.model.CommandModel;
@@ -18,7 +23,10 @@ import com.tmind.kite.utils.GetGsonObject;
  * @desc: 用来操作约会对象信息的增删改查
  */
 public class DatePersonInfoOperator {
-
+	
+	protected static final Logger logger = Logger.getLogger(DatePersonInfoOperator.class);
+	
+	
 	public static boolean addDatePersonBasicInfo(String telno_keywords, String name_keywords, String full_text_keywords, 
 							                     float look_score, float talk_score, float act_score, float peronal_score, String telno, String clientType){
 		Connection conn = null;
@@ -26,17 +34,20 @@ public class DatePersonInfoOperator {
     	try{
     		//TODO 未来修改成mysql的全文索引
     		//TODO 限制查询的条数为5条
-    		String sql = "insert into m_search_info (telno_keywords, name_keywords, full_text_keywords, source_from, add_date, upd_date, active_flag"
-    				+ " add_who, comments_table_name, detail_info_table_name, useful_mark_num, look_score, talk_score, act_score, peronal_score, come_from) "
-    				+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    		String sql = "insert into m_search_info (telno_keywords, name_keywords, full_text_keywords, source_from, add_date, upd_date, active_flag,"
+    				+ " add_by, comments_table_name, detail_info_table_name, useful_mark_num, look_score, talk_score, act_score, peronal_score, come_from, remarks1) "
+    				+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    		logger.info(sql);
     		conn = DBUtils.getConnection();
     		ps = conn.prepareStatement(sql);
     		ps.setString(1, telno_keywords);
     		ps.setString(2, name_keywords);
     		ps.setString(3, full_text_keywords);
     		ps.setString(4, "IOS");
-    		ps.setDate(5, (java.sql.Date) new Date());
-    		ps.setDate(6, (java.sql.Date) new Date());
+    		java.util.Date date=new java.util.Date();
+    		Timestamp tt=new Timestamp(date.getTime());
+    		ps.setTimestamp(5, tt);
+    		ps.setTimestamp(6, tt);
     		ps.setString(7, "Y");
     		ps.setString(8, telno);
     		ps.setString(9, "search_comments");
@@ -47,9 +58,11 @@ public class DatePersonInfoOperator {
     		ps.setFloat(14, act_score);
     		ps.setFloat(15, peronal_score);
     		ps.setString(16, "IOS");
+    		ps.setString(17, getTotalScore(look_score, talk_score, act_score, peronal_score));
     		ps.execute();
     		return true;
     	}catch(Exception e){
+    		logger.warn(e.getMessage());
     		DBUtils.freeConnection(conn, ps, null);
     		return false;
     	}finally{
@@ -80,8 +93,37 @@ public class DatePersonInfoOperator {
     	}
 	}
 	
+	//查询是否点赞过
+	public static boolean queryMarkOrNot(String queryId, String telno){
+		Connection conn = null;
+    	PreparedStatement ps = null;
+    	ResultSet rs = null;
+    	try{
+    		//TODO 未来修改成mysql的全文索引
+    		//TODO 限制查询的条数为5条
+    		String sql = "select id from date_person_mark_record_table where mark_queryid=? and mark_by=?";
+    		conn = DBUtils.getConnection();
+    		ps = conn.prepareStatement(sql);
+    		ps.setString(1, queryId);
+    		ps.setString(2, telno);
+    		rs = ps.executeQuery();
+    		if(rs.next())
+    		{
+    			return true;
+    		}else{
+    			return false;
+    		}
+    	}catch(Exception e){
+    		DBUtils.freeConnection(conn, ps, rs);
+    		return false;
+    	}finally{
+    		//ResultSet要传出，因此不能在final中关闭，当有异常抛出时才可关闭ResultSet
+    		DBUtils.freeConnection(conn, ps, null);
+    	}
+	}
 	//点赞
-	public static boolean markInfoUseful(String queryId){
+	@SuppressWarnings("resource")
+	public static boolean markInfoUseful(String queryId, String telno){
 		Connection conn = null;
     	PreparedStatement ps = null;
     	try{
@@ -89,11 +131,27 @@ public class DatePersonInfoOperator {
     		//TODO 限制查询的条数为5条
     		String sql = "update m_search_info set useful_mark_num = useful_mark_num+1 where id=?";
     		conn = DBUtils.getConnection();
+    		conn.setAutoCommit(false);
     		ps = conn.prepareStatement(sql);
     		ps.setString(1, queryId);
     		ps.execute();
+    		sql = "insert into date_person_mark_record_table (mark_queryid, mark_by, mark_date) values (?,?,?)";
+    		ps = conn.prepareStatement(sql);
+    		ps.setString(1, queryId);
+    		ps.setString(2, telno);
+    		java.util.Date date=new java.util.Date();
+    		Timestamp tt=new Timestamp(date.getTime());
+    		ps.setTimestamp(3, tt);
+    		ps.execute();
+    		conn.commit();
     		return true;
     	}catch(Exception e){
+    		try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
     		DBUtils.freeConnection(conn, ps, null);
     		return false;
     	}finally{
@@ -120,6 +178,8 @@ public class DatePersonInfoOperator {
     		List<CommandListModel> cmlist = new ArrayList<CommandListModel>();
     		while(rs.next()){
     			CommandListModel ele = new CommandListModel();
+    			ele.setId(rs.getString("id"));
+    			ele.setComments_content(rs.getString("comments_content"));
     			cmlist.add(ele);
     		}
     		cm.setComdList(cmlist);
@@ -143,7 +203,9 @@ public class DatePersonInfoOperator {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, queryId);
 			ps.setString(2, commentContent);
-			ps.setDate(3, (java.sql.Date)new java.util.Date());
+			java.util.Date date=new java.util.Date();
+    		Timestamp tt=new Timestamp(date.getTime());
+			ps.setTimestamp(3, tt);
 			ps.setString(4, telno);
 			ps.execute();
 			return true;
@@ -173,5 +235,14 @@ public class DatePersonInfoOperator {
 			//ResultSet要传出，因此不能在final中关闭，当有异常抛出时才可关闭ResultSet
 			DBUtils.freeConnection(conn, ps, null);
 		}
+	}
+	
+	/**************/
+	
+	private  static String getTotalScore(float look_score, float talk_score, float act_score, float peronal_score){
+		//统计大概分数，不需要精确计算，所以不试用BigDecimal了
+		float total=(look_score+talk_score+act_score+peronal_score)/4;
+		DecimalFormat decimalFormat=new DecimalFormat(".0");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+		return decimalFormat.format(total);//format 返回的是字符串
 	}
 }

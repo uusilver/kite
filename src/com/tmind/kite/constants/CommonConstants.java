@@ -259,10 +259,11 @@ public class CommonConstants
 	/**保存数据异常*/
 	public static final String MSG_CODE_REST_DB_EXCEPTION = "7001";
 	
+	//搜索Webservice 相关
 	/**WebSerice 服务成功返回码*/
-	public static final String SUCCESS = "success";
+	public static final String SUCCESS = "8001";
 	
-	/**WebSerice 服务失败返回码*/
-	public static final String ERROR = "error";
+	/**WebSerice 服务失败未知错误返回码*/
+	public static final String ERROR = "8009";
 
 }

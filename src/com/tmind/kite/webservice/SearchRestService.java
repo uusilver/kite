@@ -40,7 +40,7 @@ public class SearchRestService {
 							            ){
 		//TODO 校验用户的基本信息是否合法
 		
-		return SearchOperator.autoCompleteBoxSearch(keyWords,5, 0);
+		return SearchOperator.autoCompleteBoxSearch(keyWords,5, 0);//只显示5条
 	}
 	
 	/**
@@ -66,6 +66,21 @@ public class SearchRestService {
 		//TODO 校验用户的基本信息是否合法
 		
 		return SearchOperator.autoCompleteBoxSearch(keyWords,pageSize, currentPageNo);
+	}
+	
+	//获取个人查询历史
+	@GET
+	@Path("getPersonHistory/{keyWords}/{pageSize}/{currentPageNo}/{telno}/{password}/{clientType}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getPersonHistory(@PathParam(value="keyWords") String keyWords,
+								  @PathParam(value="pageSize") int pageSize,
+						          @PathParam(value="currentPageNo") int currentPageNo,
+			                      @PathParam(value="telno") String telno,
+			                      @PathParam(value="password") String pwd,
+							      @PathParam(value="clientType") String clientType){
+		//TODO 校验用户的基本信息是否合法
+		
+		return SearchOperator.getPersonHistory(keyWords,pageSize, currentPageNo);
 	}
 	
 	/**

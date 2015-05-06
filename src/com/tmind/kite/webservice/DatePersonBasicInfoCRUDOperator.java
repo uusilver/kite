@@ -1,5 +1,7 @@
 package com.tmind.kite.webservice;
-
+/**
+ * 完成对约会对象信息的增删改操作集合
+ */
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -9,13 +11,12 @@ import javax.ws.rs.core.MediaType;
 import com.tmind.kite.biz.DatePersonInfoOperator;
 import com.tmind.kite.constants.CommonConstants;
 
-/**
- * 完成对约会对象信息的增删改操作集合
- */
+
+@Path("dateRest")
 public class DatePersonBasicInfoCRUDOperator {
 
 	@GET
-	@Path("addDatePersonBasicInfo/{telno_keywords}/{name_keywords}/{full_text_keywords}/{look_score}/{talk_score}/{act_score}/{peronal_score}//{telno}/{password}/{clientType}")
+	@Path("addDatePersonBasicInfo/{telno_keywords}/{name_keywords}/{full_text_keywords}/{look_score}/{talk_score}/{act_score}/{peronal_score}/{telno}/{password}/{clientType}")
 	@Produces(MediaType.TEXT_HTML)
 	public String addDatePersonBasicInfo(@PathParam(value="telno_keywords") String telno_keywords,
             				             @PathParam(value="name_keywords") String name_keywords,
@@ -62,6 +63,25 @@ public class DatePersonBasicInfoCRUDOperator {
 		}
 	}
 	
+	//查询是否点赞过
+	@GET
+	@Path("queryMarkOrNot/{queryId}/{telno}/{password}/{clientType}")
+	@Produces(MediaType.TEXT_HTML)
+	public String queryMarkOrNot(@PathParam(value="queryId") String queryId,
+								 @PathParam(value="telno") String telno,
+            					 @PathParam(value="password") String password,
+            					 @PathParam(value="clientType") String clientType
+            					){
+		//TODO 校验用户的基本信息是否合法
+		if(DatePersonInfoOperator.queryMarkOrNot(queryId, telno)){
+			//成功表示有点过赞
+			return CommonConstants.SUCCESS;
+		}else{
+			//ERROR表示没有点过赞
+			return CommonConstants.ERROR;
+		}
+	}
+	
 	//点赞
 	@GET
 	@Path("markInfoUseful/{queryId}/{telno}/{password}/{clientType}")
@@ -72,7 +92,7 @@ public class DatePersonBasicInfoCRUDOperator {
             					 @PathParam(value="clientType") String clientType
             					){
 		//TODO 校验用户的基本信息是否合法
-		if(DatePersonInfoOperator.markInfoUseful(queryId)){
+		if(DatePersonInfoOperator.markInfoUseful(queryId, telno)){
 			return CommonConstants.SUCCESS;
 		}else{
 			return CommonConstants.ERROR;
@@ -89,12 +109,10 @@ public class DatePersonBasicInfoCRUDOperator {
 			                   @PathParam(value="clientType") String clientType
 			                   ){
 		//TODO 校验用户的基本信息是否合法
-		if(DatePersonInfoOperator.queryCommands(queryId)!=null){
-			return CommonConstants.SUCCESS;
-		}else{
-			return CommonConstants.ERROR;
-		}
+		return DatePersonInfoOperator.queryCommands(queryId);
 	}
+
+	
 	
 	//针对显示信息，添加评论
 	@GET

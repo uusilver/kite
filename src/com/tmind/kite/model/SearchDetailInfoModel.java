@@ -1,18 +1,23 @@
 package com.tmind.kite.model;
 
+import java.util.List;
+
 public class SearchDetailInfoModel {
 
 	private String id;
 	private String telno;
 	private String name;
+	private String full_text;
 	private String look_score;
 	private String talk_score;
 	private String act_score;
 	private String peronal_score;
+	private String total_score;
 	private String come_from;   //来自哪，微信，世纪佳缘等等
 	private String useful_mark_num; //此条信息对我有用标记数
 	private String comments_no; //评论数
 	private String comments_table_name;
+	private List<CommentsModel> commentList;
 	
 	public String getId() {
 		return id;
@@ -79,6 +84,26 @@ public class SearchDetailInfoModel {
 	}
 	public void setComments_table_name(String comments_table_name) {
 		this.comments_table_name = comments_table_name;
+	}
+	
+	public List<CommentsModel> getCommentList() {
+		return commentList;
+	}
+	public void setCommentList(List<CommentsModel> commentList) {
+		this.commentList = commentList;
+	}
+	
+	public String getFull_text() {
+		return full_text;
+	}
+	public void setFull_text(String full_text) {
+		this.full_text = full_text;
+	}
+	public String getTotal_score() {
+		return total_score;
+	}
+	public void setTotal_score(String total_score) {
+		this.total_score = total_score;
 	}
 	@Override
 	public String toString() {

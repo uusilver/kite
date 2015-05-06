@@ -5,7 +5,7 @@
     <param-name>webAppRootKey</param-name>
     <param-value>kiteApp</param-value>
   </context-param>
-  <filter>
+  <!-- <filter>
     <filter-name>onlineServletFilter</filter-name>
     <filter-class>com.tmind.kite.filter.OnlineServletFilter</filter-class>
   </filter>
@@ -24,7 +24,7 @@
   <filter-mapping>
     <filter-name>onlineRestFilter</filter-name>
     <url-pattern>/rest/*</url-pattern>
-  </filter-mapping>
+  </filter-mapping> -->
   
   <servlet>
   <servlet-name>log4j-init</servlet-name>

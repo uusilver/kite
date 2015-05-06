@@ -6,6 +6,12 @@ public class SearchBoxAutoCompleteModel {
 	private String status; //标志查询状态
 	private int resultNum; //标识查询结果的数目
 	private String matchWords;
+	private String name_keywords;
+	private String full_text_keywords;
+	private String source_from;
+	private String add_date;
+	private String total_score;
+	
 	public String getId() {
 		return id;
 	}
@@ -34,6 +40,36 @@ public class SearchBoxAutoCompleteModel {
 	}
 	
 	
+	public String getName_keywords() {
+		return name_keywords;
+	}
+	public void setName_keywords(String name_keywords) {
+		this.name_keywords = name_keywords;
+	}
+	public String getFull_text_keywords() {
+		return full_text_keywords;
+	}
+	public void setFull_text_keywords(String full_text_keywords) {
+		this.full_text_keywords = full_text_keywords;
+	}
+	public String getSource_from() {
+		return source_from;
+	}
+	public void setSource_from(String source_from) {
+		this.source_from = source_from;
+	}
+	public String getAdd_date() {
+		return add_date;
+	}
+	public void setAdd_date(String add_date) {
+		this.add_date = add_date;
+	}
+	public String getTotal_score() {
+		return total_score;
+	}
+	public void setTotal_score(String total_score) {
+		this.total_score = total_score;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
