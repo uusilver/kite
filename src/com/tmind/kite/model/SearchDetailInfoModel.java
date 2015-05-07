@@ -17,6 +17,7 @@ public class SearchDetailInfoModel {
 	private String useful_mark_num; //此条信息对我有用标记数
 	private String comments_no; //评论数
 	private String comments_table_name;
+	private String picStr;
 	private List<CommentsModel> commentList;
 	
 	public String getId() {
@@ -104,6 +105,14 @@ public class SearchDetailInfoModel {
 	}
 	public void setTotal_score(String total_score) {
 		this.total_score = total_score;
+	}
+	
+	
+	public String getPicStr() {
+		return picStr;
+	}
+	public void setPicStr(String picStr) {
+		this.picStr = picStr;
 	}
 	@Override
 	public String toString() {

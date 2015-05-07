@@ -9,6 +9,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
@@ -16,6 +17,7 @@ import com.tmind.kite.model.CommandListModel;
 import com.tmind.kite.model.CommandModel;
 import com.tmind.kite.utils.DBUtils;
 import com.tmind.kite.utils.GetGsonObject;
+import com.tmind.kite.utils.StringImageUtil;
 
 /**
  * 
@@ -28,47 +30,58 @@ public class DatePersonInfoOperator {
 	
 	
 	public static boolean addDatePersonBasicInfo(String telno_keywords, String name_keywords, String full_text_keywords, 
-							                     float look_score, float talk_score, float act_score, float peronal_score, String telno, String clientType){
+							                     float look_score, float talk_score, float act_score, float peronal_score, String telno, String clientType, String picStr, String picType) throws Exception{
 		Connection conn = null;
     	PreparedStatement ps = null;
-    	try{
-    		//TODO 未来修改成mysql的全文索引
-    		//TODO 限制查询的条数为5条
-    		String sql = "insert into m_search_info (telno_keywords, name_keywords, full_text_keywords, source_from, add_date, upd_date, active_flag,"
-    				+ " add_by, comments_table_name, detail_info_table_name, useful_mark_num, look_score, talk_score, act_score, peronal_score, come_from, remarks1) "
-    				+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    		logger.info(sql);
-    		conn = DBUtils.getConnection();
-    		ps = conn.prepareStatement(sql);
-    		ps.setString(1, telno_keywords);
-    		ps.setString(2, name_keywords);
-    		ps.setString(3, full_text_keywords);
-    		ps.setString(4, "IOS");
-    		java.util.Date date=new java.util.Date();
-    		Timestamp tt=new Timestamp(date.getTime());
-    		ps.setTimestamp(5, tt);
-    		ps.setTimestamp(6, tt);
-    		ps.setString(7, "Y");
-    		ps.setString(8, telno);
-    		ps.setString(9, "search_comments");
-    		ps.setString(10, "search_detail_info");
-    		ps.setInt(11, 0);
-    		ps.setFloat(12, look_score);
-    		ps.setFloat(13, talk_score);
-    		ps.setFloat(14, act_score);
-    		ps.setFloat(15, peronal_score);
-    		ps.setString(16, "IOS");
-    		ps.setString(17, getTotalScore(look_score, talk_score, act_score, peronal_score));
-    		ps.execute();
-    		return true;
-    	}catch(Exception e){
-    		logger.warn(e.getMessage());
-    		DBUtils.freeConnection(conn, ps, null);
-    		return false;
-    	}finally{
-    		//ResultSet要传出，因此不能在final中关闭，当有异常抛出时才可关闭ResultSet
-    		DBUtils.freeConnection(conn, ps, null);
-    	}
+    	
+    		//保存图片进磁盘
+    		String uuidPicName = UUID.randomUUID().toString()+"."+picType;
+    		if(StringImageUtil.generateImage(picStr, uuidPicName)){
+	    			try{
+	    			//TODO 未来修改成mysql的全文索引
+	        		//TODO 限制查询的条数为5条
+	        		String sql = "insert into m_search_info (telno_keywords, name_keywords, full_text_keywords, source_from, add_date, upd_date, active_flag,"
+	        				+ " add_by, comments_table_name, detail_info_table_name, useful_mark_num, look_score, talk_score, act_score, peronal_score, come_from, remarks1, pic_name_url, pic_type) "
+	        				+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	        		logger.info(sql);
+	        		conn = DBUtils.getConnection();
+	        		ps = conn.prepareStatement(sql);
+	        		ps.setString(1, telno_keywords);
+	        		ps.setString(2, name_keywords);
+	        		ps.setString(3, full_text_keywords);
+	        		ps.setString(4, "IOS");
+	        		java.util.Date date=new java.util.Date();
+	        		Timestamp tt=new Timestamp(date.getTime());
+	        		ps.setTimestamp(5, tt);
+	        		ps.setTimestamp(6, tt);
+	        		ps.setString(7, "Y");
+	        		ps.setString(8, telno);
+	        		ps.setString(9, "search_comments");
+	        		ps.setString(10, "search_detail_info");
+	        		ps.setInt(11, 0);
+	        		ps.setFloat(12, look_score);
+	        		ps.setFloat(13, talk_score);
+	        		ps.setFloat(14, act_score);
+	        		ps.setFloat(15, peronal_score);
+	        		ps.setString(16, "IOS");
+	        		ps.setString(17, uuidPicName);
+	        		ps.setString(18, getTotalScore(look_score, talk_score, act_score, peronal_score));
+	        		ps.setString(19, picType); //保存图片类型 jpg, png
+	        		ps.execute();
+	        		return true;
+	        	}catch(Exception e){
+	        		logger.warn(e.getMessage());
+	        		DBUtils.freeConnection(conn, ps, null);
+	        		return false;
+	        	}finally{
+	        		//ResultSet要传出，因此不能在final中关闭，当有异常抛出时才可关闭ResultSet
+	        		DBUtils.freeConnection(conn, ps, null);
+	        	}
+    		}else{
+    			logger.info("保存图片失败");
+    			return false;
+    		}
+    		
 		
 	}
 	

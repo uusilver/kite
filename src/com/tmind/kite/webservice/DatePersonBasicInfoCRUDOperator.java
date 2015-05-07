@@ -3,6 +3,7 @@ package com.tmind.kite.webservice;
  * 完成对约会对象信息的增删改操作集合
  */
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -15,8 +16,8 @@ import com.tmind.kite.constants.CommonConstants;
 @Path("dateRest")
 public class DatePersonBasicInfoCRUDOperator {
 
-	@GET
-	@Path("addDatePersonBasicInfo/{telno_keywords}/{name_keywords}/{full_text_keywords}/{look_score}/{talk_score}/{act_score}/{peronal_score}/{telno}/{password}/{clientType}")
+	@POST
+	@Path("addDatePersonBasicInfo/{telno_keywords}/{name_keywords}/{full_text_keywords}/{look_score}/{talk_score}/{act_score}/{peronal_score}/{telno}/{password}/{clientType}/{picStr}/{picType}")
 	@Produces(MediaType.TEXT_HTML)
 	public String addDatePersonBasicInfo(@PathParam(value="telno_keywords") String telno_keywords,
             				             @PathParam(value="name_keywords") String name_keywords,
@@ -27,11 +28,13 @@ public class DatePersonBasicInfoCRUDOperator {
             				             @PathParam(value="peronal_score") float peronal_score,
             				             @PathParam(value="telno") String telno,
             				             @PathParam(value="password") String password,
-            				             @PathParam(value="clientType") String clientType
-            					         ){
+            				             @PathParam(value="clientType") String clientType,
+            				             @PathParam(value="picStr") String picStr,
+            				             @PathParam(value="picType") String picType
+            					         ) throws Exception{
 		//TODO 校验用户的基本信息是否合法
 		//插入一条新纪录
-		if(DatePersonInfoOperator.addDatePersonBasicInfo(telno_keywords, name_keywords, full_text_keywords, look_score, talk_score, act_score, peronal_score, telno, clientType)){
+		if(DatePersonInfoOperator.addDatePersonBasicInfo(telno_keywords, name_keywords, full_text_keywords, look_score, talk_score, act_score, peronal_score, telno, clientType, picStr, picType)){
 			return CommonConstants.SUCCESS;
 		}else{
 			return CommonConstants.ERROR;

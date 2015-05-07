@@ -18,6 +18,7 @@ import com.tmind.kite.model.SearchBoxWrapModel;
 import com.tmind.kite.model.SearchDetailInfoModel;
 import com.tmind.kite.utils.DBUtils;
 import com.tmind.kite.utils.GetGsonObject;
+import com.tmind.kite.utils.StringImageUtil;
 
 public class SearchOperator {
 	protected static final Logger logger = Logger.getLogger(SearchOperator.class);
@@ -60,7 +61,7 @@ public class SearchOperator {
     	ResultSet rs = null;
     	try{
     		String sql = "select id, telno_keywords, name_keywords, full_text_keywords, remarks1, useful_mark_num, look_score, talk_score, act_score, "
-    				+ "peronal_score, come_from, comments_table_name, detail_info_table_name from m_search_info where id = ? and active_flag='Y'";
+    				+ "peronal_score, come_from, comments_table_name, detail_info_table_name,  pic_name_url from m_search_info where id = ? and active_flag='Y'";
     		conn = DBUtils.getConnection();
     		ps = conn.prepareStatement(sql);
     		ps.setString(1, queryId);
@@ -78,6 +79,9 @@ public class SearchOperator {
         		detailModel.setTotal_score(rs.getString("remarks1"));
         		detailModel.setCome_from(rs.getString("come_from"));
         		detailModel.setComments_table_name(rs.getString("comments_table_name"));
+        		String picNameUrl = rs.getString("pic_name_url");
+        		//获取图片转化的字符串
+        		detailModel.setPicStr(StringImageUtil.getImageStr(picNameUrl));
     		}
     		List<CommentsModel> cmList = new ArrayList<CommentsModel>();
     		sql = "select comments_content, add_date, add_by from search_comments where query_id=? and active_flag='Y'";
