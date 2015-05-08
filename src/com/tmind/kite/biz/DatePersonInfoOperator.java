@@ -64,8 +64,8 @@ public class DatePersonInfoOperator {
 	        		ps.setFloat(14, act_score);
 	        		ps.setFloat(15, peronal_score);
 	        		ps.setString(16, "IOS");
-	        		ps.setString(17, uuidPicName);
-	        		ps.setString(18, getTotalScore(look_score, talk_score, act_score, peronal_score));
+	        		ps.setString(17, getTotalScore(look_score, talk_score, act_score, peronal_score));
+	        		ps.setString(18, uuidPicName);
 	        		ps.setString(19, picType); //保存图片类型 jpg, png
 	        		ps.execute();
 	        		return true;

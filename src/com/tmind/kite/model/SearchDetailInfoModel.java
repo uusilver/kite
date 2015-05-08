@@ -5,6 +5,8 @@ import java.util.List;
 public class SearchDetailInfoModel {
 
 	private String id;
+	private String clientType;
+	private String picType;
 	private String telno;
 	private String name;
 	private String full_text;
@@ -113,6 +115,20 @@ public class SearchDetailInfoModel {
 	}
 	public void setPicStr(String picStr) {
 		this.picStr = picStr;
+	}
+	
+	
+	public String getClientType() {
+		return clientType;
+	}
+	public void setClientType(String clientType) {
+		this.clientType = clientType;
+	}
+	public String getPicType() {
+		return picType;
+	}
+	public void setPicType(String picType) {
+		this.picType = picType;
 	}
 	@Override
 	public String toString() {
